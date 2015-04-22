@@ -1,0 +1,19 @@
+{
+	"list":
+	[
+		{
+			"title": "파이썬으로 하는 알고리즘 교육",
+			"english": "Algorithm Education in Python",
+			"year": 2000,
+			"translator": "",
+			"link": "./documents/algorithm-education-in-python/index.html"
+		},
+		{
+			"title": "뷰티풀 수프4.0.0 문서",
+			"english": "Beautiful Soup 4 Document",
+			"year": 2000,
+			"translator": "",
+			"link": "./documents/beautifulsoup4/index.html"
+		}
+	]
+}
