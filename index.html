@@ -23,7 +23,7 @@
       <h3>
 <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>환영합니다!</h3>
 	<div ng-controller="docubody">
-		<div ng-repeat="data in datas">
+		<div ng-repeat="data in datas | orderBy:'-year'">
 			<pre><code><i class="fa fa-file-text-o"></i>&nbsp;<a href="{{ data.link }}">{{ data.title }} - {{ data.english }}</a></code><div align="right">{{ data.year }}년 {{ data.translator }} 번역</div></pre>
 		</div>
 	</div>
