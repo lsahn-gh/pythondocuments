@@ -1,0 +1,623 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<!-- saved from url=(0102) -->
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+
+<title>All About Python and Unicode | boodebr.org</title>
+<style type="text/css">@import url("./boodebr_org/wikklytext.css");</style>
+</head>
+
+
+<body>한글판 johnsonj 2008.05.10 토
+<h2><a href="http://boodebr.org/main/python/all-about-python-and-unicode">파이썬과 유니코드에 관한 모든 것</a></h2>
+<div class="node" id="node-61"><span class="submitted">2007년 3월 4일 - 오후 3시 39분 — 프랭크(frank) 작성</span> <br>
+<div class="content">... 유니코드에 관한 상세한 연구<br><br>
+<h2 class="wikkly-h2">목차</h2>
+<ul class="wikkly-ul">
+  <li class="wikkly-ul-li1"><a class="wikkly-a-internal" title="#STARTINGPOINT" href="#STARTINGPOINT">시작 하기</a> 
+  </li><li class="wikkly-ul-li1"><a class="wikkly-a-internal" title="#UNITEXT_IN_PYTHON" href="#UNITEXT_IN_PYTHON">파이썬의 유니코드 텍스트</a> 
+  <ul class="wikkly-ul">
+    <li class="wikkly-ul-li2"><a class="wikkly-a-internal" title="#UNI_TO_PYLITERAL" href="#UNI_TO_PYLITERAL">유니코드 심볼을 파이썬 기호상수로 변환하기</a> 
+    </li><li class="wikkly-ul-li2"><a class="wikkly-a-internal" title="#WHYNOPRINT" href="#WHYNOPRINT">왜 "print"가 작동하지 않는가?</a> 
+    </li><li class="wikkly-ul-li2"><a class="wikkly-a-internal" title="#CODECS" href="#CODECS">코덱(Codecs)</a> 
+
+    <ul class="wikkly-ul">
+      <li class="wikkly-ul-li3"><a class="wikkly-a-internal" title="#UNI_TO_BINARY" href="#UNI_TO_BINARY">유니코드에서 이진코드로</a> 
+      </li><li class="wikkly-ul-li3"><a class="wikkly-a-internal" title="#BIN_TO_UNI" href="#BIN_TO_UNI">이진코드를 유니코드로</a> </li></ul>
+    </li><li class="wikkly-ul-li2"><a class="wikkly-a-internal" title="#STRINGOPS" href="#STRINGOPS">문자열 연산</a> 
+    <ul class="wikkly-ul">
+      <li class="wikkly-ul-li3"><a class="wikkly-a-internal" title="#WRINKLE_U" href="#WRINKLE_U"><span class="wikkly-code-inline">\U</span>의 결함</a> 
+      </li><li class="wikkly-ul-li3"><a class="wikkly-a-internal" title="#BUGS_PY2021" href="#BUGS_PY2021">파이썬 2.0에서의 버그 &amp; 2.1</a> </li></ul>
+    </li><li class="wikkly-ul-li2"><a class="wikkly-a-internal" title="#UNIV_RECODE" href="#UNIV_RECODE">"범용 기록기"로서의 파이썬</a> </li></ul>
+  </li><li class="wikkly-ul-li1"><a class="wikkly-a-internal" title="#FUNBEGINS" href="#FUNBEGINS">이제 버그가 시작되리니... 유니코드와 실 세계</a> 
+  <ul class="wikkly-ul">
+    <li class="wikkly-ul-li2"><a class="wikkly-a-internal" title="#UNI_FILENAMES" href="#UNI_FILENAMES">유니코드 파일이름</a> 
+    <ul class="wikkly-ul">
+      <li class="wikkly-ul-li3"><a class="wikkly-a-internal" title="#PLAT_WIN" href="#PLAT_WIN">마이크로소프트 윈도우즈</a> 
+      </li><li class="wikkly-ul-li3"><a class="wikkly-a-internal" title="#PLAT_UNIX" href="#PLAT_UNIX">Unix/POSIX/Linux</a> 
+
+      </li><li class="wikkly-ul-li3"><a class="wikkly-a-internal" title="#PLAT_OSX" href="#PLAT_OSX">Mac 
+      OS/X</a> </li></ul>
+    </li><li class="wikkly-ul-li2"><a class="wikkly-a-internal" title="#UNI_HTML" href="#UNI_HTML">유니코드와 HTML</a> 
+    </li><li class="wikkly-ul-li2"><a class="wikkly-a-internal" title="#UNI_XML" href="#UNI_XML">유니코드와 XML</a> 
+    </li><li class="wikkly-ul-li2"><a class="wikkly-a-internal" title="#UNI_SAMBA" href="#UNI_SAMBA">유니코드와 네트워크 공유 (삼바(Samba))</a> </li></ul>
+  </li><li class="wikkly-ul-li1"><a class="wikkly-a-internal" title="#SUMMARY" href="#SUMMARY">맺는 말</a><br><br></li></ul><a class="wikkly-a-internal" name="STARTINGPOINT"></a>
+<h2 class="wikkly-h2">시작 하기</h2><br>
+이 문서를 쓰기 시작한 것은 이주 전이었다. 그 때 <a class="wikkly-a-www" title="Link to http://www.python.org" href="http://www.python.org/" target="_blank">Python</a>과 <a class="wikkly-a-www" title="Link to http://www.unicode.org" href="http://www.unicode.org/" target="_blank">Unicode</a>에 대하여 내가 아는 사용법은 다음과 같았다:<br><br>
+<div class="wikkly-block-indent">
+파이썬에서 유니코드를 사용하려면 unicode()에 문자열을 건네기만 하면 된다 </div><br><br>
+도대체 이런 이상한 지식은 어디에서 얻었는가? 물론, 그렇다. <a class="wikkly-a-www" title="Link to http://docs.python.org" href="http://docs.python.org/tut/node5.html#SECTION005130000000000000000" target="_blank">유니코드에 관하여 파이썬 자습서에서</a> 이렇게 말하고 있다:<br><br>
+<div class="wikkly-block-indent">"파이썬에서 유니코드 문자열을 만들려면 그냥 간단하게 보통 문자열을 만들듯이 하면 된다":<br><br>&gt;&gt;&gt; u'Hello World !' u'Hello 
+World !' </div><br><br>
+이 예제는 기술적으로는 올바르지만, 유니코드 초보자를 그릇된 길로 이끌 수 있다. 왜냐하면 진정한 사용법에 필요한 여러 상세한 정보를 두루뭉실하게 얼버무리기 때문이다. 이렇게 과도하게-간략화된 설명 때문에 본인은 파이썬에서 유니코드가 작동하는 방식을 완전히 잘못 이해했었다.<br><br>
+여러분 역시 과도하게-간략화된 경로를 따라 내려왔다면, 이 자습서가 모쪼록 여러분을 구해줄 수 있기를 바란다. 이 자습서에는 예제와 테스트 그리고 데모가 한 세트로 포함되어 있으며 본인이 파이썬의 유니코드와 올바르게 작업하는 방법을 "다시 익히는" 과정을 문서화했다. 크로스-플랫폼 문제뿐만 아니라, <a class="wikkly-a-www" title="Link to http://www.w3.org" href="http://www.w3.org/MarkUp/HTML" target="_blank">HTML</a>과 <a class="wikkly-a-www" title="Link to http://www.w3.org" href="http://www.w3.org/XML/" target="_blank">XML</a> 그리고 파일시스템을 다룰 때 일어나는 문제들을 다룬다.<br><br>
+그런데, 유니코드는 <i class="">상당히 단순하다</i>. 처음부터 제대로 배웠으면 좋았을텐데 아쉽다.<br><br>
+<h2 class="wikkly-h2">어디에서부터 시작할까?</h2><br>
+최상위 수준에서, 컴퓨터는 세 가지 유형의 텍스트 표현을 사용한다: 
+<ol class="wikkly-ol">
+  <li class="wikkly-ol-li1">ASCII 
+  </li><li class="wikkly-ol-li1">멀티바이트 문자 세트
+  </li><li class="wikkly-ol-li1">유니코드<br><br></li></ol>
+유니코드가 ASCII로부터 어떻게 진화해 왔는지 이해하면 유니코드를 더 쉽게 이해하실 수 있을 것이다. 다음은 이 진화과정을 간략하게 요약해 놓은 것이다.<br><br>
+<h3 class="wikkly-h3">ASCII에서 멀티바이트로</h3><br>
+처음에, ASCII가 있었다. (물론, <a class="wikkly-a-www" title="Link to http://www.dynamoo.com" href="http://www.dynamoo.com/technical/ascii-ebcdic.htm#asciibetter" target="_blank">EBCDIC도 있었지만</a>, 메인프레임 바깥으로 벗어나지 않았다. 그래서 여기에서는 생략하겠다.) ASCII 문자 세트에는 256 개의 문자가 포함되어 있는데, 다음 <a class="wikkly-a-www" title="Link to http://www.asciitable.com" href="http://www.asciitable.com/" target="_blank">ASCII 차트</a>에서 보시는 바와 같다. 256개의 문자가 사용가능하지만, 하위 128 (0-127 코드)개는 자주 사용되는 코드이다. 사실 초기 메일 시스템은 오직 0-127 (즉 "7-비트 텍스트")개만 전송을 허용하며 사실 오늘날도 여전히 많은 시스템에 적용된다. 표에서 보시다시피, ASCII는 영어권 문서에는 충분하다.<br><br>ASCII만으로는 불충분한 여러 나라에서 컴퓨터의 사용이 증가하자 문제가 일어났다. ASCII는 그리스어나 키릴어 또는 일어 텍스트 등등을 다룰 능력이 없다. 게다가, 일어 텍스트 하나 만으로도 수천개의 문자가 필요하다. 그래서 8-비트 체계 안에 맞출 방법이 없다. 이를 극복하기 위하여, 멀티바이트 문자 세트가 창안되었다. 대부분의 (전부가 아니라면?) 멀티바이트 문자 세트는 ASCII 세트에서 주로 앞쪽 128개의 문자만 주로 사용된다는 사실을 이용한다 (십진수로는 0-127, 또는 16진수로는 0x00-0x7f). 상위 코드(십진수로는 128..255, 또는 십육진수로 0x80-0xff)는 비-영어 확장 세트를 정의하는데 사용된다.<br><br>
+
+
+예제를 한 번 보자: Shift-JIS는 일본어 텍스트를 위한 인코딩이다. 그의 문자 테이블은 <a class="wikkly-a-www" title="Link to http://www.rikai.com" href="http://www.rikai.com/library/kanjitables/kanji_codes.sjis.shtml" target="_blank">여기에서 보실 수 있다</a>. 각 문자의 첫 바이트는 0x80 - 0xfc의 16진 값으로 시작함을 주목하자. 이는 흥미로운 특성인데, 왜냐하면 그 의미가 영어와 일어 텍스트가 자유롭게 혼합될 수 있다는 뜻이기 때문이다! 문자열 "Hello World!"는 영어 텍스트로서 완벽하게 유효한 Shift-JIS 인코딩이다. Shift-JIS를 해석할 때 0x80-0xff 범위의 바이트를 맞이하면, 두 코드 연속열 중에서 첫 문자라는 것을 알 수 있다. 그렇지 않으면, 보통 ASCII인 1바이트이다.<br><br>
+
+이는 오직 일본어로만 작업한다면 똑 같이 잘 작동한다. 그러나 <a class="wikkly-a-www" title="Link to http://czyborra.com" href="http://czyborra.com/charsets/iso8859.html#ISO-8859-7" target="_blank">그리스 문자 세트로</a>로 전환하면 어떤 일이 일어날까? 표를 보시면 아시겠지만, ISO-8859-7는 0x80-0xff 범위의 코드를  Shift-JIS와 <i class="">완전히 다르게 재정의한다</i>. 그래서, 영어와 일어는 혼합해 쓸 수 있지만, 그리스어와 일어는 서로 밟아댄다. 그러므로 섞어 쓸 수 없다. 이런 문제는 멀티바이트 문자 세트를 섞어쓸 때 흔히 일어난다.<br><br>
+<h3 class="wikkly-h3">멀티바이트에서 유니코드로</h3><br>
+
+다양한 언어를 섞어 쓸 때 일어나는 문제를 극복하기 위해, 유니코드는 세상의 문자 세트를 <i class="">모두</i> 하나의 거대한 테이블 안으로 넣자고 제안한다. 다음의 <a class="wikkly-a-www" title="Link to http://www.unicode.org" href="http://www.unicode.org/charts/" target="_blank">유니코드 문자 세트를</a> 한 번 살펴보자.<br><br>
+
+언뜻 보면, 각 언어에 대하여 따로 표가 있는 것처럼 보인다. 그래서 ASCII에 비해 별로 나아 보이지 않을지도 모르겠다. 실제로는 이것들은 모두 <b class="">같은 테이블</b>에 있으며, 단지 (인간이) 쉽게 참조하기 위하여 여기에 인덱스되어 있을 뿐이다. 주목할 핵심 열쇠는 이 모든 것들이 같은 테이블에 있으므로, ASCII/멀티바이트 세계처럼 중첩되지 않는다는 것이다. 이 덕분에 유니코드 문서는 코딩 충돌없이 자유롭게 언어를 섞어 쓸 수 있다. 
+<br><br>
+<h2 class="wikkly-h2">유니코드 전문용어</h2><br>
+
+<a class="wikkly-a-www" title="Link to http://www.unicode.org" href="http://www.unicode.org/charts/PDF/U0370.pdf" target="_blank">그리스어 차트</a>를 보고 몇 개의 문자를 가져와 보자: 
+<div class="wikkly-indent">
+<table class="wikkly-table">
+  <tbody>
+  <tr class="wikkly-tr">
+    <th class="wikkly-th" style="TEXT-ALIGN: center" colspan="3">샘플 유니코드 심볼</th></tr>
+  <tr class="wikkly-tr">
+    <td class="wikkly-td" style="TEXT-ALIGN: left"><span class="wikkly-code-inline">03A0</span></td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Π</td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Greek Capital Letter Pi</td></tr>
+  <tr class="wikkly-tr">
+    <td class="wikkly-td" style="TEXT-ALIGN: left"><span class="wikkly-code-inline">03A3</span></td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Σ</td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Greek Capital Letter 
+  Sigma</td></tr>
+  <tr class="wikkly-tr">
+    <td class="wikkly-td" style="TEXT-ALIGN: left"><span class="wikkly-code-inline">03A9</span></td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Ω</td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Greek Capital Letter 
+  Omega</td></tr></tbody></table></div><br><br>
+  
+  
+  흔히 이 심볼들은 <b class="">U+NNNN</b>와 같은 표기법을 사용하여 참조한다. 예를 들어 <b class="">U+03A0</b>와 같이 말이다. 그래서 다음의 표기법을 사용하여 이 문자들을 담고 있는 문자열을 정의할 수 있다 (명료하게 하기 위해 괄호를 덧붙였다):<br><br>
+<div class="wikkly-indent"><span class="wikkly-code-inline">uni&nbsp;=&nbsp;{U+03A0}&nbsp;+&nbsp;{U+03A3}&nbsp;+&nbsp;{U+03A9}&nbsp;</span> 
+</div><br><br>
+
+이제, 정확하게 'uni'가 <i class="">무엇을</i> 뜻하는지 알지만 (<b class="">ΠΣΩ</b>), 다음과 같이 할 <b class="">방법이 없다</b>: 
+<ul class="wikkly-ul">
+  <li class="wikkly-ul-li1">화면에 <span class="wikkly-code-inline">uni</span>를 인쇄하는 방법. 
+  </li><li class="wikkly-ul-li1">파일에 <span class="wikkly-code-inline">uni</span>를 저장하는 방법. 
+  </li><li class="wikkly-ul-li1">또다른 텍스트에 <span class="wikkly-code-inline">uni</span>를 추가하는 방법. 
+  </li><li class="wikkly-ul-li1"><span class="wikkly-code-inline">uni</span>를 저장하는데 얼마나 많은 바이트가 드는지 아는 방법.<br><br></li></ul>왜 그런가? <span class="wikkly-code-inline">uni</span>는 이상적인 유니코드 문자열이며 - 이 시점에서는 그저 개념외에는 아무것도 아니기 때문이다. 잠시후에 인쇄하고 저장하며 조작하는 법을 살펴보겠다. 그러나 지금 당장은 마지막 언급에 주목하자: <i class=""><span class="wikkly-code-inline">uni</span>를 저장하는데 얼마나 많은 바이트가 드는지 알려줄 방법이 없다.</i> 사실, 바이트에 관한 모든 것을 잊어 버려야 하며 유니코드 문자열을 심볼의 집합으로 생각해야 한다.<br><br>왜 유니코드 세계에서는 바이트에 관하여 잊어 버려야 하는가? 그리스 심볼인 오메가를 예로 들어 보자: <b class="">Ω</b>. 이를 이진코드로 인코드하는데 적어도 4가지 방식이 있다:<br><br>
+<table class="wikkly-table">
+  <tbody>
+  <tr class="wikkly-tr">
+    <th class="wikkly-th" style="TEXT-ALIGN: center">인코딩 이름</th>
+    <th class="wikkly-th" style="TEXT-ALIGN: center">이진 표현</th></tr>
+  <tr class="wikkly-tr">
+    <td class="wikkly-td" style="TEXT-ALIGN: left">ISO-8859-7</td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left"><span class="wikkly-code-inline">\xD9</span><br><i class=""><sub class="">"Native" 
+      Greek encoding</sub></i></td></tr>
+  <tr class="wikkly-tr">
+    <td class="wikkly-td" style="TEXT-ALIGN: left">UTF-8</td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left"><span class="wikkly-code-inline">\xCE\xA9</span></td></tr>
+  <tr class="wikkly-tr">
+    <td class="wikkly-td" style="TEXT-ALIGN: left">UTF-16</td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left"><span class="wikkly-code-inline">\xFF\xFE\xA9\x03</span></td></tr>
+  <tr class="wikkly-tr">
+    <td class="wikkly-td" style="TEXT-ALIGN: left">UTF-32</td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left"><span class="wikkly-code-inline">\xFF\xFE\x00\x00\xA9\x03\x00\x00</span></td></tr></tbody></table>
+	  
+	  각각 모두 <b class="">Ω</b>의 완벽하게 유효한 코딩이다. 그러나 이와 같이 바이트로 작업을 시도하는 것은 ASCII/멀티바이트 세계를 다루는 것과 별반 다를게 없다. 이 때문에 유니코드를 바이트가 아니라 <i class="">심볼</i>로 간주하라고 말한 것이다 (<b class="">Ω</b>).<br><br>
+<h2 class="wikkly-h2">파이썬의 유니코드 텍스트</h2><br><a class="wikkly-a-internal" name="UNITEXT_IN_PYTHON"></a>이상적인 유니코드 문자열 <span class="wikkly-code-inline">uni</span> (<b class="">ΠΣΩ</b>)를 유용한 형태로 변환하려면, 몇 가지를 살펴볼 필요가 있다: 
+<ol class="wikkly-ol">
+  <li class="wikkly-ol-li1">유니코드 기호상수를 표현하기
+  </li><li class="wikkly-ol-li1">유니코드를 이진코드로 변환하기
+  </li><li class="wikkly-ol-li1">이진코드를 유니코드로 변환하기
+  </li><li class="wikkly-ol-li1">문자열 연산을 사용하기<br><br></li></ol><a class="wikkly-a-internal" name="UNI_TO_PYLITERAL"></a>
+<h3 class="wikkly-h3">유니코드 심볼을 파이썬 기호상수로 변환하기</h3><br>
+
+유니코드 문자열을 심볼로부터 만드는 일은 아주 쉽다. 위의 그리스 심볼을 되살려보자:<br><br>
+<div class="wikkly-indent">
+<table class="wikkly-table">
+  <tbody>
+  <tr class="wikkly-tr">
+    <th class="wikkly-th" style="TEXT-ALIGN: center" colspan="3">샘플 유니코드 심볼</th></tr>
+  <tr class="wikkly-tr">
+    <td class="wikkly-td" style="TEXT-ALIGN: left"><span class="wikkly-code-inline">03A0</span></td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Π</td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Greek Capital Letter Pi</td></tr>
+  <tr class="wikkly-tr">
+    <td class="wikkly-td" style="TEXT-ALIGN: left"><span class="wikkly-code-inline">03A3</span></td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Σ</td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Greek Capital Letter 
+  Sigma</td></tr>
+  <tr class="wikkly-tr">
+    <td class="wikkly-td" style="TEXT-ALIGN: left"><span class="wikkly-code-inline">03A9</span></td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Ω</td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Greek Capital Letter 
+  Omega</td></tr></tbody></table></div><br><br>
+  
+  위의 문자들과 약간의 ASCII 구형 문자로 유니코드 문자열을 만들고 싶다고 해보자.<br><br>
+<div class="wikkly-block-indent">
+<dl class="wikkly-dl">
+  <dt class="wikkly-dt"><i class="">의사코드:</i> 
+  </dt><dd class="wikkly-dd"><span class="wikkly-code-inline">uni&nbsp;=&nbsp;'abc_'&nbsp;+&nbsp;{U+03A0}&nbsp;+&nbsp;{U+03A3}&nbsp;+&nbsp;{U+03A9}&nbsp;+&nbsp;'.txt'</span><br><br></dd></dl>
+<dl class="wikkly-dl">
+  <dt class="wikkly-dt">다음은 파이썬으로 그 문자열을 만드는 법이다: 
+  </dt><dd class="wikkly-dd"><span class="wikkly-code-inline">uni&nbsp;=&nbsp;u"abc_\u03a0\u03a3\u03a9.txt"</span> 
+  </dd></dl></div><br><br>몇가지 주목할 것들: 
+<ul class="wikkly-ul">
+  <li class="wikkly-ul-li1">평범한-ASCII 문자는 그 자체로 쓸 수 있다. 그냥 "a"라고 말하면 되고, 유니코드 심볼 <span class="wikkly-code-inline">"\u0061"</span>을 사용할 필요가 없다. <i class="">(그러나 기억하자. <span class="wikkly-code-inline">"a"</span> <b class="">는 실제로는 {U+0061}이다</b>; 유니코드 심볼 같은 것은 없다 <span class="wikkly-code-inline">"a"</span>.)</i> 
+  </li><li class="wikkly-ul-li1"><span class="wikkly-code-inline">\u</span> 피신 연속열은 유니코드를 나타내는데 사용된다. 
+  <ul class="wikkly-ul">
+    <li class="wikkly-ul-li2">이는 이진 값들을 삽입하기 위한 약간 전통적인 C-스타일의 <span class="wikkly-code-inline">\xNN</span>과 비슷하다. 그렇지만, 유니코드 테이블을 보면 6 자리까지 값을 보여준다. 이것들은 <span class="wikkly-code-inline">\xNN</span>으로 편리하게 나타낼 수 없다. 그래서 <span class="wikkly-code-inline">\u</span>가 고안되었다. 
+    </li><li class="wikkly-ul-li2">
+	
+	4자리 이하의 유니코드 값에는 4-자리 버전을 사용하자:<br><span class="wikkly-code-inline">\uNNNN</span><br><i class="">4 자리를 모두, 필요하면 앞에 0을 사용하여 채워야 함에 주의하자.</i> 
+    </li><li class="wikkly-ul-li2">4비트를 넘어가는 유니코드 값에는 8-자리 버전을 사용하자: <br><span class="wikkly-code-inline">\UNNNNNNNN</span> <br><i class="">8 자리를 모두, 필요하면 앞에 0을 사용하여 채워야 함에 주의하자.</i><br><br></li></ul></li></ul>다음은 또다른 예이다:<br><br>
+<div class="wikkly-block-indent">
+<dl class="wikkly-dl">
+  <dt class="wikkly-dt"><i class="">의사코드:</i> 
+  </dt><dd class="wikkly-dd"><span class="wikkly-code-inline">uni&nbsp;=&nbsp;{U+1A}&nbsp;+&nbsp;{U+B3C}&nbsp;+&nbsp;{U+1451}&nbsp;+&nbsp;{U+1D10C}&nbsp;</span><br><br></dd></dl>
+<dl class="wikkly-dl">
+  <dt class="wikkly-dt"><i class="">파이썬:</i> 
+  </dt><dd class="wikkly-dd"><span class="wikkly-code-inline">uni&nbsp;=&nbsp;u'\u001a\u0bc3\u1451\U0001d10c'</span><br><br></dd></dl>
+  
+  어떻게 적절하게 각 값들을 4/8 자리에 맞게 채웠는지 주목하자. 파이썬은 이렇게 하지 않으면 에러를 일으킨다. 코드에 대문자나 소문자 어느 것을 사용해도 좋다는 것을 주목하자. 다음은 정확하게 같은 일을 한다:<br><br>
+<dl class="wikkly-dl">
+  <dt class="wikkly-dt"><i class="">파이썬:</i> 
+  </dt><dd class="wikkly-dd"><span class="wikkly-code-inline">uni&nbsp;=&nbsp;u'\u001A\u0BC3\u1451\U0001D10C'</span> 
+  </dd></dl></div><br><br><a class="wikkly-a-internal" name="WHYNOPRINT"></a>
+<h3 class="wikkly-h3">왜 "print"는 작동하지 않는가?</h3><br>
+
+<span class="wikkly-code-inline">uni</span>는 <b class="">고정된 컴퓨터 표현이 없다고</b> 앞서 본인이 말했던 바를 기억하자. 그래서  <span class="wikkly-code-inline">uni</span>를 인쇄하려고 하면 어떤 일이 일어나는가? 
+<div class="wikkly-code-block">uni&nbsp;=&nbsp;u"\u001A\u0BC3\u1451\U0001D10C"<br>print&nbsp;uni</div><br><br>
+다음과 같은 메시지를 보게될 것이다: 
+<div class="wikkly-code-block">Traceback&nbsp;(most&nbsp;recent&nbsp;call&nbsp;last):<br>&nbsp;&nbsp;File&nbsp;"t6.py",&nbsp;line&nbsp;2,&nbsp;in&nbsp;?<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;uni<br>UnicodeEncodeError:&nbsp;'ascii'&nbsp;codec&nbsp;can't&nbsp;encode&nbsp;characters&nbsp;in&nbsp;position&nbsp;1-4:<br>ordinal&nbsp;not&nbsp;in&nbsp;range(128)</div><br><br>
+
+무슨 일이 일어났는가? 자, 파이썬에게 <span class="wikkly-code-inline">uni</span>를 인쇄하라고 명령했지만, <span class="wikkly-code-inline">uni</span>는 고정된 컴퓨터 표현이 없으므로, 파이썬은 먼저 <span class="wikkly-code-inline">uni</span>를 인쇄가능한 형태로 변환해야 한다. 파이썬에게 변환방법을 가르쳐 주지 않았기 때문에, 파이썬은 여러분이 ASCII를 원한다고 간주한다. 불행하게도, ASCII는 0에서 127 까지의 값만을 다룰 수 있으며, <span class="wikkly-code-inline">uni</span>에는 범위를 벗어난 값들이 들어 있으므로, 에러를 보게되는 것이다.<br><br><span class="wikkly-code-inline">uni</span>를 인쇄하는 빠른 방법은 파이썬의 <span class="wikkly-code-inline">repr()</span> 메쏘드를 사용하는 것이다: 
+<div class="wikkly-code-block">uni&nbsp;=&nbsp;u"\u001A\u0BC3\u1451\U0001D10C"<br>print&nbsp;repr(uni)</div><br><br>다음과 같이 인쇄된다: 
+<div class="wikkly-code-block">u'\x1a\u0bc3\u1451\U0001d10c'</div><br><br>물론 일리는 있다. 정확하게 <span class="wikkly-code-inline">uni</span>를 정의한 대로이니까 말이다. 
+
+그러나 <span class="wikkly-code-inline">repr(uni)</span>는 실세계에서 <span class="wikkly-code-inline">uni</span> 그 자체만큼이나 아무 쓸모가 없다. 정말 필요한 것은 코덱에 관하여 배우는 것이다.<br><br>
+<h3 class="wikkly-h3">코덱(Codecs)</h3>
+<dl class="wikkly-dl">
+  <dt class="wikkly-dt"><a class="wikkly-a-internal" name="CODECS"></a><b class="">코덱(Codecs)</b> 
+  </dt><dd class="wikkly-dd">
+  일반적으로, 파이썬의 코덱은 임의의 객체-대-객체 변환을 허용한다. 그렇지만, 이 글의 문맥에서 코덱을 다음과 같이 생각하자. 유니코드 객체를 이진 파이썬 문자열 또는 그 반대로 변환해 주는 함수로 생각하면 충분하다. 
+  </dd><dt class="wikkly-dt"><b class="">왜 코덱이 필요한가?</b> 
+  </dt><dd class="wikkly-dd">유니코드 객체는 <i class="">고정된 컴퓨터 표현이 없다</i>. 유니코드를 인쇄하거나 디스크에 저장하거나 또는 네트워크를 건너서 보내려면 먼저 고정된 컴퓨터 표현으로 인코드되어야 한다. 이는 <i class="">코덱(codec)</i>을 사용하여 완수한다. 메일 매일의 경험에서 자주 들어 보았을 만한 코덱은 다음과 같다: <b class="">ascii</b>, <b class="">iso-8859-7</b>, <b class="">UTF-8</b>, <b class="">UTF-16</b>.<br><br></dd></dl>
+<h3 class="wikkly-h3">유니코드에서 이진 코드로</h3><br><a class="wikkly-a-internal" name="UNI_TO_BINARY"></a>유니코드 값을 이진 표현으로 변환하려면, 코덱의 이름과 함께 <span class="wikkly-code-inline">.encode</span> 메쏘드를 호출해야 한다. 예를 들어, 유니코드 값을 <b class="">UTF-8</b>로 변환하려면: 
+<div class="wikkly-code-block">binary&nbsp;=&nbsp;uni.encode("utf-8")</div><br><br>
+<span class="wikkly-code-inline">uni</span>를 좀 더 재미있게 만들어 보면 어떨까? 평범한 텍스트 문자를 추가해 보자: 
+<div class="wikkly-code-block">uni&nbsp;=&nbsp;u"Hello\u001A\u0BC3\u1451\U0001D10CUnicode"</div><br><br>
+이제 코덱에 따라 <span class="wikkly-code-inline">uni</span>가 어떻게 표현되는지 한 번 보자. 다음은 작은 테스트 프로그램이다:<br><br>
+<div class="wikkly-codebox-container">
+<div class="wikkly-codebox-title">test_codec01.py</div>
+<div class="wikkly-codebox-body">if&nbsp;__name__&nbsp;==&nbsp;'__main__':<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;define&nbsp;our&nbsp;Unicode&nbsp;string<br>&nbsp;&nbsp;&nbsp;&nbsp;uni&nbsp;=&nbsp;u"Hello\u001A\u0BC3\u1451\U0001D10CUnicode"<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;UTF-8&nbsp;and&nbsp;UTF-16&nbsp;can&nbsp;fully&nbsp;encode&nbsp;*any*&nbsp;Unicode&nbsp;string<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"UTF-8",&nbsp;repr(uni.encode('utf-8'))<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"UTF-16",&nbsp;repr(uni.encode('utf-16'))<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;ASCII&nbsp;can&nbsp;only&nbsp;code&nbsp;values&nbsp;0-127.&nbsp;Below,&nbsp;we&nbsp;tell&nbsp;Python<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;to&nbsp;replace&nbsp;non-codable&nbsp;characters&nbsp;with&nbsp;'?'<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"ASCII",uni.encode('ascii','replace')<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;ISO-8859-1&nbsp;is&nbsp;similar&nbsp;to&nbsp;ASCII<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"ISO-8859-1",uni.encode('iso-8859-1','replace')</div></div><br><br>
+
+이의 출력 결과는 다음과 같다: 
+<div class="wikkly-code-block">UTF-8&nbsp;'Hello\x1a\xe0\xaf\x83\xe1\x91\x91\xf0\x9d\x84\x8cUnicode'<br>UTF-16&nbsp;'\xff\xfeH\x00e\x00l\x00l\x00o\x00\x1a\x00\xc3\x0bQ\x144<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\xd8\x0c\xddU\x00n\x00i\x00c\x00o\x00d\x00e\x00'<br>ASCII&nbsp;Hello????Unicode<br>ISO-8859-1&nbsp;Hello????Unicode</div><br><br>
+여전히 <span class="wikkly-code-inline">repr()</span>을 사용하여 UTF-8 문자열과 UTF-16 문자열을 인쇄하고 있음을 주목하자. 왜인가? 음, 그렇지 않았으면, 화면에 날 이진 값들을 인쇄했을 것이고, 이 문서에 집어 넣기가 어려웠을 것이다.<br><br><a class="wikkly-a-internal" name="BIN_TO_UNI"></a>
+<h3 class="wikkly-h3">이진코드에서 유니코드로</h3><br>
+누군가 여러분에게 <b class="">UTF-8</b> 인코드된 버전으로 유니코드 객체를 주었다고 해보자. 어떻게 그것을 다시 유니코드로 변환할 것인가? 아마도 순진하게 다음과 같이 시도해 볼 것이다:<br><br>
+<div class="wikkly-warnbox-container">
+<div class="wikkly-warnbox-title">순진한 (그른) 방법</div>
+<div class="wikkly-warnbox-body"><span class="wikkly-code-inline">uni&nbsp;=&nbsp;unicode(&nbsp;utf8_string&nbsp;)</span></div></div><br><br>
+왜 이것이 잘못인가? 다음은 정확하게 같은 일을 하는 샘플 프로그램이다: 
+<div class="wikkly-code-block">uni&nbsp;=&nbsp;u"Hello\u001A\u0BC3\u1451\U0001D10CUnicode"<br>utf8_string&nbsp;=&nbsp;uni.encode('utf-8')<br><br>#&nbsp;naively&nbsp;convert&nbsp;back&nbsp;to&nbsp;Unicode<br>uni&nbsp;=&nbsp;unicode(utf8_string)</div><br><br>
+여기에서 무슨 일이 일어나는가: 
+<div class="wikkly-code-block">Traceback&nbsp;(most&nbsp;recent&nbsp;call&nbsp;last):<br>&nbsp;&nbsp;&nbsp;&nbsp;File&nbsp;"t6.py",&nbsp;line&nbsp;5,&nbsp;in&nbsp;?<br>&nbsp;&nbsp;&nbsp;&nbsp;uni&nbsp;=&nbsp;unicode(utf8_string)<br><br>&nbsp;&nbsp;&nbsp;&nbsp;UnicodeDecodeError:&nbsp;'ascii'&nbsp;codec&nbsp;can't&nbsp;decode&nbsp;byte&nbsp;0xe0<br>&nbsp;&nbsp;&nbsp;&nbsp;in&nbsp;position&nbsp;6:&nbsp;ordinal&nbsp;not&nbsp;in&nbsp;range(128)</div><br><br>
+보시다시피, <span class="wikkly-code-inline">unicode()</span> 함수는 실제로 매개변수를 두 개 취한다: 
+<div class="wikkly-code-block">def&nbsp;unicode(string,&nbsp;encoding):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;....</div><br><br>
+
+위의 예제에서 인코딩이 없으므로 파이썬은 신뢰성 있게 또다시 ASCII를 원한다고 간주하였다 <a class="wikkly-a-internal" title="#Footnote1" href="#Footnote1">(각주 1)</a>. 그리고 잘못된 것을 돌려주었다. <br><br>다음은 올바른 방법이다: 
+<div class="wikkly-code-block">uni&nbsp;=&nbsp;u"Hello\u001A\u0BC3\u1451\U0001D10CUnicode"<br>utf8_string&nbsp;=&nbsp;uni.encode('utf-8')<br><br>#&nbsp;have&nbsp;to&nbsp;decode&nbsp;with&nbsp;the&nbsp;same&nbsp;codec&nbsp;the&nbsp;encoder&nbsp;used!<br>uni&nbsp;=&nbsp;unicode(utf8_string,'utf-8')<br>print&nbsp;"Back&nbsp;from&nbsp;UTF-8:&nbsp;",repr(uni)</div><br><br>다음과 같이 출력된다: 
+<div class="wikkly-code-block">&nbsp;&nbsp;&nbsp;&nbsp;Back&nbsp;from&nbsp;UTF-8:&nbsp;&nbsp;u'Hello\x1a\u0bc3\u1451\U0001d10cUnicode'</div><br><br>
+<h3 class="wikkly-h3"><a class="wikkly-a-internal" name="STRINGOPS"></a>문자열 연산</h3><br>
+위의 예제가 아무쪼록 왜 우리가 가능하면 유니코드 값을 이진 문자열로 취급하지 않으려고 하는지 그 이유를 알려주었기를 바란다! UTF-8 버전은 길이가 23 바이트였고, UTF-16 버전은 36 바이트였으며, ASCII 버전은 겨우 16 바이트였다 (그러나 4 유니코드 값을 완전히 <i class="">버렸다</i>) 그리고 ISO-8859-1와 비슷하다.<br><br>
+이 때문에 이 문서의 머리에서 바이트에 관하여 모든 것을 잊어 버리라고 제안한 것이다!<br><br>
+좋은 소식은 일단 유니코드 객체가 있으면, 정확하게 일반 문자열 객체와 똑 같이 행위한다는 것이다. 그래서 (<span class="wikkly-code-inline">\u</span>와 <span class="wikkly-code-inline">\U</span> 피신문자 말고는) 새로 배울 구문이 없다. 다음은 짧은 샘플 코드로서 유니코드 객체가 예상대로 행위하는 것을 보여준다:<br><br>
+<div class="wikkly-codebox-container">
+<div class="wikkly-codebox-title">test_stringops01.py</div>
+<div class="wikkly-codebox-body">if&nbsp;__name__&nbsp;==&nbsp;'__main__':<br><br>&nbsp;&nbsp;&nbsp;&nbsp;uni&nbsp;=&nbsp;u"Hello\u001A\u0BC3\u1451\U0001D10CUnicode"<br><br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"uni&nbsp;=&nbsp;",repr(uni)<br><br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"len(uni)&nbsp;=&nbsp;",len(uni)<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;print&nbsp;the&nbsp;"Hello"&nbsp;part<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"uni[:5]&nbsp;=&nbsp;",uni[:5]<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;print&nbsp;the&nbsp;Unicode&nbsp;characters&nbsp;one&nbsp;at&nbsp;a&nbsp;time<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"uni[5]&nbsp;=&nbsp;",repr(uni[5])<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"uni[6]&nbsp;=&nbsp;",repr(uni[6])<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"uni[7]&nbsp;=&nbsp;",repr(uni[7])<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Depending&nbsp;on&nbsp;how&nbsp;Python&nbsp;was&nbsp;compiled,&nbsp;\U&nbsp;characters<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;may&nbsp;be&nbsp;stored&nbsp;as&nbsp;two&nbsp;Unicode&nbsp;characters&nbsp;--&nbsp;see&nbsp;the<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;section&nbsp;"A&nbsp;wrinkle&nbsp;in&nbsp;\U"&nbsp;below&nbsp;for&nbsp;more&nbsp;details&nbsp;...<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"uni[8]&nbsp;=&nbsp;",repr(uni[8])<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"uni[9]&nbsp;=&nbsp;",repr(uni[9])<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;print&nbsp;the&nbsp;"Unicode"&nbsp;text&nbsp;at&nbsp;the&nbsp;end<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"uni[10:]&nbsp;=&nbsp;",repr(uni[10:])</div></div><br><br>
+이 샘플을 실행하면 다음과 같이 출력된다: 
+<div class="wikkly-code-block">uni&nbsp;=&nbsp;&nbsp;u'Hello\x1a\u0bc3\u1451\U0001d10cUnicode'<br>len(uni)&nbsp;=&nbsp;&nbsp;17<br>uni[:5]&nbsp;=&nbsp;&nbsp;Hello<br>uni[5]&nbsp;=&nbsp;&nbsp;u'\x1a'<br>uni[6]&nbsp;=&nbsp;&nbsp;u'\u0bc3'<br>uni[7]&nbsp;=&nbsp;&nbsp;u'\u1451'<br>uni[8]&nbsp;=&nbsp;&nbsp;u'\ud834'<br>uni[9]&nbsp;=&nbsp;&nbsp;u'\udd0c'<br>uni[10:]&nbsp;=&nbsp;&nbsp;u'Unicode'</div><br><br><a class="wikkly-a-internal" name="WRINKLE_U"></a>
+<h3 class="wikkly-h3"><span class="wikkly-code-inline">\U</span>의 결함</h3><br>
+
+어떻게 파이썬이 컴파일되었는가에 따라, 유니코드 객체를 내부적으로 UTF-16 (2 바이트/문자) 또는 UTF-32 (4 바이트/문자) 포맷으로 저장한다. <i class="">불행하게도</i> 이 낮은-수준의 상세는 보통의 문자열 인터페이스를 통하여 노출되어 있다.<br><br>
+
+ <span class="wikkly-code-inline">\u03a0</span> 같은 4-자리 (16-비트) 문자에 대해서는 아무 차이가 없다. 
+<div class="wikkly-code-block">a&nbsp;=&nbsp;u'\u03a0'<br>print&nbsp;len(a)</div>
+위 코드는 파이썬이 어떻게 구축되었는가에 상관없이, 길이 1을 보여준다. 그리고 <span class="wikkly-code-inline">a[0]</span>는 언제나 <span class="wikkly-code-inline">\u03a0</span>이 된다. 그렇지만, <span class="wikkly-code-inline">\U0001FF00</span> 같은 8-자리 (32-비트) 문자라면, <b class="">차이가 있다</b>. 분명히, 32-비트 값은 16-비트 코드로 직접 표현될 수 없다. 그래서 두 쌍의 16-비트 값이 사용된다. (<span class="wikkly-code-inline">0xD800&nbsp;-&nbsp;0xDFFF</span> 코드는 이른바 "<i class="">대리 쌍(surrogate pairs)</i>"이라고 불리우는데, 이런 두-문자 연속열을 위하여 예약되어 있다. 이런 값들은 그 자체로 사용되면 무효이다. 유니코드 규격에 의하면 말이다.)<br><br>
+
+다음은 무슨 일이 일어나는지 보여주는 샘플 프로그램이다: 
+<div class="wikkly-codebox-container">
+<div class="wikkly-codebox-title"><span class="wikkly-code-inline">\U</span>에 무슨 일이 일어나는가 ...</div>
+<div class="wikkly-codebox-body">a&nbsp;=&nbsp;u'\U0001ff00'<br>print&nbsp;"Length:",len(a)<br><br>print&nbsp;"Chars:"<br>for&nbsp;c&nbsp;in&nbsp;a:<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;repr(c)</div></div>
+"UTF-16" 파이썬 아래에서 이 코드를 실행하면, 다음과 같다: 
+<div class="wikkly-codebox-container">
+<div class="wikkly-codebox-title">출력결과, 'UTF-16' Python</div>
+<div class="wikkly-codebox-body">Length:&nbsp;2<br>Chars:<br>u'\ud83f'<br>u'\udf00'</div></div>
+'UTF-32' Python 아래에서는 다음과 같이 보일 것이다: 
+<div class="wikkly-codebox-container">
+<div class="wikkly-codebox-title">출력결과, 'UTF-32' Python</div>
+<div class="wikkly-codebox-body">Length:&nbsp;1<br>Chars:<br>u'\U0001ff00'</div></div>
+
+이는 신경써야할 짜증스런 세부사항이다. 그래서 유니코드 문자열을 통하여 문자를 하나하나 손댈 수 있는 모듈을 하나 작성했다. 'UTF-16'이든 'UTF-32' 취향의 파이썬에서 실행되든 상관없이 말이다. 
+
+이른바 <b class="">xmlmap</b>이라고 부르며 <a class="wikkly-a-www" title="Link to http://freshmeat.net" href="http://freshmeat.net/projects/gnosisxml/" target="_blank">Gnosis Utils</a>의 일부이다. 다음은 두 예제이다. 하나는 <b class="">xmlmap</b>를 사용하고, 다른 하나는 사용하지 않는다. 
+<div class="wikkly-codebox-container">
+<div class="wikkly-codebox-title"><span class="wikkly-code-inline">xmlmap</span> 없이</div>
+<div class="wikkly-codebox-body">a&nbsp;=&nbsp;u'A\U0001ff00C\U0001fafbD'<br>print&nbsp;"Length:",len(a)<br><br>print&nbsp;"Chars:"<br>for&nbsp;c&nbsp;in&nbsp;a:<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;repr(c)</div></div>
+<div class="wikkly-codebox-container">
+<div class="wikkly-codebox-title">UTF-16에서 <span class="wikkly-code-inline">xmlmap</span> 없이 수행한 결과</div>
+<div class="wikkly-codebox-body">Length:&nbsp;7<br>Chars:<br>u'A'<br>u'\ud83f'<br>u'\udf00'<br>u'C'<br>u'\ud83e'<br>u'\udefb'<br>u'D'</div></div>
+이제, <span class="wikkly-code-inline">usplit()</span> 함수를 사용하여, 분리된 값들을 필요한 곳에서 조합해서 한 번에 하나씩 문자를 얻으려면: 
+<div class="wikkly-codebox-container">
+<div class="wikkly-codebox-title"><span class="wikkly-code-inline">xmlmap</span>로</div>
+<div class="wikkly-codebox-body">from&nbsp;gnosis.xml.xmlmap&nbsp;import&nbsp;usplit<br><br>a&nbsp;=&nbsp;u'A\U0001ff00C\U0001fafbD'<br>print&nbsp;"Length:",len(a)<br><br>print&nbsp;"Chars:"<br>for&nbsp;c&nbsp;in&nbsp;usplit(a):<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;repr(c)</div></div>
+<div class="wikkly-codebox-container">
+<div class="wikkly-codebox-title">UTF-16 파이썬에서 <span class="wikkly-code-inline">xmlmap</span>를 가지고 수행한 결과</div>
+<div class="wikkly-codebox-body">Length:&nbsp;7<br>Chars:<br>u'A'<br>u'\U0001ff00'<br>u'C'<br>u'\U0001fafb'<br>u'D'</div></div>
+
+이제 파이썬이 어떻게 컴파일되었는가에 상관없이 동일한 결과를 얻을 것이다. (길이는 여전히 같음에 주의하자. 그러나 <span class="wikkly-code-inline">usplit()</span>에 의하여 대리쌍(surrogate pairs)은 조립되었으므로 보이지 않는다.)<br><br><a class="wikkly-a-internal" name="BUGS_PY2021"></a>
+<h3 class="wikkly-h3">파이썬 2.0 &amp; 2.1의 버그</h3><br>
+<div class="wikkly-indent"><i class="">
+그렇다. 파이썬 2.0과 2.1 이라니 "누가 신경쓸지" 궁금하실 거다. 그러나 완벽하게 이식성있는 코드를 작성하려면, 문제가 된다!</i> </div><br><br>
+파이썬 2.0.x 그리고 2.1.x은 <span class="wikkly-code-inline">\uD800-\uDFFF</span> 범위의 한개짜리-문자 코드를 다룰 때 심각한 버그가 있다.<br><br>
+아래의 샘플 코드가 그 문제를 보여준다: 
+<div class="wikkly-code-block">&nbsp;u&nbsp;=&nbsp;unichr(0xd800)<br>&nbsp;print&nbsp;"Orig:&nbsp;",repr(u)<br><br>&nbsp;#&nbsp;create&nbsp;utf-8&nbsp;from&nbsp;'\ud800'<br>&nbsp;ue&nbsp;=&nbsp;u.encode('utf-8')<br>&nbsp;print&nbsp;"UTF-8:&nbsp;",repr(ue)<br><br>&nbsp;#&nbsp;decode&nbsp;back&nbsp;to&nbsp;unicode<br>&nbsp;uu&nbsp;=&nbsp;unicode(ue,'utf-8')<br>&nbsp;print&nbsp;"Back:&nbsp;",repr(uu)</div><br><br>
+이 코드를 파이썬 2.2 이상에서 실행하면 예상대로 결과를 돌려준다: 
+<div class="wikkly-code-block">&nbsp;Orig:&nbsp;&nbsp;u'\ud800'<br>&nbsp;UTF-8:&nbsp;&nbsp;'\xed\xa0\x80'<br>&nbsp;Back:&nbsp;&nbsp;u'\ud800'</div><br><br>
+파이썬 2.0.x은 다음과 같이 출력한다: 
+<div class="wikkly-code-block">&nbsp;Orig:&nbsp;&nbsp;u'\uD800'<br>&nbsp;UTF-8:&nbsp;&nbsp;'\240\200'<br>&nbsp;Traceback&nbsp;(most&nbsp;recent&nbsp;call&nbsp;last):<br>&nbsp;&nbsp;&nbsp;File&nbsp;"test_utf8_bug.py",&nbsp;line&nbsp;9,&nbsp;in&nbsp;?<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uu&nbsp;=&nbsp;unicode(ue,'utf-8')<br>&nbsp;UnicodeError:&nbsp;UTF-8&nbsp;decoding&nbsp;error:&nbsp;unexpected&nbsp;code&nbsp;byte</div><br><br>
+파이썬 2.1.x은 다음과 같이 출력한다: 
+<div class="wikkly-code-block">&nbsp;Orig:&nbsp;&nbsp;u'\ud800'<br>&nbsp;UTF-8:&nbsp;&nbsp;'\xa0\x80'<br>&nbsp;Traceback&nbsp;(most&nbsp;recent&nbsp;call&nbsp;last):<br>&nbsp;&nbsp;&nbsp;File&nbsp;"test_utf8_bug.py",&nbsp;line&nbsp;9,&nbsp;in&nbsp;?<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uu&nbsp;=&nbsp;unicode(ue,'utf-8')<br>&nbsp;UnicodeError:&nbsp;UTF-8&nbsp;decoding&nbsp;error:&nbsp;unexpected&nbsp;code&nbsp;byte</div><br><br>
+보시다시피, 둘 모두 단일 문자로 사용되면 <span class="wikkly-code-inline">u'\ud800'</span>를 인코드하지 못한다. <span class="wikkly-code-inline">0xD800&nbsp;..&nbsp;0xDFF</span> 사이의 문자들이 그 자체로 사용될 때 유효하지 않는 것은 맞지만, 사실은 파이썬에서는 홀로 사용할 수 있다.<br><br>
+
+<h4 class="wikkly-h4"><i class="">그러나 그것이 무효한 걸, 왜 파이썬이 신경쓰는가?</i></h4><br>
+
+좋은 예가 떠 올랐다. 완전히 우연하게도 이 자습서를 위한 코드를 만들다가 말이다. 파이썬 파일을 두개 만들어 보자:<br><br><i class="">aaa.py</i> 
+<div class="wikkly-code-block">x&nbsp;=&nbsp;u'\ud800'</div><br><br><i class="">bbb.py</i> 
+<div class="wikkly-code-block">import&nbsp;sys<br>sys.path.insert(0,'.')<br>import&nbsp;aaa</div><br><br>
+
+이제 파이썬 2.0.x/2.1.x을 사용하여 <span class="wikkly-code-inline">bbb.py</span>를 <b class="">두 번</b> 실행해보자 (두 번 실행될 필요가 있으므로 두 번째는 <span class="wikkly-code-inline">aaa.pyc</span>를 적재할 것이다). 두 번째 실행되면 다음과 같은 에러를 맞이한다: 
+<div class="wikkly-code-block">&nbsp;&nbsp;Traceback&nbsp;(most&nbsp;recent&nbsp;call&nbsp;last):<br>&nbsp;&nbsp;&nbsp;&nbsp;File&nbsp;"bbb.py",&nbsp;line&nbsp;3,&nbsp;in&nbsp;?<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;aaa<br>&nbsp;&nbsp;UnicodeError:&nbsp;UTF-8&nbsp;decoding&nbsp;error:&nbsp;unexpected&nbsp;code&nbsp;byte</div><br><br>
+
+바로 그것이다. 소스에  <span class="wikkly-code-inline">u'\ud800'</span> 같은 문자열이 들어 있다면, 파이썬 2.0.x/2.1.x은 자신의 바이트 코드를 .pyc 파일로부터 <i class=""><u class="">재적재 하지 못한다</u></i>. 그런 경우 이식성있는 임시방책은 <span class="wikkly-code-inline">u'\ud800'</span> 대신에 <span class="wikkly-code-inline">unichr(0xd800)</span>를 사용하는 것이 될 것이다 (이것을 <b class="">gnosis.xml.pickle</b>이 해준다).<br><br>
+<h2 class="wikkly-h2"><a class="wikkly-a-internal" name="UNIV_RECODE"></a>
+"범용 기록기"로서의 파이썬</h2><br>
+이 시점까지 본인은 보여주기 위하여 유니코드와 UTF 사이를 변환해 왔다.  그렇지만, 파이썬은 그 보다 훨씬 더 많은 일을 선사한다. 거의 모든 멀티바이트 문자열을 유니코드로 (그리고 그 반대로) 변환할 수 있다. 이런 변환을 모두 구현하는 일은 엄청난 노고이다. 다행스럽게도 파이썬이 대신 그 일을 해준다. 그래서 우리는 사용하는 방법만 알면 된다..<br><br>
+
+그리스어 테이블을 다시 연구해 보자. 이 번에는 문자들을 유니코드와 ISO-8859-7 ("native Greek")로 나타내 보겠다.<br><br>
+<div class="wikkly-indent">
+<table class="wikkly-table">
+  <tbody>
+  <tr class="wikkly-tr">
+    <th class="wikkly-th" style="TEXT-ALIGN: center">문자</th>
+    <th class="wikkly-th" style="TEXT-ALIGN: center">이름</th>
+    <th class="wikkly-th" style="TEXT-ALIGN: center">유니코드로</th>
+    <th class="wikkly-th" style="TEXT-ALIGN: center">ISO-8859-7로</th></tr>
+  <tr class="wikkly-tr">
+    <td class="wikkly-td" style="TEXT-ALIGN: center">Π </td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Greek Capital Letter Pi</td>
+    <td class="wikkly-td" style="TEXT-ALIGN: center"><span class="wikkly-code-inline">03A0</span> </td>
+    <td class="wikkly-td" style="TEXT-ALIGN: center"><span class="wikkly-code-inline">0xD0</span> </td></tr>
+  <tr class="wikkly-tr">
+    <td class="wikkly-td" style="TEXT-ALIGN: center">Σ </td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Greek Capital Letter Sigma</td>
+    <td class="wikkly-td" style="TEXT-ALIGN: center"><span class="wikkly-code-inline">03A3</span> </td>
+    <td class="wikkly-td" style="TEXT-ALIGN: center"><span class="wikkly-code-inline">0xD3</span> </td></tr>
+  <tr class="wikkly-tr">
+    <td class="wikkly-td" style="TEXT-ALIGN: center">Ω </td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Greek Capital Letter Omega</td>
+    <td class="wikkly-td" style="TEXT-ALIGN: center"><span class="wikkly-code-inline">03A9</span> </td>
+    <td class="wikkly-td" style="TEXT-ALIGN: center"><span class="wikkly-code-inline">0xD9</span> </td></tr></tbody></table></div>
+	  
+	  파이썬에서 <span class="wikkly-tt">unicode()</span>와 <span class="wikkly-tt">.encode()</span>를 사용하면 이 사이를 변환하는 작업은 아무것도 아니다. 
+<div class="wikkly-code-block">#&nbsp;{Pi}{Sigma}{Omega}&nbsp;as&nbsp;ISO-8859-7&nbsp;encoded&nbsp;string&nbsp;<br>b&nbsp;=&nbsp;'\xd0\xd3\xd9'<br><br>#&nbsp;Convert&nbsp;to&nbsp;Unicode&nbsp;('univeral&nbsp;format')<br>u&nbsp;=&nbsp;unicode(b,&nbsp;'iso-8859-7')<br>print&nbsp;repr(u)<br><br>#&nbsp;...&nbsp;and&nbsp;back&nbsp;to&nbsp;ISO-8859-7<br>c&nbsp;=&nbsp;u.encode('iso-8859-7')<br>print&nbsp;repr(c)</div><br><br>
+
+다음과 같이 보여준다: 
+
+<div class="wikkly-code-block">u'\u03a0\u03a3\u03a9'<br>\xd0\xd3\xd9</div><br><br>
+또 파이썬을 "범용 기록기"로 사용할 수 있다. <a class="wikkly-a-www" title="Link to http://www.rikai.com" href="http://www.rikai.com/library/kanjitables/kanji_codes.sjis.shtml" target="_blank">ShiftJIS</a>라는 일어 인코딩으로 된 파일을 받았다고 해보자. 그리고 <a class="wikkly-a-www" title="Link to http://www.rikai.com" href="http://www.rikai.com/library/kanjitables/kanji_codes.euc.shtml" target="_blank">EUC-JP</a> 인코딩으로 변환하고 싶다고 해보자: 
+<div class="wikkly-code-block">txt&nbsp;=&nbsp;...&nbsp;the&nbsp;ShiftJIS-encoded&nbsp;text&nbsp;...<br><br>#&nbsp;convert&nbsp;to&nbsp;Unicode&nbsp;("universal&nbsp;format")<br>u&nbsp;=&nbsp;unicode(txt,&nbsp;'shiftjis')<br><br>#&nbsp;convert&nbsp;to&nbsp;EUC-JP<br>out&nbsp;=&nbsp;u.encode('eucjp')</div><br><br>
+물론, 이것은 호환성이 있는 문자 집합 사이를 변환할 때만 작동한다. 이런 식으로 일어 문자 세트와 그리스어 문자 세트 사이를 변환하려는 시도는 작동하지 않을 것이다.<br><br>
+<h2 class="wikkly-h2"><a class="wikkly-a-internal" name="FUNBEGINS"></a>이제 재미가 시작되리니 ... 유니코드와 실제 세계</h2><br>
+이제 파이썬 안에서 유니코드 객체를 사용하는 방법을 낱낱히 익혔다. 멋지지 않은가?  그렇지만, 나머지 세계는 파이썬 만큼 깔끔하고 말끔하지 않다. 그래서 파이썬이 아닌 다른 세계에서는 어떻게 유니코드를 다루는지 이해할 필요가 있다. 엄청나게 어렵지는 않지만 고려해야할 특별한 경우가 많다.<br><br>
+
+지금부터는 다음을 다룰 때 일어나는 유니코드 문제를 살펴보겠다: 
+<ol class="wikkly-ol">
+  <li class="wikkly-ol-li1">파일이름 (운영체제 종속적 문제들) 
+  </li><li class="wikkly-ol-li1">XML 
+  </li><li class="wikkly-ol-li1">HTML 
+  </li><li class="wikkly-ol-li1">네트워크 파일 (삼바(Samba))<br><br></li></ol>
+<h3 class="wikkly-h3"><a class="wikkly-a-internal" name="UNI_FILENAMES"></a>유니코드 파일이름</h3><br>
+
+너무 단순해 보인다. 그렇지 않은가? 파일 이름에 그리스어 문자를 주고 싶어서, 그냥 다음과 같이 하면: 
+<div class="wikkly-code-block">&nbsp;&nbsp;&nbsp;open(unicode_name,&nbsp;'w')</div><br><br>
+이론적으로는 맞다. 그것이면 충분하다. 그렇지만 이것이 작동하지 않는 경우가 무수히 많으며, 프로그램이 어떤 플랫폼에서 실행중인가에 따라 달라진다. <br><br>
+<h3 class="wikkly-h3"><a class="wikkly-a-internal" name="PLAT_WIN"></a>마이크로소프트 윈도즈</h3><br>
+
+파이썬을 윈도즈 아래에서 실행시키려면 적어도 두 가지 방식이 있다. 첫째 방법은 <a class="wikkly-a-www" title="Link to http://www.python.org" href="http://www.python.org/" target="_blank">http://www.python.org/</a>에서 얻은 <b class="">Win32 이진파일</b>을 사용하는 것이다. 이 방법을 "윈도우즈-고유의 파이썬"이라고 칭하겠다.<br><br>
+다른 방법은 <a class="wikkly-a-www" title="Link to http://www.cygwin.org" href="http://www.cygwin.org/" target="_blank">Cygwin</a>에 따라오는 파이썬 버전을 사용하는 것이다. 이 파이썬 버전은 (사용자 코드가) 윈도우즈-고유의 환경처럼 보이기 보다 POSIX를 더 닮았다..<br><br>
+
+많은 경우, 두 버전은 교환가능하다. 이식성있게 파이썬 코드를 작성하는 한, 어느 인터프리터 아래에서 실행중인지 신경쓰지 않아도 된다. <i class="">그렇지만</i>, 한가지 중요한 예외는 유니코드를 다룰 때이다. 그 때문에 어느 버전을 실행하고 있는지 구체적으로 언급할 것이다.<br><br>
+<h3 class="wikkly-h3">윈도우즈-고유의 파이썬 사용하기</h3><br>
+
+익숙한 그리스어 심볼을 계속 사용해 보자:<br><br>
+<div class="wikkly-indent">
+<table class="wikkly-table">
+  <tbody>
+  <tr class="wikkly-tr">
+    <th class="wikkly-th" style="TEXT-ALIGN: center" colspan="3">샘플 유니코드 심볼</th></tr>
+  <tr class="wikkly-tr">
+    <td class="wikkly-td" style="TEXT-ALIGN: left"><span class="wikkly-code-inline">03A0</span></td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Π</td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Greek Capital Letter Pi</td></tr>
+  <tr class="wikkly-tr">
+    <td class="wikkly-td" style="TEXT-ALIGN: left"><span class="wikkly-code-inline">03A3</span></td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Σ</td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Greek Capital Letter 
+  Sigma</td></tr>
+  <tr class="wikkly-tr">
+    <td class="wikkly-td" style="TEXT-ALIGN: left"><span class="wikkly-code-inline">03A9</span></td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Ω</td>
+    <td class="wikkly-td" style="TEXT-ALIGN: left">Greek Capital Letter 
+  Omega</td></tr></tbody></table></div><br><br>
+  우리의 샘플 유니코드 파일이름은 다음과 같이 될 것이다: 
+<div class="wikkly-code-block">#&nbsp;this&nbsp;is:&nbsp;abc_{PI}{Sigma}{Omega}.txt<br>uname&nbsp;=&nbsp;u"abc_\u03A0\u03A3\u03A9.txt"</div><br><br>
+그 이름으로 파일을 만들어 보자. 한 줄의 텍스트를 담아서 말이다: 
+<div class="wikkly-code-block">open(uname,'w').write('Hello&nbsp;world!\n')</div><br><br>
+
+익스플로러 창을 열면 결과를 보여준다 (<i class="">클릭하면 더 큰 버전을 볼 수 있다</i>):<br><br>
+<div class="wikkly-indent"><a href="http://boodebr.org/python/pyunicode/win32_01.png" target="_blank"><img class="wikkly-img" src="./All About Python and Unicode   boodebr.org_files/win32_01.jpg"></a></div><br><br>
+
+파일이름이 유니코드로 찬란하게 빛나고 있다.<br><br>
+
+이제, 어떻게 <span class="wikkly-code-inline">os.listdir()</span>이 이 이름과 작동하는지 살펴보자. 알아야 할 첫 번째는 <span class="wikkly-code-inline">os.listdir()</span>에 두 개의 연산 모드가 있다는 것이다: 
+<ul class="wikkly-ul">
+  <li class="wikkly-ul-li1">비-유니코드 모드,os.listdir()에 비-유니코드 문자열을, 즉 <span class="wikkly-code-inline">os.listdir('.')을 건네면 수행된다.</span> 
+  </li><li class="wikkly-ul-li1">유니코드 모드, os.listdir()에 유니코드 문자열을, 즉 <span class="wikkly-code-inline">os.listdir(u'.')</span>을 건네면 수행된다.<br><br></li></ul>
+  먼저, 유니코드로 시도해보자: 
+<div class="wikkly-code-block">os.chdir('ttt')<br>#&nbsp;there&nbsp;is&nbsp;only&nbsp;one&nbsp;file&nbsp;in&nbsp;directory&nbsp;'ttt'<br>name&nbsp;=&nbsp;os.listdir(u'.')[0]<br>print&nbsp;"Got&nbsp;name:&nbsp;",repr(name)<br>print&nbsp;"Line:&nbsp;",open(name,'r').read()</div><br><br>
+이 프로그램을 실행하면 다음과 같이 출력된다: 
+<div class="wikkly-code-block">Got&nbsp;name:&nbsp;&nbsp;u'abc_\u03a0\u03a3\u03a9.txt'<br>Line:&nbsp;&nbsp;Hello&nbsp;world!</div><br><br>
+
+위와 비교하면, 올바른 것 같아 보인다. <span class="wikkly-code-inline">print&nbsp;repr(name)</span>가 요구되었다는 점에 주목하자. 이름을 화면에 직접 인쇄하려고 했다면 에러가 일어났을 것이기 때문이다. 왜인가? 그렇다. 역시 파이썬은 원하는 인코딩이 ASCII 코딩이라고 간주했을 것이고, 그래서 에러와 함께 실패했을 것이다.<br><br>
+이제 위의 샘플을 시도해 보자. 그러나 비-유니코드 버전의 <span class="wikkly-code-inline">os.listdir()</span>을 사용해서 말이다: 
+<div class="wikkly-code-block">os.chdir('ttt')<br>#&nbsp;there&nbsp;is&nbsp;only&nbsp;one&nbsp;file&nbsp;in&nbsp;directory&nbsp;'ttt'<br>name&nbsp;=&nbsp;os.listdir('.')[0]<br>print&nbsp;"Got&nbsp;name:&nbsp;",repr(name)<br>print&nbsp;"Line:&nbsp;",open(name,'r').read()</div><br><br>
+다음과 같이 출력된다: 
+<div class="wikkly-code-block">Got&nbsp;name:&nbsp;&nbsp;'abc_?SO.txt'<br>Line:&nbsp;<br>Traceback&nbsp;(most&nbsp;recent&nbsp;call&nbsp;last):<br>&nbsp;&nbsp;File&nbsp;"c:\frank\src\unicode\t2.py",&nbsp;line&nbsp;8,&nbsp;in&nbsp;?<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"Line:&nbsp;",open(name,'r').read()<br>IOError:&nbsp;[Errno&nbsp;2]&nbsp;No&nbsp;such&nbsp;file&nbsp;or&nbsp;directory:&nbsp;'abc_?SO.txt'</div><br><br>이런! 
+무슨 일이 일어났는가? 놀라운 win32 "이중-API"의 세계에 오신 것을 환영한다.<br><br>
+약간의 배경지식을 설명하자면: 
+<div class="wikkly-block-indent">Windows NT/2000/XP는 언제나 바탕의 파일 시스템에 대한 파일이름을 유니코드로 쓴다 (<a class="wikkly-a-internal" title="#Footnote2" href="#Footnote2">각주 2</a>). 
+그래서 이론적으로 유니코드 파일이름은 흠없이 파이썬과 작동해야 한다.<br><br>
+
+불행하게도, win32는 실제로 파일 시스템과 상호작용하는데 <b class="">두</b> 세트의  API를 제공한다. 그리고 진짜 마이크로소프트 스타일로, 둘은 호환되지 않는다. 그 두 API는 다음과 같다: 
+<ol class="wikkly-ol">
+  <li class="wikkly-ol-li1">유니코드-인식 어플리케이션을 위한 API 한세트. 진짜 유니코드 파일이름을 돌려준다. 
+  </li><li class="wikkly-ol-li1">유니코드-미인식 어플리케이션을 위한 API 한세트. 진짜 유니코드 파일이름의 <a class="wikkly-a-www" title="Link to http://en.wikipedia.org" href="http://en.wikipedia.org/wiki/Locale" target="_blank">locale</a>-의존적인 코딩.<br><br></li></ol>
+  
+  파이썬은 win32 플랫폼에서 (좋든 나쁘든) 이 관례를 따른다. 그래서 <span class="wikkly-code-inline">os.listdir()</span>와 <span class="wikkly-code-inline">open()</span>을 호출하는데 두 가지 비호환 방식에 봉착한다: 
+<ol class="wikkly-ol">
+  <li class="wikkly-ol-li1">유니코드 문자열로 <span class="wikkly-code-inline">os.listdir()</span>이나 <span class="wikkly-code-inline">open()</span> 등등을 호출하면, 파이썬은 유니코드 버전의 API를 호출하며, 진짜 유니코드 파일이름을 얻는다. 
+  (이는 위의 첫 API 세트에 상응한다).  </li><li class="wikkly-ol-li1"> 비-유니코드 문자열로 <span class="wikkly-code-inline">os.listdir()</span>이나 <span class="wikkly-code-inline">open()</span> 등등을 호출하면, 파이썬은 비-유니코드 버전의 API를 호출하며, <i class="">바로 여기가 문제가 숨어 있는 곳이다</i>. 비-유니코드 API는 <i class="">MBCS</i>라고 부르는 코덱으로 유니코드를 처리한다. MBCS는 결함이 많은 코덱이다: MBCS 이름은 유니코드로 표현될 수 있지만, 그 반대는 안된다. MBCS 코딩은 또한 현재 로케일에 따라 바뀐다. 다른 말로 해서, MBCS 멀티바이트-문자로 된 파일이름을 가지고 나의 영어 로케일 머신에서 CD를 구워, 그 CD를 일본에 보내면, 거기에서 파일이름은 완전히 다른 문자가 들어있는 것처럼 보일 것이다. </li></ol></div><br><br>
+  이제 배경에 있는 진실을 알았으므로, 위에서 무슨 일이 일어났는지 알 수 있다. <span class="wikkly-code-inline">os.listdir('.')</span>을 사용하면, 파일 시스템에 저장된 MBCS-버전의 진짜 유니코드 이름을 얻는다. 그리고, 나의 영어-로케일 컴퓨터에서, 그리스어 문자에 대하여 정확하게 일치하는 매핑이 없으므로, 결국 <span class="wikkly-code-inline">"?"</span>, <span class="wikkly-code-inline">"S"</span>, 그리고 <span class="wikkly-code-inline">"O"</span>로 결말을 맺는다. 이 때문에 이상한 결과에 다다른다. 영어 로케일에서는 MBCS API를 사용하여 그리스어-문자 파일을 <b class="">열 방법이 없다</b>(!!).<br><br>
+<dl class="wikkly-dl">
+  <dt class="wikkly-dt"><i class="">기준 선</i> 
+  </dt><dd class="wikkly-dd">
+  
+  <b class="">언제나</b> <span class="wikkly-code-inline">os.listdir()</span>, <span class="wikkly-code-inline">open()</span>, 등등에 유니코드 문자열을 사용하기를 권장한다. Windows NT/2000/XP는 언제나 파일이름을 유니코드로 저장하며, 그래서 이것이 고유의 행위이다. 그리고 위에 보여준 바와 같이 가끔은 유니코드 파일 이름을 열 수 있는 <i class="">유일한</i> 방법이 될 수 있다. 
+  <div class="wikkly-warnbox-container">
+  <div class="wikkly-warnbox-title">위험! Cygwin</div>
+  <div class="wikkly-warnbox-body">Cygwin은 여기에서 <i class="">큰</i> 문제가 있다. (적어도, 현재로는) 유니코드를 지원하지 않는다. 다시 말해, 유니코드 버전의 win32 API를 <i class="">절대로 호출하지 않는다</i>. 그러므로, (그리스어-문자 파일이름과 같이) 어떤 파일은 Cygwin에서 여는 것이 <b class="">불가능하다</b>. <span class="wikkly-code-inline">os.listdir(u'.')</span>이나 <span class="wikkly-code-inline">os.listdir('')</span>을 사용한다면 문제가 되지 않는다; 언제든지 MBCS-코드된 버전을 얻기 때문이다.<br><br>
+  
+  이것은 파이썬-종속적인 문제가 아님에 주의하자; Cygwin에 관련된 시스템 문제이다. <span class="wikkly-code-inline">zsh</span>, <span class="wikkly-code-inline">ls</span>, <span class="wikkly-code-inline">zip</span>, <span class="wikkly-code-inline">unzip</span>, <span class="wikkly-code-inline">mkisofs</span> 같은 모든 Cygwin 유틸리티는 그리스어-문자 이름을 인식하지 못할 것이며 다양한 에러를 보고할 것이다. </div></div>
+  </dd><dd class="wikkly-dd"></dd></dl><br><br>
+<h3 class="wikkly-h3"><a class="wikkly-a-internal" name="PLAT_UNIX"></a>Unix/POSIX/Linux</h3><br>
+
+언제나 파일이름을 유니코드 포맷으로 저장하는 Windows NT/2000/XP와는 다르게, POSIX 시스템은 (리눅스를 포함하여) 언제나 파일이름을 이진 문자열로 저장한다. 이것이 약간 더 유연하다. 왜냐하면 운영체제 그 자체는 파일이름에 어떤 인코딩이 사용되었는지 알 (또는 신경쓸) 필요가 없기 때문이다. 단점이라면 사용자가 책임을 지고 적절한 코딩을 위해 환경("<i class="">locale</i>")을 설정해 주어야 한다는 것이다.<br><br>
+
+
+<h4 class="wikkly-h4">로케일 설정하기</h4><br>
+
+POSIX 박스가 유니코드 파일이름을 다루도록 설정하는 세부작업은 이 문서의 범위를 넘는다. 그러나 일반적으로 몇 가지 환경 변수를 설정하는 것으로 귀결된다. 나의 경우, U.S. English 로케일에서 <b class="">UTF-8</b> 코덱을 사용하고 싶었다. 그래서 다음 기동 파일들에다 몇 줄을 추가했다(<a class="wikkly-a-www" title="Link to http://www.gentoo.org" href="http://www.gentoo.org/" target="_blank">젠투 리눅스</a>와 <a class="wikkly-a-www" title="Link to http://www.ubuntu.com" href="http://www.ubuntu.com/" target="_blank">우분투 리눅스</a> 아래에서 이를 시도해 보았다. 물론, 모든 리눅스 시스템이 비슷하겠지만 말이다):<br><br>
+
+<span class="wikkly-code-inline">.bashrc</span>에 다음과 같이 추가하였다: 
+<div class="wikkly-code-block">LANG="en_US.utf8"<br>LANGUAGE="en_US.utf8"<br>LC_ALL="en_US.utf8"<br><br>export&nbsp;LANG<br>export&nbsp;LANGUAGE<br>export&nbsp;LC_ALL</div><br><br>
+
+제대로 측정하기 위하여, 같은 줄을 <span class="wikkly-code-inline">.zshrc</span> 파일에도 추가하였다.<br><br>
+앞 세 줄을 <span class="wikkly-code-inline">/etc/env.d/02locale</span>에도 추가하였다. 
+<div class="wikkly-warnbox-container">
+<div class="wikkly-warnbox-title">절대 주의</div>
+<div class="wikkly-warnbox-body"><b class="">제발</b> 무엇을 하고 있는지 모르겠다면 맹목적으로 여러분의 시스템을 위와 같이 바꾸지 마시길 바란다. 로케일을 전환하면 파일을 읽을 수 없을 수 있다. 위의 예는 오직 ASCII 로케일로부터 UTF-8 로케일로 바꾸는 간단한 예를 보이기 위한 것이다. 
+</div></div><br><br>
+<h3 class="wikkly-h3">POSIX 아래의 파이썬</h3><br>
+
+파이썬에 관한 한, POSIX 아래에서 <b class="">커다란</b> 장점은 둘 중에 아무거나 사용해도 된다는 것이다: 
+<div class="wikkly-code-block">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;os.listdir('.')</div><br><br>또는: 
+
+<div class="wikkly-code-block">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;os.listdir(u'.')</div><br><br>
+
+두 방법 모두 <span class="wikkly-code-inline">open()</span>에 건네 파일을 열 수 있는 문자열을 돌려준다. 이는 윈도우즈보다 훨씬 더 좋다. 윈도우즈는  <span class="wikkly-code-inline">os.listdir('.')</span>을 사용한다면 유니코드 이름으로 조작하여 돌려준다. 이는 위에 보다시피 가끔 파일을 여는데 유효한 이름을 주는데 실패할 수 있다. 
+
+POSIX/Linux 아래에서는 언제나 유효한 이름을 얻는다.<br><br>
+다음은 이를 보여주는 샘플 함수이다:<br><br>
+<div class="wikkly-codebox-container">
+<div class="wikkly-codebox-title">test_posix01.test()</div>
+<div class="wikkly-codebox-body">def&nbsp;test():<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Demonstrate&nbsp;that&nbsp;listdir(u'.')&nbsp;and&nbsp;listdir('.')&nbsp;both<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;work&nbsp;fine&nbsp;under&nbsp;POSIX&nbsp;(unlike&nbsp;win32)<br><br>&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;os<br><br>&nbsp;&nbsp;&nbsp;&nbsp;uname&nbsp;=&nbsp;u'abc_\u03a0\u03a3\u03a9.txt'<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;make&nbsp;a&nbsp;tempdir&nbsp;so&nbsp;I'll&nbsp;only&nbsp;have&nbsp;a&nbsp;single&nbsp;file&nbsp;in&nbsp;it<br>&nbsp;&nbsp;&nbsp;&nbsp;os.mkdir('ttt')<br>&nbsp;&nbsp;&nbsp;&nbsp;os.chdir('ttt')<br><br>&nbsp;&nbsp;&nbsp;&nbsp;open(uname,'w').write("Hello&nbsp;unicode!\n")<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;use&nbsp;listdir()&nbsp;to&nbsp;get&nbsp;name&nbsp;as&nbsp;Unicode<br>&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;=&nbsp;os.listdir(u'.')[0]<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"As&nbsp;unicode:&nbsp;",repr(name)<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"&nbsp;&nbsp;&nbsp;Read&nbsp;line:&nbsp;",open(name,'r').read()<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;now&nbsp;get&nbsp;name&nbsp;as&nbsp;a&nbsp;bytestring<br>&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;=&nbsp;os.listdir('.')[0]<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"As&nbsp;bytestring:&nbsp;",repr(name)<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"&nbsp;&nbsp;&nbsp;Read&nbsp;line:&nbsp;",open(name,'r').read()</div></div><br><br>
+
+이를 실행하면 다음과 같은 결과를 얻는다: 
+<div class="wikkly-code-block">As&nbsp;unicode:&nbsp;&nbsp;u'abc_\u03a0\u03a3\u03a9.txt'<br>&nbsp;&nbsp;&nbsp;Read&nbsp;line:&nbsp;&nbsp;Hello&nbsp;unicode!<br><br>As&nbsp;bytestring:&nbsp;&nbsp;'abc_\xce\xa0\xce\xa3\xce\xa9.txt'<br>&nbsp;&nbsp;&nbsp;Read&nbsp;line:&nbsp;&nbsp;Hello&nbsp;unicode!</div><br><br>
+
+보시다시피, 성공적으로 파일을 읽었다. 파일이름을 유니코드 버전으로 사용하든 바이트스트링 버전으로 사용하든 상관없이 말이다.<br><br>
+<h2 class="wikkly-h2">어플리케이션 데모</h2><br>
+
+기본적으로 "DOS box"와 윈도우즈 익스플로러가 있는  마이크로소프트 윈도즈 세계와는 다르게, Linux 아래에서는 어떤 터미널을 실행할지 어떤 파일 관리자를 실행할지 선택이 수 없이 많다. 이것은 한 편으로 축복이자 또 한 편으로는 저주이다: 기호에 꼭 맞는 어플리케이션을 고를 수 있다는 것은 축복이지만, 또한 모든 어플리케이션이 똑 같은 정도로 유니코드를 지원하는 것은 아니라는 점에서는 저주이다.<br><br>
+다음은 여러 인기 있는 어플리케이션이 지원하고 있는 것들을 조사한 것이다.<br><br>
+<h3 class="wikkly-h3">유니코드 파일이름을 지원하는 어플리케이션</h3><br>
+개인적으로 현재 즐겨쓰는 어플은 다중-언어 터미널인 <span class="wikkly-code-inline">mlterm</span>이다 (<i class="">클릭하면 좀 더 큰 버전을 보실 수 있음</i>):<br><br>
+<div class="wikkly-indent"><a href="http://boodebr.org/python/pyunicode/mlterm_01.png" target="_blank"><img class="wikkly-img" src="./All About Python and Unicode   boodebr.org_files/mlterm_01.jpg"></a></div><br><br>GNOME 터미널 (<span class="wikkly-code-inline">gnome-terminal</span>):<br><br>
+<div class="wikkly-indent"><a href="http://boodebr.org/python/pyunicode/gnome_terminal_01.png" target="_blank"><img class="wikkly-img" src="./All About Python and Unicode   boodebr.org_files/gnome_terminal_01.jpg"></a></div><br><br>KDE 터미널 (<span class="wikkly-code-inline">konsole</span>):<br><br>
+<div class="wikkly-indent"><a href="http://boodebr.org/python/pyunicode/konsole_01.png" target="_blank"><img class="wikkly-img" src="./All About Python and Unicode   boodebr.org_files/konsole_01.jpg"></a></div><br><br>
+수정된 버전의 rxvt (<span class="wikkly-code-inline">rxvt-unicode</span>)는 유니코드를 처리한다. 물론 내가 선택한 폰트에서 밑줄 문자에 약간 문제가 있기는 하다 ...<br><br>
+<div class="wikkly-indent"><a href="http://boodebr.org/python/pyunicode/urxvt_01.png" target="_blank"><img class="wikkly-img" src="./All About Python and Unicode   boodebr.org_files/urxvt_01.jpg"></a></div><br><br>
+다음은 KDE 관리자 창(konqueror)에 보이는 그리스어-문자 파일이다: 
+<br><br>
+<div class="wikkly-indent"><a href="http://boodebr.org/python/pyunicode/konq_01.png" target="_blank"><img class="wikkly-img" src="./All About Python and Unicode   boodebr.org_files/konq_01.jpg"></a></div><br><br>
+그리고 다음은 GNOME 파일 관리자 (Nautilus)에 보이는 것이다:<br><br>
+<div class="wikkly-indent"><a href="http://boodebr.org/python/pyunicode/naut_01.png" target="_blank"><img class="wikkly-img" src="./All About Python and Unicode   boodebr.org_files/naut_01.jpg"></a></div><br><br>XFCE 4 파일 관리자:<br><br>
+<div class="wikkly-indent"><a href="http://boodebr.org/python/pyunicode/xfce_01.png" target="_blank"><img class="wikkly-img" src="./All About Python and Unicode   boodebr.org_files/xfce_01.jpg"></a></div><br><br>표준 KDE 파일 선택자는 유니코드 파일이름을 지원한다:<br><br>
+<div class="wikkly-indent"><a href="http://boodebr.org/python/pyunicode/kfilesel_01.png" target="_blank"><img class="wikkly-img" src="./All About Python and Unicode   boodebr.org_files/kfilesel_01.jpg"></a></div><br><br>GNOME 파일 선택자도 마찬가지다:<br><br>
+<div class="wikkly-indent"><a href="http://boodebr.org/python/pyunicode/gfilesel_01.png" target="_blank"><img class="wikkly-img" src="./All About Python and Unicode   boodebr.org_files/gfilesel_01.jpg"></a></div><br><br>
+<h3 class="wikkly-h3">
+유니코드 파일이름을 지원하지 않는 어플리케이션</h3><br>
+표준 <span class="wikkly-code-inline">rxvt</span>는 유니코드를 올바르게 처리하지 못한다:<br><br>
+<div class="wikkly-indent"><a href="http://boodebr.org/python/pyunicode/rxvt_01.png" target="_blank"><img class="wikkly-img" src="./All About Python and Unicode   boodebr.org_files/rxvt_01.jpg"></a></div><br><br>
+Xfm 파일 관리자는 유니코드 파일이름을 처리하지 못한다:<br><br>
+<div class="wikkly-indent"><a href="http://boodebr.org/python/pyunicode/xfm_01.png" target="_blank"><img class="wikkly-img" src="./All About Python and Unicode   boodebr.org_files/xfm_01.jpg"></a></div><br><br><a class="wikkly-a-internal" name="PLAT_OSX"></a>
+<h3 class="wikkly-h3">Mac OS/X</h3><br>
+본인은 OSX 머신이 없어서 이를 테스트하지 못했지만, 독자 여러분께서 OSX의 유니코드 지원에 관한 정보를 공헌해 주셨다.<br><br>
+
+한 독자분께서 지적해 주신 바에 의하면 <span class="wikkly-code-inline">os.listdir('.')</span>와 <span class="wikkly-code-inline">os.listdir(u'.')</span> 둘 모두 <span class="wikkly-code-inline">open()</span>에 바로 건넬 수 있는 객체를 돌려준다. POSIX 아래에서 할 수 있듯이 말이다.<br><br>
+
+독자 <a class="wikkly-a-www" title="Link to http://www.fiee.net" href="http://www.fiee.net/" target="_blank">하반(Hraban)</a>은 다음과 같이 지적했다: 
+<div class="wikkly-block-indent">
+
+MacOS X는 특수한 종류의 <i class="">decomposed UTF-8</i>을 사용하여 파일이름을 저장한다고 언급해야 했습니다. 파일이름을 읽어 그것을  "보통의" UTF-8 파일에 쓰고 싶다면, 정규화 시켜야 합니다 (적어도 편집기에서 즉 나의 TeX 시스템에서 decomposed UTF-8를 이해하지 못한다면 말입니다): 
+<div class="wikkly-code-block">filename&nbsp;=&nbsp;unicodedata.normalize('NFC',&nbsp;unicode(filename,&nbsp;'utf-8')).encode('utf-8')</div></div><br><br>
+이 글을 읽고 (본인과 같이) 문제를 잘 이해하지 못하는 분들을 위하여 다음에 몇가지 참조할 것들을 보여준다: 
+<ul class="wikkly-ul">
+  <li class="wikkly-ul-li1"><a class="wikkly-a-www" title="Link to http://developer.apple.com" href="http://developer.apple.com/qa/qa2001/qa1173.html" target="_blank">VFS의 텍스트 인코딩</a> 
+  </li><li class="wikkly-ul-li1"><a class="wikkly-a-www" title="Link to http://mail.python.org" href="http://mail.python.org/pipermail/python-list/2003-February/189641.html" target="_blank">유니코드 파일이름</a><br><br></li></ul>
+  
+  나는 이렇게 생각했다. <b class="">é</b>와 같이 악센트가 붙은 이름을 건네면, 파일시스템에 저장하기 전에 이것을 <span class="wikkly-code-inline">e</span>와 <span class="wikkly-code-inline">'</span>로 분해할 것이라고 말이다 (이 행위는 유니코드 표준에 정의되어 있다).<br><br>
+  이 섹션에 다른 것을 덧 붙일 수 있다면, 아래에 논평을 남겨 주시기 바란다!<br><br><a class="wikkly-a-internal" name="UNI_HTML"></a>
+<h2 class="wikkly-h2">유니코드와 HTML</h2><br>
+파이썬으로 HTML을 만들고 있는 자신을 보게 될 것이다 (예를 들어, <a class="wikkly-a-www" title="Link to http://www.modpython.org" href="http://www.modpython.org/" target="_blank">mod_python</a>, <a class="wikkly-a-www" title="Link to http://www.cherrypy.org" href="http://www.cherrypy.org/" target="_blank">CherryPy</a>, 기타 등등을 사용할 때 말이다). 그래서 유니코드 문자를 HTML 문서에 어떻게 사용하는가?<br><br>
+그 해답에는 다음과 같은 쉬운 단계가 연루된다: 
+<ol class="wikkly-ol">
+  <li class="wikkly-ol-li1"><span class="wikkly-code-inline">&lt;meta&gt;</span> 태그를 사용하여 사용자의 브라우저에 사용한 인코딩을 알려주자. (<a class="wikkly-a-internal" title="#Footnote3" href="#Footnote3">각주 3</a>) 
+  </li><li class="wikkly-ol-li1">HTML을 유니코드 객체로 만들자. 
+  </li><li class="wikkly-ol-li1">선호하는 코덱으로 HTML 바이트스트림을 쓰자.<br><br></li></ol>
+  다음은 지금까지 주욱 사용해 온 그리스어-문자열을 똑 같이 작성하는 예이다: 
+<div class="wikkly-code-block">&nbsp;&nbsp;&nbsp;&nbsp;code&nbsp;=&nbsp;'utf-8'&nbsp;#&nbsp;make&nbsp;it&nbsp;easy&nbsp;to&nbsp;switch&nbsp;the&nbsp;codec&nbsp;later<br>&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;html&nbsp;=&nbsp;u'&lt;html&gt;'<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;use&nbsp;a&nbsp;&lt;meta&gt;&nbsp;tag&nbsp;to&nbsp;specify&nbsp;the&nbsp;document&nbsp;encoding&nbsp;used<br>&nbsp;&nbsp;&nbsp;&nbsp;html&nbsp;+=&nbsp;u'&lt;meta&nbsp;http-equiv="content-type"&nbsp;content="text/html;&nbsp;charset=%s"&gt;'&nbsp;%&nbsp;code<br>&nbsp;&nbsp;&nbsp;&nbsp;html&nbsp;+=&nbsp;u'&lt;head&gt;&lt;/head&gt;&lt;body&gt;'<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;my&nbsp;actual&nbsp;Unicode&nbsp;content&nbsp;...<br>&nbsp;&nbsp;&nbsp;&nbsp;html&nbsp;+=&nbsp;u'abc_\u03A0\u03A3\u03A9.txt'<br><br>&nbsp;&nbsp;&nbsp;&nbsp;html&nbsp;+=&nbsp;u'&lt;/body&gt;&lt;/html&gt;'<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Now,&nbsp;you&nbsp;cannot&nbsp;write&nbsp;Unicode&nbsp;directly&nbsp;to&nbsp;a&nbsp;file.&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;First&nbsp;have&nbsp;to&nbsp;either&nbsp;convert&nbsp;it&nbsp;to&nbsp;a&nbsp;bytestring&nbsp;using&nbsp;a&nbsp;codec,&nbsp;or<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;open&nbsp;the&nbsp;file&nbsp;with&nbsp;the&nbsp;'codecs'&nbsp;module.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Method&nbsp;#1,&nbsp;doing&nbsp;the&nbsp;conversion&nbsp;yourself:<br>&nbsp;&nbsp;&nbsp;&nbsp;open('t.html','w').write(&nbsp;html.encode(&nbsp;code&nbsp;)&nbsp;)<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Or,&nbsp;by&nbsp;using&nbsp;the&nbsp;codecs&nbsp;module:<br>&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;codecs<br>&nbsp;&nbsp;&nbsp;&nbsp;codecs.open('t.html','w',code).write(&nbsp;html&nbsp;)<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;..&nbsp;the&nbsp;method&nbsp;you&nbsp;use&nbsp;depends&nbsp;on&nbsp;personal&nbsp;preference&nbsp;and/or<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;convenience&nbsp;in&nbsp;the&nbsp;code&nbsp;you&nbsp;are&nbsp;writing.</div><br><br>
+이제 페이지 (<i class="">t.html</i>)를 파이어폭스에서 열어보자:<br><br>
+<div class="wikkly-indent"><a href="http://boodebr.org/python/pyunicode/win32_02.png" target="_blank"><img class="wikkly-img" src="./All About Python and Unicode   boodebr.org_files/win32_02.jpg"></a></div><br><br>
+예상한 그대로이다!<br><br>
+이제, 샘플 코드로 다시 돌아가 줄을 교체해 보자: 
+<div class="wikkly-code-block">&nbsp;&nbsp;&nbsp;&nbsp;code&nbsp;=&nbsp;'utf-8'</div><br><br>를 다음과 같이... 
+<div class="wikkly-code-block">&nbsp;&nbsp;&nbsp;&nbsp;code&nbsp;=&nbsp;'utf-16'</div><br><br>... 
+HTML 파일은 이제 UTF-16 포맷으로 씌여지겠지만, 브라우저 창에 표시되는 결과는 정확하게 똑 같을 것이다.<br><br><a class="wikkly-a-internal" name="UNI_XML"></a>
+<h3 class="wikkly-h3">유니코드와 XML</h3><br>
+
+<a class="wikkly-a-www" title="Link to http://www.w3.org" href="http://www.w3.org/TR/2004/REC-xml-20040204/" target="_blank">XML 1.0 표준</a>은 모든 해석기가 <b class="">UTF-8</b> 인코딩과 <b class="">UTF-16</b> 인코딩을 지원해야 한다고 요구한다. 그래서, XML 해석기라면 당연히 합법적인 <b class="">UTF-8</b> 또는 <b class="">UTF-16</b>로 인코드된 문서를 입력으로 허용할 것 같아 보일 것이다. 그렇지 않은가?<br><br><b class="">아니다!</b><br><br>
+
+다음 예제 프로그램을 한 번 보자: 
+<div class="wikkly-code-block">&nbsp;&nbsp;&nbsp;xml&nbsp;=&nbsp;u'&lt;?xml&nbsp;version="1.0"&nbsp;encoding="utf-8"&nbsp;?&gt;'<br>&nbsp;&nbsp;&nbsp;xml&nbsp;+=&nbsp;u'&lt;H&gt;&nbsp;\u0019&nbsp;&lt;/H&gt;'<br><br>&nbsp;&nbsp;&nbsp;#&nbsp;encode&nbsp;as&nbsp;UTF-8<br>&nbsp;&nbsp;&nbsp;utf8_string&nbsp;=&nbsp;xml.encode(&nbsp;'utf-8'&nbsp;)</div><br><br>
+
+이 시점에서, <span class="wikkly-code-inline">utf8_string</span>은 XML을 나타내는 완벽하게 유효한 <b class="">UTF-8</b> 문자열이다. 그래서 해석할 수 있어야 한다. 그렇지 않은가?: 
+<div class="wikkly-code-block">from&nbsp;xml.dom.minidom&nbsp;import&nbsp;parseString<br>parseString(&nbsp;utf8_string&nbsp;)</div><br><br>
+
+다음은 위 코드를 실행하면 일어나는 일이다: 
+<div class="wikkly-code-block">Traceback&nbsp;(most&nbsp;recent&nbsp;call&nbsp;last):<br>&nbsp;&nbsp;&nbsp;File&nbsp;"t9.py",&nbsp;line&nbsp;9,&nbsp;in&nbsp;?<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parseString(&nbsp;utf8_string&nbsp;)<br>&nbsp;&nbsp;&nbsp;File&nbsp;"c:\py23\lib\xml\dom\minidom.py",&nbsp;line&nbsp;1929,&nbsp;in&nbsp;parseString<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;expatbuilder.parseString(string)<br>&nbsp;&nbsp;&nbsp;File&nbsp;"c:\py23\lib\xml\dom\expatbuilder.py",&nbsp;line&nbsp;940,&nbsp;in&nbsp;parseString<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;builder.parseString(string)<br>&nbsp;&nbsp;&nbsp;File&nbsp;"c:\py23\lib\xml\dom\expatbuilder.py",&nbsp;line&nbsp;223,&nbsp;in&nbsp;parseString<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parser.Parse(string,&nbsp;True)<br>xml.parsers.expat.ExpatError:&nbsp;not&nbsp;well-formed&nbsp;(invalid&nbsp;token):&nbsp;line&nbsp;1,&nbsp;column&nbsp;43</div><br><br>
+
+우와 - 무슨 일이 일어났는가?  컬럼 43에서 에러가 일어났다. 컬럼 43이 무엇인지 살펴보자: 
+<div class="wikkly-code-block">&gt;&gt;&nbsp;print&nbsp;repr(utf8_string[43])<br><br>'\x19'</div><br><br>
+
+유니코드 문자 <span class="wikkly-code-inline">U+0019</span> 같이 보이지 않는다. 왜 그런가? XML 1.0 표준의 섹션 2.2에서 문서에 나타나도 좋은 합법적 문자 집합을 정의한다. 그 표준에 따르면: 
+<div class="wikkly-block-indent">
+<div class="wikkly-code-block">/*&nbsp;any&nbsp;Unicode&nbsp;character,&nbsp;excluding&nbsp;the&nbsp;surrogate&nbsp;blocks,&nbsp;FFFE,&nbsp;and&nbsp;FFFF.&nbsp;*/<br>Char&nbsp;::=&nbsp;#x9&nbsp;|&nbsp;#xA&nbsp;|&nbsp;#xD&nbsp;|&nbsp;[#x20-#xD7FF]&nbsp;|<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[#xE000-#xFFFD]&nbsp;|&nbsp;[#x10000-#x10FFFF]</div></div><br><br>
+
+분명히, 합법적으로 XML 문서 안에 포함가능한 문자에 중대한 틈이 있다.  위의 코드를 파이썬 함수로 변환해 보자. 주어진 유니코드 값이 XML 스트림을 쓰는데 합법적인지 테스트하는데 사용하기 위해서 말이다:<br><br>
+<div class="wikkly-codebox-container">
+<div class="wikkly-codebox-title">gnosis.xml.xmlmap.raw_illegal_xml_regex()</div>
+<div class="wikkly-codebox-body">def&nbsp;raw_illegal_xml_regex():<br>&nbsp;&nbsp;&nbsp;&nbsp;"""&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;I&nbsp;want&nbsp;to&nbsp;define&nbsp;a&nbsp;regexp&nbsp;to&nbsp;match&nbsp;*illegal*&nbsp;characters.<br>&nbsp;&nbsp;&nbsp;&nbsp;That&nbsp;way,&nbsp;I&nbsp;can&nbsp;do&nbsp;"re.search()"&nbsp;to&nbsp;find&nbsp;a&nbsp;single&nbsp;character,<br>&nbsp;&nbsp;&nbsp;&nbsp;instead&nbsp;of&nbsp;"re.match()"&nbsp;to&nbsp;match&nbsp;the&nbsp;entire&nbsp;string.&nbsp;[Based&nbsp;on<br>&nbsp;&nbsp;&nbsp;&nbsp;my&nbsp;assumption&nbsp;that&nbsp;.search()&nbsp;would&nbsp;be&nbsp;faster&nbsp;in&nbsp;this&nbsp;case.]<br><br>&nbsp;&nbsp;&nbsp;&nbsp;Here&nbsp;is&nbsp;a&nbsp;verbose&nbsp;map&nbsp;of&nbsp;the&nbsp;XML&nbsp;character&nbsp;space&nbsp;(as&nbsp;defined<br>&nbsp;&nbsp;&nbsp;&nbsp;in&nbsp;section&nbsp;2.2&nbsp;of&nbsp;the&nbsp;XML&nbsp;specification):<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u0000&nbsp;-&nbsp;u0008&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Illegal<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u0009&nbsp;-&nbsp;u000A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Legal<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u000B&nbsp;-&nbsp;u000C&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Illegal<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u000D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Legal<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u000E&nbsp;-&nbsp;u001F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Illegal<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u0020&nbsp;-&nbsp;uD7FF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Legal<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uD800&nbsp;-&nbsp;uDFFF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Illegal&nbsp;(See&nbsp;note!)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uE000&nbsp;-&nbsp;uFFFD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Legal<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uFFFE&nbsp;-&nbsp;uFFFF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Illegal<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;U00010000&nbsp;-&nbsp;U0010FFFF&nbsp;=&nbsp;Legal&nbsp;(See&nbsp;note!)<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;Note:<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;range&nbsp;U00010000&nbsp;-&nbsp;U0010FFFF&nbsp;is&nbsp;coded&nbsp;as&nbsp;2-character&nbsp;sequences<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;using&nbsp;the&nbsp;codes&nbsp;(D800-DBFF),(DC00-DFFF),&nbsp;which&nbsp;are&nbsp;both&nbsp;illegal<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;used&nbsp;as&nbsp;single&nbsp;chars,&nbsp;from&nbsp;above.<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Python&nbsp;won't&nbsp;let&nbsp;you&nbsp;define&nbsp;\U&nbsp;character&nbsp;ranges,&nbsp;so&nbsp;you&nbsp;can't<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;just&nbsp;say&nbsp;'\U00010000-\U0010FFFF'.&nbsp;However,&nbsp;you&nbsp;can&nbsp;take&nbsp;advantage<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;the&nbsp;fact&nbsp;that&nbsp;(D800-DBFF)&nbsp;and&nbsp;(DC00-DFFF)&nbsp;are&nbsp;illegal,&nbsp;unless<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;part&nbsp;of&nbsp;a&nbsp;2-character&nbsp;sequence,&nbsp;to&nbsp;match&nbsp;for&nbsp;the&nbsp;\U&nbsp;characters.<br>&nbsp;&nbsp;&nbsp;&nbsp;"""<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;First,&nbsp;add&nbsp;a&nbsp;group&nbsp;for&nbsp;all&nbsp;the&nbsp;basic&nbsp;illegal&nbsp;areas&nbsp;above<br>&nbsp;&nbsp;&nbsp;&nbsp;re_xml_illegal&nbsp;=&nbsp;u'([\u0000-\u0008\u000b-\u000c\u000e-\u001f\ufffe-\uffff])'<br><br>&nbsp;&nbsp;&nbsp;&nbsp;re_xml_illegal&nbsp;+=&nbsp;u"|"<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Next,&nbsp;we&nbsp;know&nbsp;that&nbsp;(uD800-uDBFF)&nbsp;must&nbsp;ALWAYS&nbsp;be&nbsp;followed&nbsp;by&nbsp;(uDC00-uDFFF),<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;and&nbsp;(uDC00-uDFFF)&nbsp;must&nbsp;ALWAYS&nbsp;be&nbsp;preceded&nbsp;by&nbsp;(uD800-uDBFF),&nbsp;so&nbsp;this<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;is&nbsp;how&nbsp;we&nbsp;check&nbsp;for&nbsp;the&nbsp;U00010000-U0010FFFF&nbsp;range.&nbsp;There&nbsp;are&nbsp;also&nbsp;special<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;case&nbsp;checks&nbsp;for&nbsp;start&nbsp;&amp;&nbsp;end&nbsp;of&nbsp;string&nbsp;cases.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;I've&nbsp;defined&nbsp;this&nbsp;oddly&nbsp;due&nbsp;to&nbsp;the&nbsp;bug&nbsp;mentioned&nbsp;at&nbsp;the&nbsp;top&nbsp;of&nbsp;this&nbsp;file<br>&nbsp;&nbsp;&nbsp;&nbsp;re_xml_illegal&nbsp;+=&nbsp;u'([%s-%s][^%s-%s])|([^%s-%s][%s-%s])|([%s-%s]$)|(^[%s-%s])'&nbsp;%&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(unichr(0xd800),unichr(0xdbff),unichr(0xdc00),unichr(0xdfff),<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unichr(0xd800),unichr(0xdbff),unichr(0xdc00),unichr(0xdfff),<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unichr(0xd800),unichr(0xdbff),unichr(0xdc00),unichr(0xdfff))<br><br>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;re_xml_illegal</div></div>
+<div class="wikkly-codebox-container">
+<div class="wikkly-codebox-title">코드를 사용하여 ...</div>
+<div class="wikkly-codebox-body">def&nbsp;make_illegal_xml_regex():<br>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;re.compile(&nbsp;raw_illegal_xml_regex()&nbsp;)<br><br>c_re_xml_illegal&nbsp;=&nbsp;make_illegal_xml_regex()</div></div><br><br>
+
+최종 결과: 
+
+<div class="wikkly-codebox-container">
+<div class="wikkly-codebox-title">gnosis.xml.xmlmap.is_legal_xml()</div>
+<div class="wikkly-codebox-body">def&nbsp;is_legal_xml(&nbsp;uval&nbsp;):<br>&nbsp;&nbsp;&nbsp;&nbsp;"""<br>&nbsp;&nbsp;&nbsp;&nbsp;Given&nbsp;a&nbsp;Unicode&nbsp;object,&nbsp;figure&nbsp;out&nbsp;if&nbsp;it&nbsp;is&nbsp;legal<br>&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;place&nbsp;it&nbsp;in&nbsp;an&nbsp;XML&nbsp;file.<br>&nbsp;&nbsp;&nbsp;&nbsp;"""<br>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(c_re_xml_illegal.search(&nbsp;uval&nbsp;)&nbsp;==&nbsp;None)</div></div><br><br>
+
+위의 함수는 유니코드 문자열이 있는데, 한 번에 한 문자씩 검색할 때 약간 느린 경우에 좋다. 그래서 다음은 그런 일을 해주는 대안 함수 이다 (이 함수는 앞서 정의된 <a class="wikkly-a-internal" title="#UsplitDef" href="#UsplitDef">usplit()</a> 함수를 이용함에 주의하자):<br><br>
+<div class="wikkly-codebox-container">
+<div class="wikkly-codebox-title">gnosis.xml.xmlmap.is_legal_xml_char()</div>
+<div class="wikkly-codebox-body">def&nbsp;is_legal_xml_char(&nbsp;uchar&nbsp;):<br>&nbsp;&nbsp;&nbsp;&nbsp;"""<br>&nbsp;&nbsp;&nbsp;&nbsp;Check&nbsp;if&nbsp;a&nbsp;single&nbsp;unicode&nbsp;char&nbsp;is&nbsp;XML-legal.<br>&nbsp;&nbsp;&nbsp;&nbsp;(This&nbsp;is&nbsp;faster&nbsp;that&nbsp;running&nbsp;the&nbsp;full&nbsp;'is_legal_xml()'&nbsp;regexp<br>&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;you&nbsp;need&nbsp;to&nbsp;go&nbsp;character-at-a-time.&nbsp;For&nbsp;string-at-a-time<br>&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;course&nbsp;you&nbsp;want&nbsp;to&nbsp;use&nbsp;is_legal_xml().)<br><br>&nbsp;&nbsp;&nbsp;&nbsp;USAGE&nbsp;NOTE:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;you&nbsp;want&nbsp;to&nbsp;use&nbsp;this&nbsp;in&nbsp;a&nbsp;'for'&nbsp;loop,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;make&nbsp;sure&nbsp;use&nbsp;usplit(),&nbsp;e.g.:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;c&nbsp;in&nbsp;usplit(&nbsp;uval&nbsp;):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;is_legal_xml_char(c):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...&nbsp;<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Otherwise,&nbsp;the&nbsp;first&nbsp;char&nbsp;of&nbsp;a&nbsp;legal&nbsp;2-character<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence&nbsp;will&nbsp;be&nbsp;incorrectly&nbsp;tagged&nbsp;as&nbsp;illegal,&nbsp;on<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pythons&nbsp;where&nbsp;\U&nbsp;is&nbsp;stored&nbsp;as&nbsp;2-chars.<br>&nbsp;&nbsp;&nbsp;&nbsp;"""<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;due&nbsp;to&nbsp;inconsistencies&nbsp;in&nbsp;how&nbsp;\U&nbsp;is&nbsp;handled&nbsp;(based&nbsp;on<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;how&nbsp;Python&nbsp;was&nbsp;compiled)&nbsp;it&nbsp;is&nbsp;shorter&nbsp;to&nbsp;test&nbsp;for<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;illegal&nbsp;chars&nbsp;than&nbsp;legal&nbsp;ones,&nbsp;and&nbsp;invert&nbsp;the&nbsp;result.<br>&nbsp;&nbsp;&nbsp;&nbsp;#<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;(as&nbsp;one&nbsp;example:&nbsp;(u'\ud900'&nbsp;&gt;&nbsp;u'\U00100000')&nbsp;can&nbsp;be&nbsp;True,<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;depending&nbsp;on&nbsp;how&nbsp;Python&nbsp;was&nbsp;compiled.&nbsp;Testing&nbsp;for&nbsp;illegal&nbsp;chars<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;lets&nbsp;us&nbsp;stick&nbsp;with&nbsp;the&nbsp;single&nbsp;char&nbsp;sequences&nbsp;(all&nbsp;2-char<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;sequences&nbsp;are&nbsp;legal&nbsp;for&nbsp;XML).<br><br>&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;len(uchar)&nbsp;==&nbsp;1:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;not&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(uchar&nbsp;&gt;=&nbsp;u'\u0000'&nbsp;and&nbsp;uchar&nbsp;&lt;=&nbsp;u'\u0008')&nbsp;or&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(uchar&nbsp;&gt;=&nbsp;u'\u000b'&nbsp;and&nbsp;uchar&nbsp;&lt;=&nbsp;u'\u000c')&nbsp;or&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(uchar&nbsp;&gt;=&nbsp;u'\u000e'&nbsp;and&nbsp;uchar&nbsp;&lt;=&nbsp;u'\u001f')&nbsp;or&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;always&nbsp;illegal&nbsp;as&nbsp;single&nbsp;chars<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(uchar&nbsp;&gt;=&nbsp;unichr(0xd800)&nbsp;and&nbsp;uchar&nbsp;&lt;=&nbsp;unichr(0xdfff))&nbsp;or&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(uchar&nbsp;&gt;=&nbsp;u'\ufffe'&nbsp;and&nbsp;uchar&nbsp;&lt;=&nbsp;u'\uffff')<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br>&nbsp;&nbsp;&nbsp;&nbsp;elif&nbsp;len(uchar)&nbsp;==&nbsp;2:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;all&nbsp;2-char&nbsp;codings&nbsp;are&nbsp;legal&nbsp;in&nbsp;XML<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;(this&nbsp;looks&nbsp;weird,&nbsp;but&nbsp;remember&nbsp;that&nbsp;even&nbsp;after&nbsp;calling<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;usplit(),&nbsp;\U00010000&nbsp;is&nbsp;STILL&nbsp;len()&nbsp;of&nbsp;2,&nbsp;usplit()&nbsp;just<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;made&nbsp;it&nbsp;a&nbsp;single&nbsp;listitem<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;True<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;else:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raise&nbsp;Exception("Must&nbsp;pass&nbsp;a&nbsp;single&nbsp;character&nbsp;to&nbsp;is_legal_xml_char")</div></div><br><br>
+
+
+다음은 위의 함수를 시연해 주는 상당히 광범위한 테스트 사례이다:<br><br>
+<div class="wikkly-codebox-container">
+<div class="wikkly-codebox-title">test_xml_legality</div>
+<div class="wikkly-codebox-body">from&nbsp;xml.dom.minidom&nbsp;import&nbsp;parseString<br>import&nbsp;re<br>import&nbsp;sys<br><br>#&nbsp;define&nbsp;True/False&nbsp;if&nbsp;this&nbsp;Python&nbsp;doesn't&nbsp;have&nbsp;them<br>try:<br>&nbsp;&nbsp;&nbsp;&nbsp;a&nbsp;=&nbsp;True<br>except:<br>&nbsp;&nbsp;&nbsp;&nbsp;True&nbsp;=&nbsp;1<br>&nbsp;&nbsp;&nbsp;&nbsp;False&nbsp;=&nbsp;0<br><br>from&nbsp;gnosis.xml.xmlmap&nbsp;import&nbsp;*<br><br>#&nbsp;sanity&nbsp;check&nbsp;for&nbsp;testing&nbsp;purposes<br>def&nbsp;try_in_xml(&nbsp;uval&nbsp;):<br>&nbsp;&nbsp;&nbsp;&nbsp;"Try&nbsp;putting&nbsp;the&nbsp;Unicode&nbsp;string&nbsp;uval&nbsp;into&nbsp;an&nbsp;XML&nbsp;doc&nbsp;&amp;&nbsp;parsing."<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;xml&nbsp;=&nbsp;u'&lt;?xml&nbsp;version="1.0"&nbsp;encoding="utf-8"&nbsp;?&gt;'<br>&nbsp;&nbsp;&nbsp;&nbsp;xml&nbsp;+=&nbsp;u'&lt;H&gt;'&nbsp;+&nbsp;uval&nbsp;+&nbsp;'&lt;/H&gt;'<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#print&nbsp;[u&nbsp;for&nbsp;u&nbsp;in&nbsp;usplit(xml)&nbsp;if&nbsp;u&nbsp;&gt;=&nbsp;u'\U00010000']<br><br>&nbsp;&nbsp;&nbsp;&nbsp;try:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parseString(xml.encode('utf-8'))<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;True&nbsp;#&nbsp;succeeded<br>&nbsp;&nbsp;&nbsp;&nbsp;except:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;False&nbsp;#&nbsp;failed<br><br>#&nbsp;---&nbsp;test&nbsp;cases&nbsp;---<br><br>bad_unicode&nbsp;=&nbsp;[<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;0000-0008&nbsp;is&nbsp;illegal<br>&nbsp;&nbsp;&nbsp;&nbsp;u'abc\u0001def',<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;000B-000C&nbsp;is&nbsp;illegal<br>&nbsp;&nbsp;&nbsp;&nbsp;u'abc\u000cdef',<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;000E-0019&nbsp;is&nbsp;illegal<br>&nbsp;&nbsp;&nbsp;&nbsp;u'abc\u0015def',<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;D800-DBFF&nbsp;is&nbsp;illegal,&nbsp;unless&nbsp;it&nbsp;starts&nbsp;a&nbsp;2-char&nbsp;sequence<br>&nbsp;&nbsp;&nbsp;&nbsp;u'abc\ud900def',<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;DC00-DFFF&nbsp;is&nbsp;illegal,&nbsp;unless&nbsp;it&nbsp;ends&nbsp;a&nbsp;2-char&nbsp;sequence<br>&nbsp;&nbsp;&nbsp;&nbsp;u'abc\uDDDDdef',<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;FFFE-FFFF&nbsp;is&nbsp;illegal<br>&nbsp;&nbsp;&nbsp;&nbsp;u'abc\ufffedef',<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;case&nbsp;of&nbsp;D800-DBFF&nbsp;at&nbsp;end&nbsp;of&nbsp;string&nbsp;(next&nbsp;to&nbsp;last&nbsp;segment&nbsp;of&nbsp;regex)<br>&nbsp;&nbsp;&nbsp;&nbsp;u'abc\ud800',<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;case&nbsp;of&nbsp;DC00-DFFF&nbsp;at&nbsp;start&nbsp;of&nbsp;string&nbsp;(last&nbsp;segment&nbsp;of&nbsp;regex)<br>&nbsp;&nbsp;&nbsp;&nbsp;u'\udc00'<br>&nbsp;&nbsp;&nbsp;&nbsp;]<br><br>good_unicode&nbsp;=&nbsp;[<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;0009-000A&nbsp;is&nbsp;legal<br>&nbsp;&nbsp;&nbsp;&nbsp;u'abc\u0009def\u000aghi',<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;000D&nbsp;is&nbsp;legal<br>&nbsp;&nbsp;&nbsp;&nbsp;u'abc\u000ddef',<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;0020-D7FF&nbsp;is&nbsp;legal<br>&nbsp;&nbsp;&nbsp;&nbsp;u'abc\u0020def\u8112ghi\ud7ffjkl',<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;E000-FFFD&nbsp;is&nbsp;legal<br>&nbsp;&nbsp;&nbsp;&nbsp;u'abc\ue000def\uF123ghi\ufffdjkl',<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;U00010000&nbsp;-&nbsp;U0010FFFF&nbsp;is&nbsp;legal<br>&nbsp;&nbsp;&nbsp;&nbsp;u'abc\U00010000def\U00023456ghi\U00101234jkl'<br>&nbsp;&nbsp;&nbsp;&nbsp;]<br><br>if&nbsp;__name__&nbsp;==&nbsp;'__main__':<br><br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"**&nbsp;BAD&nbsp;VALUES&nbsp;**"<br>&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;u&nbsp;in&nbsp;bad_unicode:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;print&nbsp;the&nbsp;unicode&nbsp;value,&nbsp;test&nbsp;legality,&nbsp;and&nbsp;sanity&nbsp;check&nbsp;by<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;putting&nbsp;it&nbsp;in&nbsp;an&nbsp;XML&nbsp;document&nbsp;&amp;&nbsp;parsing&nbsp;it<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"%-50s&nbsp;%8s&nbsp;%1d"&nbsp;%&nbsp;(repr(u),&nbsp;is_legal_xml(u),&nbsp;try_in_xml(u))<br><br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"\n**&nbsp;GOOD&nbsp;VALUES&nbsp;**"<br>&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;u&nbsp;in&nbsp;good_unicode:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;print&nbsp;the&nbsp;unicode&nbsp;value,&nbsp;test&nbsp;legality,&nbsp;and&nbsp;sanity&nbsp;check&nbsp;by<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;putting&nbsp;it&nbsp;in&nbsp;an&nbsp;XML&nbsp;document&nbsp;&amp;&nbsp;parsing&nbsp;it<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"%-50s&nbsp;%8s&nbsp;%1d"&nbsp;%&nbsp;(repr(u),&nbsp;is_legal_xml(u),&nbsp;try_in_xml(u))<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;an&nbsp;all-illegal&nbsp;string<br>&nbsp;&nbsp;&nbsp;&nbsp;u&nbsp;=&nbsp;u'\u0000\u0005\u0008\u000b\u000c\u000e\u0010\u0019'&nbsp;+&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u'\ud800\ud900\u0000\udc00\udd00\udfff\ufffe\uffff'<br><br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"\nTesting&nbsp;one&nbsp;char&nbsp;at&nbsp;a&nbsp;time&nbsp;..."<br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;repr(u)<br>&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;c&nbsp;in&nbsp;usplit(u):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;test&nbsp;as&nbsp;a&nbsp;char<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;is_legal_xml_char(c):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raise&nbsp;"ERROR(1)"<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;test&nbsp;as&nbsp;a&nbsp;string<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;is_legal_xml(c):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raise&nbsp;"ERROR(2)"<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;stick&nbsp;in&nbsp;an&nbsp;XML&nbsp;document&nbsp;to&nbsp;double-check&nbsp;the&nbsp;above<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;try_in_xml(c)&nbsp;!=&nbsp;False:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raise&nbsp;"ERROR(3)"<br><br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"OK\n"<br><br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;an&nbsp;all-legal&nbsp;string<br>&nbsp;&nbsp;&nbsp;&nbsp;u&nbsp;=&nbsp;u'\u0009\u000a\u000d\u0020\u2345\ud7ff'&nbsp;+&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u'\ue000\ue876\ufffd'&nbsp;+&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u'\U00010000\U00012345\U00100000\U0010ffff'<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;subtle&nbsp;--&nbsp;make&nbsp;sure&nbsp;it&nbsp;allows&nbsp;a&nbsp;handcoded&nbsp;2-char&nbsp;sequence&nbsp;(this<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;is&nbsp;the&nbsp;case&nbsp;that&nbsp;forces&nbsp;usplit()&nbsp;to&nbsp;do&nbsp;a&nbsp;full&nbsp;pass&nbsp;even&nbsp;if&nbsp;\U&nbsp;is<br>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;stored&nbsp;as&nbsp;single&nbsp;chars)<br>&nbsp;&nbsp;&nbsp;&nbsp;u&nbsp;+=&nbsp;u'\ud800\udc00'&nbsp;<br><br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;repr(u)<br>&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;c&nbsp;in&nbsp;usplit(u):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;test&nbsp;as&nbsp;a&nbsp;char<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;not&nbsp;is_legal_xml_char(c):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raise&nbsp;"ERROR(1)"<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;test&nbsp;as&nbsp;a&nbsp;string<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;not&nbsp;is_legal_xml(c):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raise&nbsp;"ERROR(2)"<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;stick&nbsp;in&nbsp;an&nbsp;XML&nbsp;document&nbsp;to&nbsp;double-check&nbsp;the&nbsp;above<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;try_in_xml(c)&nbsp;!=&nbsp;True:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raise&nbsp;"ERROR(3)"<br><br>&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"OK"</div></div><br><br>
+
+<span class="wikkly-code-inline">\U</span> 코딩에서 볼 수 있는 차이를 보여주기 위하여, 두 가지 다른 버전의 파이썬 아래에서 이를 실행하려고 했다.<br><br>
+
+먼저 파이썬 2.0에서 (나의 머신에서 2-문자 <span class="wikkly-code-inline">\U</span> 인코딩을 사용하는): 
+<div class="wikkly-code-block">&nbsp;**&nbsp;BAD&nbsp;VALUES&nbsp;**<br>&nbsp;u'abc\001def'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;0<br>&nbsp;u'abc\014def'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;0<br>&nbsp;u'abc\025def'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;0<br>&nbsp;u'abc\uD900def'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;0<br>&nbsp;u'abc\uDDDDdef'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;0<br>&nbsp;u'abc\uFFFEdef'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;0<br>&nbsp;u'abc\uD800'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;0<br>&nbsp;u'\uDC00'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;0<br><br>&nbsp;**&nbsp;GOOD&nbsp;VALUES&nbsp;**<br>&nbsp;u'abc\011def\012ghi'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;1<br>&nbsp;u'abc\015def'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;1<br>&nbsp;u'abc&nbsp;def\u8112ghi\uD7FFjkl'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;1<br>&nbsp;u'abc\uE000def\uF123ghi\uFFFDjkl'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;1<br>&nbsp;u'abc\uD800\uDC00def\uD84D\uDC56ghi\uDBC4\uDE34jkl'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;1<br><br>&nbsp;Testing&nbsp;one&nbsp;char&nbsp;at&nbsp;a&nbsp;time&nbsp;...<br>&nbsp;u'\000\005\010\013\014\016\020\031\uD800\uD900\000\uDC00\uDD00<br>&nbsp;\uDFFF\uFFFE\uFFFF'<br>&nbsp;OK<br><br>&nbsp;u'\011\012\015&nbsp;\u2345\uD7FF\uE000\uE876\uFFFD\uD800\uDC00\uD808<br>&nbsp;\uDF45\uDBC0\uDC00\uDBFF\uDFFF\uD800\uDC00'<br>&nbsp;OK</div><br><br>
+
+이제 파이썬 2.3에서, 나의 머신에서는 <span class="wikkly-code-inline">\U</span>를 단일 문자로 저장한다:: 
+<div class="wikkly-code-block">&nbsp;**&nbsp;BAD&nbsp;VALUES&nbsp;**<br>&nbsp;u'abc\x01def'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;False&nbsp;0<br>&nbsp;u'abc\x0cdef'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;False&nbsp;0<br>&nbsp;u'abc\x15def'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;False&nbsp;0<br>&nbsp;u'abc\ud900def'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;False&nbsp;0<br>&nbsp;u'abc\udddddef'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;False&nbsp;0<br>&nbsp;u'abc\ufffedef'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;False&nbsp;0<br>&nbsp;u'abc\ud800'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;False&nbsp;0<br>&nbsp;u'\udc00'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;False&nbsp;0<br><br>&nbsp;**&nbsp;GOOD&nbsp;VALUES&nbsp;**<br>&nbsp;u'abc\tdef\nghi'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;True&nbsp;1<br>&nbsp;u'abc\rdef'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;True&nbsp;1<br>&nbsp;u'abc&nbsp;def\u8112ghi\ud7ffjkl'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;True&nbsp;1<br>&nbsp;u'abc\ue000def\uf123ghi\ufffdjkl'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;True&nbsp;1<br>&nbsp;u'abc\U00010000def\U00023456ghi\U00101234jkl'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;True&nbsp;1<br><br>&nbsp;Testing&nbsp;one&nbsp;char&nbsp;at&nbsp;a&nbsp;time&nbsp;...<br>&nbsp;u'\x00\x05\x08\x0b\x0c\x0e\x10\x19\ud800\ud900\x00\udc00\udd00<br>&nbsp;&nbsp;&nbsp;\udfff\ufffe\uffff'<br>&nbsp;OK<br><br>&nbsp;u'\t\n\r&nbsp;\u2345\ud7ff\ue000\ue876\ufffd\U00010000\U00012345<br>&nbsp;&nbsp;&nbsp;\U00100000\U0010ffff\U00010000'<br>&nbsp;OK</div><br><br>
+보시다시피 두 파이썬 버전 모두 같은 응답을 돌려준다 (단 Python 2.0은 True/False 대신에 1/0을 사용한다). 그러나 맨끝에서 repr() 코딩을 보시면 두 버전이 <span class="wikkly-code-inline">\U</span>를 서로 다르게 표현하고 있다. <i class="">앞서 정의한 usplit() 함수를 사용하는 한, 코드에서 아무 차이도 보이지 않을 것이다.</i><br><br>
+좋다. 그래서 이제 어떤 문자들은 XML 파일에 둘 수 없다는 결론을 내렸다. 어떻게 이 문제를 처리할 것인가? 어쩌면 그 불법의 값들을 XML 개체로 인코드할 수 있지 않을까? 
+<div class="wikkly-code-block">&nbsp;xml&nbsp;=&nbsp;u'&lt;?xml&nbsp;version="1.0"&nbsp;encoding="utf-8"&nbsp;?&gt;'<br><br>&nbsp;#&nbsp;try&nbsp;to&nbsp;cheat&nbsp;and&nbsp;put&nbsp;\u0019&nbsp;as&nbsp;an&nbsp;entity&nbsp;...<br>&nbsp;xml&nbsp;+=&nbsp;u'&lt;H&gt;&nbsp;&amp;#x19;&nbsp;&lt;/H&gt;'<br><br>&nbsp;#&nbsp;encode&nbsp;as&nbsp;UTF-8<br>&nbsp;utf8_string&nbsp;=&nbsp;xml.encode(&nbsp;'utf-8'&nbsp;)<br><br>&nbsp;#&nbsp;parse&nbsp;it<br>&nbsp;from&nbsp;xml.dom.minidom&nbsp;import&nbsp;parseString<br>&nbsp;parseString(&nbsp;utf8_string&nbsp;)</div><br><br>
+이를 실행하면 다음과 같이 출력된다:: 
+<div class="wikkly-code-block">&nbsp;Traceback&nbsp;(most&nbsp;recent&nbsp;call&nbsp;last):<br>&nbsp;&nbsp;File&nbsp;"t10.py",&nbsp;line&nbsp;11,&nbsp;in&nbsp;?<br>&nbsp;&nbsp;&nbsp;&nbsp;parseString(&nbsp;utf8_string&nbsp;)<br>&nbsp;&nbsp;File&nbsp;"c:\py23\lib\xml\dom\minidom.py",&nbsp;line&nbsp;1929,&nbsp;in&nbsp;parseString<br>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;expatbuilder.parseString(string)<br>&nbsp;&nbsp;File&nbsp;"c:\py23\lib\xml\dom\expatbuilder.py",&nbsp;line&nbsp;940,&nbsp;in&nbsp;parseString<br>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;builder.parseString(string)<br>&nbsp;&nbsp;File&nbsp;"c:\py23\lib\xml\dom\expatbuilder.py",&nbsp;line&nbsp;223,&nbsp;in&nbsp;parseString<br>&nbsp;&nbsp;&nbsp;&nbsp;parser.Parse(string,&nbsp;True)<br>&nbsp;xml.parsers.expat.ExpatError:&nbsp;reference&nbsp;to&nbsp;invalid&nbsp;character&nbsp;number:&nbsp;line&nbsp;1,&nbsp;column&nbsp;43</div><br><br>
+안된다! XML 1.0 표준에 의하면, 그 불법 문자들이 허용되지 않는다. 거기에서 별별 수를 다 써도 안된다. 사실, 해석기가 불법 문자들을 하나라도 <i class="">허용하면</i>, 정의대로라면 <b class="">그 해석기는 XML 해석기가 아니다</b>. XML의 핵심 아이디어는 해석기에 "용서"를 허용하지 않는 것이다. HTML 세계에 존재하는 지저분한 비호환성을 피하기 위해서 말이다.<br><br>
+<dl class="wikkly-dl">
+  <dt class="wikkly-dt"><b class="">그래서 어떻게 그 불법 문자들을 처리할까?</b> 
+  </dt><dd class="wikkly-dd">
+  문자들이 불법이라는 사실 때문에, 그를 다룰 <i class="">표준적인 방법은 없다</i>. 불법 문자를 표현하기 위하여 또다른 방법을 찾는 것은 XML 저자에게 (또는 어플리케이션에) 달려 있다. 어쩌면 미래의 XML 표준에서는 이 상황에 접근하는데 도움을 줄 수 있을 것이다.<br><br></dd></dl><a class="wikkly-a-internal" name="UNI_SAMBA"></a>
+<h3 class="wikkly-h3">유니코드와 네트워크 공유 (삼바)</h3><br><a class="wikkly-a-www" title="Link to http://www.samba.org" href="http://www.samba.org/" target="_blank">Samba 3.0</a> 이상은 이름이 유니코드인 파일을 공유할 수 있다. 사실, 테스트는 예기치 못하게 실행되었다: 나는 그냥 (리눅스 머신에서) 삼바 공유를 윈도우즈 클라이언트에서 열었다. 그 안에 든 그리스어-문자로된 파일이름을 가진 폴더를 열었고, 그 결과는 아래와 같다:<br><br>
+<div class="wikkly-indent"><a href="http://boodebr.org/python/pyunicode/samba_01.png" target="_blank"><img class="wikkly-img" src="./All About Python and Unicode   boodebr.org_files/samba_01.jpg"></a></div><br><br>
+이것이 잘 작동하지 않았다면 좀 더 복잡한 설정절차가 있었을 테지만, 나에게는 아무 것도 필요없었다. 삼바는 기본 값이 UTF-8 코딩이다. 그래서 <span class="wikkly-code-inline">smb.conf</span> 파일을 수정할 필요조차 없었다.<br><br><a class="wikkly-a-internal" name="SUMMARY"></a>
+<h2 class="wikkly-h2">맺는 말</h2><br>
+
+여기에서 언급하지 않은 주제가 몇가지 있지만, 나중에 추가할 생각이다. 그 중에는: 
+<ol class="wikkly-ol">
+  <li class="wikkly-ol-li1">독자적으로 코딩 변환을 정의함으로써, "불법적 XML 문자" 문제를 임시-처리하는 법을 보여주는 몇가지 예제들. 
+  </li><li class="wikkly-ol-li1"><span class="wikkly-code-inline">os.listdir(u'.')</span>이 비-유니코드 문자열을 돌려주는 것이 완전히 가능하다   (파일이름이 현재 로케일에 합법적인 코딩을 가지고 저장되지 않았다는 뜻이다). 문제는 <span class="wikkly-code-inline">/a-legal/b-illegal/c-legal</span>과 같이, 합법적 이름과 불법적 이름을 혼용할 경우, <span class="wikkly-code-inline">os.path.join()</span>을 사용하여 유니코드 부분과 비-유니코드 부분을 결합할 수 없다는 뜻이다. 왜냐하면 올바른 파일이름이 아니기 때문이다 (위의 예제에서, <span class="wikkly-code-inline">b-illegal</span>이 유효한 유니코드 코딩을 가지고 있지 않기 때문이다). 내가 발견한 유일한 해결책은 각 경로 요소에 한 번에 하나씩 <span class="wikkly-code-inline">os.chdir()</span>을 적용하는 것이었다. 파일을 열거나 디렉토리를 순회하거나 등등에 말이다. 이 문제에 관하여 섹션을 덧붙일 필요가 있다.<br><br></li></ol>
+  
+  이 문서에 정의된 여러 함수는 (<span class="wikkly-code-inline">usplit()</span>, <span class="wikkly-code-inline">is_legal_xml()</span>, <span class="wikkly-code-inline">is_legal_xml_string()</span>) <a class="wikkly-a-www" title="Link to http://freshmeat.net" href="http://freshmeat.net/projects/gnosisxml/" target="_blank">Gnosis Utils</a>의 일부로 얻을 수 있다 
+(본인이 공저자중 한 사람임). 위 함수를 구비한 건 1.2.0 버전이 첫 배포본이다. <span class="wikkly-code-inline">gnosis.xml.xmlmap</span> 패키지에서 얻을 수 있다. 앞으로 나올 버전에서는 위에 언급한 유니코드-&gt;XML 변환함수를 합병해 넣을 생각이다.<br><br>
+<h3 class="wikkly-h3">각주:</h3><br>
+<ol class="wikkly-ol">
+  <li class="wikkly-ol-li1"><a class="wikkly-a-internal" name="Footnote1"></a>내 생각으로는, 만약 파이썬의 유니코드를 지원한 저자가 단순히   "기본 ASCII" 로직을 생략했더라면, 훨씬 더 명료했을 것이다. 그래야 초보자가 무슨 일이 일어나는지 이해하지 않을 수 없을테니까 말이다.
+  명시적으로 코딩하지 않고, 맹목적으로 <span class="wikkly-code-inline">unicode(value)</span>를 사용하는 대신에 말이다.<br><br>
+  이제 공정을 기하기 위해, ASCII를 기본 인코딩으로 사용하는 것은 합리적이다. 파이썬의 ASCII 코덱은 오직 0-127 사이의 코드만 받아 들이기 때문에, <span class="wikkly-code-inline">unicode()</span>가 작동해야 한다면, ASCII가 거의 올바른 코덱이다. 
+  </li><li class="wikkly-ol-li1"><a class="wikkly-a-internal" name="Footnote2"></a>
+  (95/98 시기의) 더 앞의 버전은 어떻게 하는지 모르겠다. 그러나 그의 유니코드 지원은 현재 표준에 이르지 못할 것이라고 짐작한다. 
+  </li><li class="wikkly-ol-li1"><a class="wikkly-a-internal" name="Footnote3"></a>
+  실제로, 파이어폭스와 인터넷 익스플로러는 <i class="">올바른</i> <span class="wikkly-code-inline">&lt;meta&gt;</span> 태그가 없어도 올바르게 페이지를 화면에 표시할 수 있겠지만, 일반적으로 항상 <i class="">올바른</i> <span class="wikkly-code-inline">&lt;meta&gt;</span> 태그를 포함시키는 것이 좋다. 왜냐하면 자동-추측이 모든 플랫폼에서 또는 모든 HTML 문서에 대하여 잘 작동하는 것은 아니기 때문이다.<br><br></li></ol>
+<h3 class="wikkly-h3">이 문서에 관하여 ...</h3><br>
+<div class="wikkly-indent">저자: <b class="">프랭크 맥잉베일(Frank McIngvale)</b><br>Version: <b class="">1.3</b><br>Last Revised: <b class="">Apr 22, 2007</b><br>
+한글판 johnsonj 2008.05.09 금
+</div>
+<div class="wikkly-generated-by">Written in <a class="wikkly-a-www" title="WikklyText 1.2.1 on Sat Apr 26 03:21:24 2008 [106.9k, 3.3s] " href="http://wikklytext.com/">WikklyText</a>.</div></div>
+
+
+</div></body></html>
