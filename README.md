@@ -7,7 +7,7 @@
 - 자신의 저장소에서 해당 브랜치를 로컬로 받아온다.  
 - 수정한다.  
 - 자신의 저장소로 Push 한다.  
-- Pull Request 한다.  
+- gh-pages 저장소로 Pull Request 한다.  
   
 # 규칙
 - documents 폴더 내에 문서당 하나의 폴더만 생성한다.  
@@ -16,9 +16,12 @@
   (예: coreapython 사이트로 절대 경로 되어 있는 경우)  
 - list.json 파일을 규칙에 맞게 작성한다.  
 - README.md 참여자 카테고리에 자신의 Github 링크 추가.  
+- Pull Request 전에 확실하게 확인할 것.  
+- 절대 원본 저장소로 바로 Push 하지 말 것.  
+- Commit은 [Git Style Guide](https://github.com/ikaruce/git-style-guide)를 따를 것.  
 
 # 라이센스
-모든 라이센스는 coreapython.hosting.param.com을 따른다.  
+모든 라이센스는 [coreapython 문서고](coreapython.hosting.param.com)를 따른다.  
 이하, MIT도 따름.  
 
 # 참여자
