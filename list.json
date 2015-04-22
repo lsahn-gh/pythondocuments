@@ -2,6 +2,13 @@
 	"list":
 	[
 		{
+			"title": "파이썬과 유니코드에 관한 모든 것",
+			"english": "All About Python and Unicode",
+			"year": 2008,
+			"translator": "johnsonj",
+			"link": "./documents/all-about-python-and-unicode/index.html"
+		},
+		{
 			"title": "파이썬으로 하는 알고리즘 교육",
 			"english": "Algorithm Education in Python",
 			"year": 2006,
