@@ -7,23 +7,24 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="fa/css/font-awesome.min.css">
   </head>
   <body>
     <section class="page-header">
       <h1 class="project-name">Korea Python Documents</h1>
       <h2 class="project-tagline">
 	      파이썬 문서고 저장소<br>
-	      프로젝트에 참여하고 싶다면 Fork하고 Pull Request하세요.!
+	      프로젝트에 참여하고 싶다면 Fork하고 Pull Request하세요!
       </h2>
-      <a href="https://github.com/cryptosan/pythondocuments/tree/gh-pages" class="btn">참여하기</a>
+      <a href="https://github.com/cryptosan/pythondocuments/tree/gh-pages" class="btn"><i class="fa fa-github fa-lg"></i>&nbsp;&nbsp;참여하기</a>
     </section>
 
     <section class="main-content">
       <h3>
-<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>환영합니다!</h3>
 	<div ng-controller="docubody">
 		<div ng-repeat="data in datas">
-			<pre><code><a href="{{ data.link }}">{{ data.title }} - {{ data.english }}</a><br>번역:{{ data.translator }} - {{ data.year }}년</code></pre>
+			<pre><code><i class="fa fa-file-text-o"></i>&nbsp;<a href="{{ data.link }}">{{ data.title }} - {{ data.english }}</a></code><div align="right">{{ data.year }}년 {{ data.translator }} 번역</div></pre>
 		</div>
 	</div>
       <footer class="site-footer">
