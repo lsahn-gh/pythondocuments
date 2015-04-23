@@ -1,0 +1,692 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>제 20 장 : 트리(tree)</title>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+
+<body>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap21.htm" ><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm" ><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap19.htm" ><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm" ><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+  </tr>
+</table>
+<hr>
+
+
+<h2>제 20 장</h2>
+
+<h1>트리</h1>
+<p>
+연결 리스트처럼 트리도 노드로 구성됩니다. 가장 흔한 종류의 트리는 <b>이진 트리(binary tree)</b>입니다. 여기에서 각 노드는 (null일 수도 있는) 다른 두 개의 노드에 대한 참조점을 가집니다. 이러한 참조점들을 각각 왼쪽과 오른쪽 하부트리라고 지칭합니다. 리스트 노드처럼 트리 노드도 카르고를 가집니다. 트리에 대한 상태 다이어그램은 다음과 같이 보입니다:</p>
+
+<p align="center"><img src="illustrations/tree1.png" ></p>
+
+<p>
+그림을 가지런히 하기 위해 종종 <span class=code>Nones</span>를 생략합니다.</p>
+
+<p>
+(<span class=code>tree</span>노드가 가르키는) 트리의 최상위를 <b>뿌리(root)</b>라고 부릅니다. 나무 비유를 유지하면 다른 노드들은 <B>가지(branches)</B>라고 부르며 null 참조점을 가지는 맨 끝의 노드들을 <b>잎(leaves)</b>이라고 부릅니다. 묘하게도 그림에서 뿌리를 위에 그리고 바닥에 잎들을 그리지만 엄청나게 이상한 것은 아닙니다.</p>
+<p>
+더욱 복잡하게도 컴퓨터 과학자들은 또 다른 비유를 섞어 씁니다---가족(family) 트리가 그것인데, 최상위 노드는 종종 <b>부모(parent)</b>라고 부르고 최상위 노드가 가르키는 노드들은 그의 <b>자손(children)</b>이라고 부릅니다. 같은 부모를 가진 노드들을 <b>형제(siblings)</b>라고 부릅니다.</p>
+<p>
+마지막으로, 지리학적 어휘로 트리에 대하여 언급하기도 합니다. 이미 왼쪽(left) 과 오른쪽(right)을 언급하였지만, 또 "위(up)" (부모/루트로 향합니다)와 "아래(down)" (자손/잎으로 향합니다)도 있습니다. 또, 뿌리로부터 같은 거리에 있는 모든 노드들은 트리의 <b>수준(level)</b>을 이룹니다.</p>
+
+<p>
+트리를 논의하기 위해 비유가 세 개나 필요한 것은 아니지만, 그런 비유들이 있다는 것은 알아 두시기 바랍니다.</p>
+<p>
+연결 리스트처럼 트리는 재귀적으로 정의되므로 재귀 데이타 구조입니다.</p>
+
+
+
+<p style="margin-left: 30px; margin-right: 30px;"> 트리는 다음과 같이:
+
+<ul>
+
+<li><span class=code>None</span>으로 표현되는 빈 트리이거나, 또는</li>
+
+<li>한 개의 객체 참조점과 두 개의 트리 참조점을 가지는 노드입니다.</li>
+
+</ul>
+
+</p>
+
+
+
+<a name=1></a><br>
+<h3>20.1 트리를 구축하기</h3>
+<p>
+트리를 조립하는 처리과정은 연결 리스트를 조립하는 처리과정과 비슷합니다. 각 구성자의 요청은 하나의 노드를 구축합니다.</p>
+
+
+<p><span class=code><span class=keyword>class</span> Tree:
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__init__</span>(self, cargo, left=None, right=None):
+<br>&nbsp; &nbsp; self.cargo = cargo
+<br>&nbsp; &nbsp; self.left&nbsp; = left
+<br>&nbsp; &nbsp; self.right = right
+<br>
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__str__</span>(self):
+<br>&nbsp; &nbsp; <span class=keyword>return</span> str(self.cargo)
+<br></span></p>
+
+
+
+<p>
+<span class=code>cargo</span>는 어떤 형도 될 수 있습니다. 그러나 <span class=code>left</span>와 <span class=code>right</span> 매개변수들은 트리 노드가 되어야 합니다.  <span class=code>left</span>와 <span class=code>right</span>는 선택적입니다; 기본 값은 <span class=code>None</span>입니다.</p>
+
+<p>
+노드를 인쇄하려면 그냥 카르고를 인쇄하면 됩니다.</p>
+<p>
+트리를 구축하는 하나의 방법은 아래로부터 위로 구축하고 자손 노드들을 먼저 할당하는 것입니다:</p>
+
+
+<p><span class=code>left = Tree(2)
+<br>right= Tree(3)
+<br></span></p>
+
+
+
+<p>
+그리고나서 부모 노드를 생성하고 그것을 자손 노드에 연결합니다:</p>
+
+
+<p><span class=code>tree = Tree(1, left, right);
+<br></span></p>
+
+<p>
+구성자 요청을 내포시키면 이 코드를 더 간결하게 만들 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; tree = Tree(1, Tree(2), Tree(3))
+<br></span></p>
+
+<p>
+어떤 방법이든 그 결과는 이 장의 처음에 보인 그 트리입니다.</p>
+
+<a name=2></a><br>
+<h3>20.2 트리를 순회하기</h3>
+<p>
+새로운 데이타 구조를 보게되면 언제나 제일 먼저 하는 질문은 다음과 같을 것입니다. "어떻게 그것을 순회하지?". 가장 자연스러운 방법으로 트리를 순회하는 것은 재귀적으로 순회하는 것입니다. 예를 들어, 만약 트리가 정수를 카르고로 가지고 있다면, 다음 함수는 그 합을 반환합니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>total</span>(tree):
+<br>&nbsp; <span class=keyword>if</span> tree == None: <span class=keyword>return</span> 0
+<br>&nbsp; <span class=keyword>return</span> total(tree.left) + total(tree.right) + tree.cargo
+<br></span></p>
+
+<p>
+기저 케이스는 빈 트리입니다. 빈 트리는 아무 카르고도 가지고 있지 않습니다. 그래서 그 합은 0입니다. 재귀적인 단계는 두 개의 재귀적인 호출을 만들고 자손 트리의 합을 찾습니다. 재귀 호출이 완료되면, 부모의 카르고를 더하고 총계를 돌려줍니다.</p>
+
+<a name=3></a><br>
+<h3>20.3 표현식 트리</h3>
+
+<p>
+트리는 표현식의 구조를 표현하는 자연스러운 방법입니다. 다른 표기법들과는 다르게 트리는 계산방법을 명료하게 표현할 수 있습니다. 예를 들어, 덧셈 전에 곱셈이 먼저 일어나야 한다는 것을 모르는 한, 중위 표현식 <span class=code>1 + 2 * 3</span>는 모호합니다.</p>
+
+<p>
+이 표현식 트리는 같은 계산을 표현합니다:</p>
+
+<p align="center"><img src="illustrations/tree2.png" ></p>
+
+<p>
+표현식 트리의 노드들은 <span class=code>1</span>과 <span class=code>2</span> 같은 피연산자일 수 있고 또는 <span class=code>+</span>와 <span class=code>*</span> 같은 연산자일 수 있습니다. 피연산자들은 잎(leaf) 노드입니다; 연산자들은 그들의 피연산자들에 대한 참조점을 가집니다. (이러한 모든 연산자들은 <b>이항(binary)</b>적입니다. 즉 정확하게 두 개의 피연산자를 가지고 있다는 것을 뜻합니다.)</p>
+
+<p>이 트리를 다음과 같이 구축할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; tree = Tree(<span class=quote>'+'</span>, Tree(1), Tree(<span class=quote>'*'</span>, Tree(2), Tree(3)))
+<br></span></p>
+
+<p>
+그림을 보면, 연산의 순서가 어떻게 되는지 의문이 없습니다; 곱셈이 먼저 일어나고 덧셈의 두 번째 피연산자를 계산합니다.</p>
+
+<p>
+표현식 트리는 쓸모가 많습니다. 이 장의 예제에서는 트리를 사용하여 표현식을 후위식과 전위식 그리고 중위식으로 번역합니다. 비슷한 트리들이 컴파일러 안에서 사용되어 프로그램을 해석하고 최적화하며 그리고 번역합니다.</p>
+
+<a name=4></a><br>
+<h3>20.4 트리 순회</h3>
+<p>
+이제 표현식 트리를 순회할 수 있으며 그 내용들을 다음과 같이 인쇄할 수 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>printTree</span>(tree):
+<br>&nbsp; <span class=keyword>if</span> tree == None: <span class=keyword>return
+<br>&nbsp; print</span> tree.cargo,
+<br>&nbsp; printTree(tree.left)
+<br>&nbsp; printTree(tree.right)
+<br></span></p>
+
+
+
+
+
+<p>
+다른 말로 해서, 트리를 인쇄하려면 먼저 루트의 내용을 인쇄하고 왼쪽의 하부트리를 모두 인쇄합니다. 그리고나서 오른쪽의 전체 트리를 인쇄합니다. 이런 방식의 트리 순회를 <b>전위순회(preorder)</b>라고 부릅니다. 왜냐하면 루트의 내용이 자손의 내용보다 먼저(<i>before</i>) 나타나기 때문입니다. 이 전의 예제에 대하여 그 출력결과는 다음과 같습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; tree = Tree(<span class=quote>'+'</span>, Tree(1), Tree(<span class=quote>'*'</span>, Tree(2), Tree(3)))
+<br>&gt;&gt;&gt; printTree(tree)
+<br>+ 1 * 2 3
+<br></span></p>
+
+<p>
+이 형식은 후위식과 중위식 어떤 것과도 다릅니다; 이 형식은 <b>전위식(prefix)</b>이라고 부르는 또 다른 표기법입니다. 여기에서 연산자들은 피연산자들보다 먼저 나타납니다.</p>
+<p>
+이 트리를 다른 순서로 순회하면 어떻게 되는지 의문이 생길 수 있습니다. 그러면 서로 다른 표기법을 얻게 될 것입니다. 예를 들어, 하부트리를 먼저 인쇄하고 나서 루트노드를 인쇄하려면 다음과 같이 하면 됩니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>printTreePostorder</span>(tree):
+<br>&nbsp; <span class=keyword>if</span> tree == None: <span class=keyword>return</span>
+<br>&nbsp; printTreePostorder(tree.left)
+<br>&nbsp; printTreePostorder(tree.right)
+<br>&nbsp; <span class=keyword>print</span> tree.cargo,
+<br></span></p>
+
+
+
+<p>
+그 결과인 <span class=code>1 2 3 * +</span>은 후위식입니다! 이런 순서로 순회하는 것을 <b>후위순회(postorder)</b>라고 부릅니다.</p>
+
+<p>마지막으로, 트리를 <b>중위순회(inorder)</b>로 순회하려면 먼저 왼쪽 트리를 인쇄하고 나서 루트를 인쇄하고 다음으로 오른쪽 트리를 인쇄합니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>printTreeInorder</span>(tree):
+<br>&nbsp; <span class=keyword>if</span> tree == None: <span class=keyword>return</span>
+<br>&nbsp; printTreeInorder(tree.left)
+<br>&nbsp; <span class=keyword>print</span> tree.cargo,
+<br>&nbsp; printTreeInorder(tree.right)
+<br></span></p>
+
+
+
+<p>
+그 결과인 <span class=code>1 + 2 * 3</span>은 중위식으로 작성된 표현식입니다.</p>
+<p>
+공정히 하려면 중요한 복잡성을 생략했다는 것을 지적해야 하겠습니다. 중위식으로 표현식을 작성할 때, 어떤 경우에는 괄호를 사용하여 연산의 순서를 유지해야만 합니다. 그래서 중위순회는 중위 표현식을 생성하기에 전혀 충분하지 않습니다.</p>
+
+<p>
+그럼에도 불구하고, 조금만 개선하면 표현식 트리와 트리 재귀 순회는 표현식을 하나의 형식에서 다른 형식으로 바꾸는 보편적인 방법을 제공합니다.</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, <span class=code>printTreeInorder</span>를 수정하여 각 연산자와 두 개의 피연산자 주위에 괄호를 배치하도록 해 보세요. 출력결과가 정확하고 명료합니까? 괄호는 언제나 필수적입니까? </i> </p>
+
+<p>
+만약 중위(inorder) 순회를 하고 트리에서 어떤 수준에 있는지 위치를 추적유지한다면, 트리를 그래픽으로 표현할 수 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>printTreeIndented</span>(tree, level=0):
+<br>&nbsp; <span class=keyword>if</span> tree == None: <span class=keyword>return</span>
+<br>&nbsp; printTreeIndented(tree.right, level+1)
+<br>&nbsp; <span class=keyword>print</span> <span class=quote>'&nbsp; '</span>*level + str(tree.cargo)
+<br>&nbsp; printTreeIndented(tree.left, level+1)
+<br></span></p>
+
+
+
+<p>
+매개변수 <span class=code>level</span>은 트리에서 어디에 위치하고 있는지를 추적유지합니다. 기본 값으로, 수준(level)은 초기에 0입니다. 재귀 호출을 할 때마다 <span class=code>level+1</span>을 건넵니다. 왜냐하면 자손의 수준이 항상 그 부모의 수준보다 1만큼 더 크기 때문입니다. 각 항목은 수준당 두 개의 공백만큼씩 들여쓰기 됩니다. 예제 트리의 결과는 다음과 같습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; printTreeIndented(tree)
+<br>&nbsp; &nbsp; 3
+<br>&nbsp; *
+<br>&nbsp; &nbsp; 2
+<br>+
+<br>&nbsp; 1
+<br></span></p>
+
+<p>
+출력결과를 옆으로 살펴 보시면 원래 그림을 간단히 만든 버전을 볼 수 있습니다.</p>
+
+<a name=5></a><br>
+<h3>20.5 표현식 트리를 구축하기</h3>
+<p>
+이 섹션에서는 중위 표현식을 해석(parse)합니다. 그리고 그에 상응하는 표현식 트리를 구축합니다. 예를 들어, 표현식 <span class=code>(3+7)*9</span>는 다음의 트리를 산출합니다.</p>
+
+<p align="center"><img src="illustrations/tree3.png"></p>
+
+<p>
+속성의 이름들을 생략하여 다이어그램을 간략화한 것을 주목하세요.</p>
+
+<p>
+앞으로 작성할 해석기는 숫자와 괄호 그리고 연산자 <span class=code>+</span>와 <span class=code>*</span>를 포함하는 표현식을 처리합니다. 입력 문자열이 이미 파이썬의 리스트로 토큰화되었다고 가정합니다. <span class=code>(3+7)*9</span>에 대한 토큰 리스트는 다음과 같습니다:</p>
+
+
+<p><span class=code>[<span class=quote>'('</span>, 3, <span class=quote>'+'</span>, 7, <span class=quote>')'</span>, <span class=quote>'*'</span>, 9, <span class=quote>'end'</span>]
+<br></span></p>
+
+
+
+<p><span class=code>end</span> 토큰은 해석기가 리스트의 마지막을 지나서 읽지 않도록 해 주는데 유용합니다.</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, 하나의 표현식 문자열을 취해서 토큰 리스트를 반환하는 함수를 작성해 보세요.</i> </p>
+
+<p>
+작성할 첫 번째 함수는 <span class=code>getToken</span>입니다. 이것은 토큰 리스트 하나와 예상된 토큰을 매개변수로 취합니다. 예상된 토큰을 리스트에 있는 첫 번째 토큰과 비교합니다: 만약 일치하면 그 토큰을 리스트로부터 제거하고 참을 돌려줍니다; 그렇지 않으면, 거짓을 돌려줍니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>getToken</span>(tokenList, expected):
+<br>&nbsp; <span class=keyword>if</span> tokenList[0] == expected:
+<br>&nbsp; &nbsp; <span class=keyword>del</span> tokenList[0]
+<br>&nbsp; &nbsp; <span class=keyword>return</span> 1
+<br>&nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> 0
+<br></span></p>
+
+
+
+<p>
+<span class=code>tokenList</span>는 변경가능한 객체를 가리키므로 여기에서 일어나는 변경은 같은 객체를 가리키는 다른 모든 변수들이 볼 수 있습니다.</p>
+
+<p>다음 함수 <span class=code>getNumber</span>는 피연산자를 처리합니다. 만약 <span class=code>tokenList</span>에 있는 다음 토큰이 숫자라면 <span class=code>getNumber</span>는 그것을 제거하고 그 숫자를 담고 있는 잎 노드를 돌려줍니다; 그렇지 않으면, <span class=code>None</span>을 돌려줍니다.</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>getNumber</span>(tokenList):
+<br>&nbsp; x = tokenList[0]
+<br>&nbsp; <span class=keyword>if</span> type(x) != type(0): <span class=keyword>return</span> None
+<br>&nbsp; <span class=keyword>del</span> tokenList[0]
+<br>&nbsp; <span class=keyword>return</span> Tree (x, None, None)
+<br></span></p>
+
+
+
+<p>
+더 진행하기 전에 먼저 <span class=code>getNumber</span>를 따로 시험해 봅시다. 숫자들을 담은 리스트를 <span class=code>tokenList</span>에 할당하고, 첫 번째 숫자를 추출해서 그 결과를 인쇄하고, 토큰 리스트에 남아있는 것을 인쇄해 봅니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; tokenList = [9, 11, <span class=quote>'end'</span>]
+<br>&gt;&gt;&gt; x = getNumber(tokenList)
+<br>&gt;&gt;&gt; printTreePostorder(x)
+<br>9
+<br>&gt;&gt;&gt; <span class=keyword>print</span> tokenList
+<br>[11, <span class=quote>'end'</span>]
+<br></span></p>
+
+
+
+<p>
+다음으로 필요한 메쏘드는 <span class=code>getProduct</span>입니다, 이 메쏘드는 곱에 대한 표현 트리를 구축합니다. 간단한 곱은 숫자 두개를 피연산자로 가집니다. <span class=code>3 * 7</span>처럼 말입니다.</p>
+<p>
+여기에 있는 <span class=code>getProduct</span> 버전은 간단한 곱을 처리합니다.</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>getProduct</span>(tokenList):
+<br>&nbsp; a = getNumber(tokenList)
+<br>&nbsp; <span class=keyword>if</span> getToken(tokenList, <span class=quote>'*'</span>):
+<br>&nbsp; &nbsp; b = getNumber(tokenList)
+<br>&nbsp; &nbsp; <span class=keyword>return</span> Tree (<span class=quote>'*'</span>, a, b)
+<br>&nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> a
+<br></span></p>
+
+
+
+<p>
+<span class=code>getNumber</span>가 성공해서 싱글턴 트리를 반환한다고 가정하고서, 첫 번째 피연산자를 <span class=code>a</span>에 할당합니다. 만약 그 다음 문자가 <span class=code>*</span>라면, 두 번째 숫자를 얻고 <span class=code>a</span>와 <span class=code>b</span> 그리고 연산자로 트리 표현식을 구축합니다.</p>
+<p>
+만약 다음 문자가 다른 어떤 것이라면, 그냥 <span class=code>a</span>를 가진 잎 노드를 반환합니다. 다음에 두 가지 예제가 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; tokenList = [9, <span class=quote>'*'</span>, 11, <span class=quote>'end'</span>]
+<br>&gt;&gt;&gt; tree = getProduct(tokenList)
+<br>&gt;&gt;&gt; printTreePostorder(tree)
+<br>9 11 *
+<br>&gt;&gt;&gt; tokenList = [9, <span class=quote>'+'</span>, 11, <span class=quote>'end'</span>]
+<br>&gt;&gt;&gt; tree = getProduct(tokenList)
+<br>&gt;&gt;&gt; printTreePostorder(tree)
+<br>9
+<br></span></p>
+
+
+
+<p>
+두 번째 예제는 한 개의 피연산자를 일종의 곱이라고 간주하고 있다는 것을 암시합니다. "곱(product)"에 대한 이러한 정의는 반직관적이지만, 알고보면 쓸모가 많습니다.</p>
+
+<p>
+이제 <span class=code>3 * 5 * 13</span>와 같은 복합적인 곱을 다루어야 합니다. 이 표현식을 곱의 곱으로 처리합니다. 즉 <span class=code>3 * (5 * 13)</span>와 같이 말입니다. 결과로 나온 트리는 다음과 같습니다:</p>
+
+<p align="center"><img src="illustrations/tree4.png"></p>
+<p>
+<span class=code>getProduct</span>에서 조금 변경하면 얼마든지 긴 곱을 다룰 수 있습니다.:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>getProduct</span>(tokenList):
+<br>&nbsp; a = getNumber(tokenList)
+<br>&nbsp; <span class=keyword>if</span> getToken(tokenList, <span class=quote>'*'</span>):
+<br>&nbsp; &nbsp; b = getProduct(tokenList)&nbsp; &nbsp; &nbsp; &nbsp;<span class=comment># 이 줄이 변경됨
+</span><br>&nbsp; &nbsp; <span class=keyword>return</span> Tree (<span class=quote>'*'</span>, a, b)
+<br>&nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> a
+<br></span></p>
+
+
+
+<p>
+다른 말로 하면, 곱은 싱글턴이거나 루트에 <span class=code>*</span>가 있고 왼쪽에 숫자 하나가 있으며 오른쪽에 곱을 가진 트리일 수 있습니다. 이제는 이런 종류의 재귀적인 정의가 친숙하게 느껴지기 시작해야 합니다.</p>
+
+
+
+<p>복합적인 곱을 처리하는 새로운 버전을 시험해 봅시다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; tokenList = [2, <span class=quote>'*'</span>, 3, <span class=quote>'*'</span>, 5 , <span class=quote>'*'</span>, 7, <span class=quote>'end'</span>]
+<br>&gt;&gt;&gt; tree = getProduct(tokenList)
+<br>&gt;&gt;&gt; printTreePostorder(tree)
+<br>2 3 5 7 * * *
+<br></span></p>
+
+
+
+<p>
+다음으로 합들을 해석하는 기능을 추가해 보겠습니다. 다시, "합(sums)"에 대하여 약간 반직관적인 정의를 사용합니다. 우리의 관점으로 보면, 합은 루트에 <span class=code>+</span>가 있고 왼쪽에 곱이 있으며 오른쪽에 합을 가진 트리일 수 있습니다. 또는, 합은 단지 곱일수 있습니다.</p>
+
+
+
+<p>
+이러한 정의를 기꺼이 다루어 보면 이 정의가 훌륭한 특성을 지니고 있는 것을 알 수 있습니다: 어떠한 표현식도 (괄호 없이) 곱들의 합으로 표현할 수 있습니다. 이 특성이 우리의 해석 알고리즘의 기초입니다.</p>
+
+<p>
+<span class=code>getSum</span>은 왼쪽에 곱을 그리고 오른쪽에 합을 가지는 트리를 구축하려고 시도합니다. 그러나 만약 <span class=code>+</span>를 발견할 수 없다면, 단지 곱만을 구축합니다.</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>getSum</span>(tokenList):
+<br>&nbsp; a = getProduct(tokenList)
+<br>&nbsp; <span class=keyword>if</span> getToken(tokenList, <span class=quote>'+'</span>):
+<br>&nbsp; &nbsp; b = getSum(tokenList)
+<br>&nbsp; &nbsp; <span class=keyword>return</span> Tree (<span class=quote>'+'</span>, a, b)
+<br>&nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> a
+<br></span></p>
+
+
+
+<p>이제 <span class=code>9 * 11 + 5 * 7</span>로 그것을 시험해 봅시다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; tokenList = [9, <span class=quote>'*'</span>, 11, <span class=quote>'+'</span>, 5, <span class=quote>'*'</span>, 7, <span class=quote>'end'</span>]
+<br>&gt;&gt;&gt; tree = getSum(tokenList)
+<br>&gt;&gt;&gt; printTreePostorder(tree)
+<br>9 11 * 5 7 * +
+<br></span></p>
+
+<p>
+거의 완성되었습니다. 그러나 여전히 괄호를 처리해야 합니다. 숫자가 존재할 가능성이 있는 표현식의 어느곳에나 괄호로 둘러쳐진 전체 합이 있을 수 있습니다. <span class=code>getNumber</span>를 변경하여 <b>하부표현식(subexpressions)</b>을 처리하기만 하면 됩니다:</p>
+
+
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>getNumber</span>(tokenList):
+<br>&nbsp; <span class=keyword>if</span> getToken(tokenList, <span class=quote>'('</span>):
+<br>&nbsp; &nbsp; x = getSum(tokenList)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class=comment># 하부표현식을 얻는다
+</span><br>&nbsp; &nbsp; getToken(tokenList, <span class=quote>')'</span>)&nbsp; &nbsp; &nbsp; &nbsp;<span class=comment># 닫는 괄호를 제거한다
+</span><br>&nbsp; &nbsp; <span class=keyword>return</span> x
+<br>&nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; x = tokenList[0]
+<br>&nbsp; &nbsp; <span class=keyword>if</span> type(x) != type(0): <span class=keyword>return</span> None
+<br>&nbsp; &nbsp; tokenList[0:1] = []
+<br>&nbsp; &nbsp; <span class=keyword>return</span> Tree (x, None, None)
+<br></span></p>
+
+
+
+<p>이 코드를 <span class=code>9 * (11 + 5) * 7</span>으로 시험해 봅시다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; tokenList = [9, <span class=quote>'*'</span>, <span class=quote>'('</span>, 11, <span class=quote>'+'</span>, 5, <span class=quote>')'</span>, <span class=quote>'*'</span>, 7, <span class=quote>'end'</span>]
+<br>&gt;&gt;&gt; tree = getSum(tokenList)
+<br>&gt;&gt;&gt; printTreePostorder(tree)
+<br>9 11 5 + 7 * *
+<br></span></p>
+
+
+
+<p>
+해석기는 괄호들을 올바르게 처리하였습니다; 덧셈은 곱셈보다 먼저 일어납니다.</p>
+
+<p>
+완성된 프로그램 버전에서는 <span class=code>getNumber</span>에 새로운 이름을 부여해서 그의 새로운 임무를 더 잘 기술해 주는 것이 좋은 생각이 될 것입니다..</p>
+
+<a name=6></a><br>
+<h3>20.6 에러를 다루기</h3>
+
+<p>
+해석기 전체를 통하여 표현식들이 잘-구성되어 있다고 가정하고 있습니다. 예를 들어, 하부표현식의 마지막에 도달하면 다음 문자가 닫는 괄호라고 가정합니다. 만약 에러가 있고 다음 문자가 다른 어떤 것이라면, 그것을 처리해야 합니다.</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>getNumber</span>(tokenList):
+<br>&nbsp; <span class=keyword>if</span> getToken(tokenList, <span class=quote>'('</span>):
+<br>&nbsp; &nbsp; x = getSum(tokenList)
+<br>&nbsp; &nbsp; <span class=keyword>if not</span> getToken(tokenList, <span class=quote>')'</span>):
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>raise</span> <span class=quote>'BadExpressionError'</span>, <span class=quote>'missing parenthesis'</span>
+<br>&nbsp; &nbsp; <span class=keyword>return</span> x
+<br>&nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; <span class=comment># 나머지 함수는 생략
+</span><br></span></p>
+
+
+
+<p>
+<span class=code><span class=keyword>raise</span></span> 서술문은 예외를 일으킵니다; 이 경우에, <span class=code>BadExpressionError</span>라고 부르는 새로운 종류의 예외를 만듭니다. 만약 <span class=code>getNumber</span>라고 부르는 함수 또는 역추적에 있는 다른 함수들 중의 하나가 그 예외를 처리한다면, 프로그램은 계속될 수 있습니다. 그렇지 않으면, 파이썬은 에러 메시지를 인쇄하고 종료합니다.</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, 이러한 함수에서 에러가 일어날 만한 곳과 적절하게 <span class=code><span class=keyword>raise</span></span> 서술문이 들어갈 만한 곳을 찾아 보세요. 부적절하게 구성된 표현식으로 코드를 테스트해 보세요.</i> </p>
+
+<a name=7></a><br>
+<h3>20.7 동물 트리</h3>
+<p>
+이 섹션에서는 트리를 사용하여 지식 베이스를 표현하는 작은 프로그램을 개발합니다.</p>
+<p>
+프로그램은 사용자와 상호작용하면서 질문과 동물 이름들의 트리를 생성합니다. 다음 예제를 실행해 봅니다:</p>
+
+
+<p><span class=code>Are you thinking of an animal? y
+<br>Is it a bird? n
+<br>What <span class=keyword>is</span> the animals name? dog
+<br>What question would distinguish a dog <span class=keyword>from</span> a bird? Can it fly
+<br>If the animal were dog the answer would be? n
+<br>
+<br>Are you thinking of an animal? y
+<br>Can it fly? n
+<br>Is it a dog? n
+<br>What <span class=keyword>is</span> the animals name? cat
+<br>What question would distinguish a cat <span class=keyword>from</span> a dog? Does it bark
+<br>If the animal were cat the answer would be? n
+<br>
+<br>Are you thinking of an animal? y
+<br>Can it fly? n
+<br>Does it bark? y
+<br>Is it a dog? y
+<br>I rule!
+<br>
+<br>Are you thinking of an animal? n
+<br></span></p>
+
+
+
+<p>이 대화로 구축되는 트리는 다음과 같습니다:</p>
+
+<p align="center"><img src="illustrations/tree5.png"></p>
+
+<p>
+각 회전의 처음에 프로그램은 트리의 최상부에서 시작하여 첫 번째 질문을 던집니다. 대답에 따라서 프로그램은 왼쪽 또는 오른쪽으로 이동하며 잎 노드에 도달할 때까지 계속합니다. 도달하면 추론을 합니다. 만약 그 추론이 올바르지 않다면 프로그램은 사용자에게 그 새로운 동물의 이름을 물어봅니다. 그리고 그 새로운 동물과 (잘못된) 추론이 어떻게 다른지 질문합니다. 그리고나서 프로그램은 트리에 있는 한 노드에 그 새로운 질문과 새로운 동물을 추가합니다.</p>
+
+<p>다음이 그 코드입니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>animal</span>():
+<br>&nbsp; <span class=comment># 싱글턴으로 시작한다
+</span><br>&nbsp; root = Tree(<span class=quote>"bird"</span>)
+<br>
+<br>&nbsp; <span class=comment># 사용자가 중지시킬 때까지 회돌이 지속
+</span><br>&nbsp; <span class=keyword>while</span> 1:
+<br>&nbsp; &nbsp; <span class=keyword>print
+<br>&nbsp; &nbsp; if not</span> yes(<span class=quote>"Are you thinking of an animal? "</span>): <span class=keyword>break</span>
+<br>
+<br>&nbsp; &nbsp; <span class=comment># 트리 순회하기
+</span><br>&nbsp; &nbsp; tree = root
+<br>&nbsp; &nbsp; <span class=keyword>while</span> tree.getLeft() != None:
+<br>&nbsp; &nbsp; &nbsp; prompt = tree.getCargo() + <span class=quote>"? "</span>
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>if</span> yes(prompt):
+<br>&nbsp; &nbsp; &nbsp; &nbsp; tree = tree.getRight()
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; &nbsp; &nbsp; tree = tree.getLeft()
+<br>
+<br>&nbsp; &nbsp; <span class=comment># 추측한다
+</span><br>&nbsp; &nbsp; guess = tree.getCargo()
+<br>&nbsp; &nbsp; prompt = <span class=quote>"Is it a "</span> + guess + <span class=quote>"? "</span>
+<br>&nbsp; &nbsp; <span class=keyword>if</span> yes(prompt):
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>print</span> <span class=quote>"I rule!"</span>
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>continue</span>
+<br>
+<br>&nbsp; &nbsp; <span class=comment># 새로운 정보를 얻는다
+</span><br>&nbsp; &nbsp; prompt&nbsp; = <span class=quote>"What is the animal's name? "</span>
+<br>&nbsp; &nbsp; animal&nbsp; = raw_input(prompt)
+<br>&nbsp; &nbsp; prompt&nbsp; = <span class=quote>"What question would distinguish a %s from a %s? "</span>
+<br>&nbsp; &nbsp; question = raw_input(prompt % (animal,guess))
+<br>
+<br>&nbsp; &nbsp; <span class=comment># 새로운 정보를 트리에 추가한다
+</span><br>&nbsp; &nbsp; tree.setCargo(question)
+<br>&nbsp; &nbsp; prompt = <span class=quote>"If the animal were %s the answer would be? "</span>
+<br>&nbsp; &nbsp; <span class=keyword>if</span> yes(prompt % animal):
+<br>&nbsp; &nbsp; &nbsp; tree.setLeft(Tree(guess))
+<br>&nbsp; &nbsp; &nbsp; tree.setRight(Tree(animal))
+<br>&nbsp; &nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; &nbsp; tree.setLeft(Tree(animal))
+<br>&nbsp; &nbsp; &nbsp; tree.setRight(Tree(guess))
+<br></span></p>
+
+<p>
+함수 <span class=code>yes</span>는 도움자입니다; 이 함수는 프롬프트를 인쇄하고 사용자로부터 입력을 받습니다. 대답이 <i>y</i> 또는 <i>Y</i>로 시작하면, 그 함수는 참을 반환합니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>yes</span>(ques):
+<br>&nbsp; <span class=keyword>from</span> string <span class=keyword>import</span> lower
+<br>&nbsp; ans = lower(raw_input(ques))
+<br>&nbsp; <span class=keyword>return</span> (ans[0] == <span class=quote>'y'</span>)
+<br></span></p>
+
+
+
+<p>
+바깥쪽 회돌이의 조건은 <span class=code>1</span>입니다. 이것은 <span class=code><span class=keyword>break</span></span> 서술문이 실행될 까지 계속될 것이라는 것을 뜻합니다. 사용자가 동물에 대하여 생각하고 있지 않을 때까지 말입니다.</p>
+<p>
+안쪽 <span class=code><span class=keyword>while</span></span> 회돌이는 사용자의 대답을 지침으로 삼아 위로부터 아래로 트리를 탐색합니다.</p>
+<p>
+새로운 노드가 트리에 추가되면 새로운 질문이 카르고를 대체합니다. 그리고 두 자손 노드는 각각 새로운 동물과 원래의 카르고입니다.</p>
+
+<p>
+이 프로그램의 결점 하나는 종료하고 나면 세심하게 가르쳤던 모든 것들을 모두 잊어 버린다는 것입니다!</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, 그 지식 베이스 트리를 파일에 저장할 만한 여러 방법을 강구해 보세요. 제일 쉽다고 생각하는 것을 구현해 보세요.</i> </p>
+
+<a name=8></a><br>
+<h3>20.8 용어 해설</h3>
+
+<dl>
+
+<dt>이진 트리(binary tree)</dt>
+<dd>각 노드가 0, 1, 또는 2 개의 노드를 독립적으로 가리키는 트리.</dd>
+
+<dt>루트(root)</dt>
+<dd>트리에서 부모가 없는 최상위 노드.</dd>
+
+<dt>리프(leaf)</dt>
+<dd>트리에서 자손이 없는 최하위 노드.</dd>
+
+<dt>부모(parent)</dt>
+<dd>주어진 노드를 가리키는 노드.</dd>
+
+<dt>자손(child)</dt>
+<dd>한 노드가 가리키는 노드들중의 하나.</dd>
+
+<dt>형제(siblings)</dt>
+<dd>공통의 부모를 가지는 노드들.</dd>
+
+<dt>수준(level)</dt>
+<dd>뿌리로부터 같은 거리에 있는 노드들의 모둠.</dd>
+
+<dt>이항 연산자(binary operator)</dt>
+<dd>두 개의 피연자를 취하는 연산자.</dd>
+
+<dt>하부표현식(subexpression)</dt>
+<dd>괄호안에 싸인 표현식으로 더 큰 표현식 안에서 한개의 피연산자처럼 작용한다.</dd>
+
+<dt>전위순회(preorder)</dt>
+<dd>트리를 순회하는 방식으로, 자손노드보다 각 노드를 먼저 방문한다.</dd>
+
+<dt>전위식 표기법(prefix notation)</dt>
+<dd>각 연산자가 피연산자들보다 먼저 나타나도록 수학적 표현식을 작성하는 방법.</dd>
+
+<dt>후위순회(postorder)</dt>
+<dd>트리를 순회하는 방식으로, 각 노드보다 그의 자손을 먼저 방문한다.</dd>
+
+<dt>중위순회(inorder)</dt>
+<dd>트리를 순회하는 방식으로, 왼쪽의 하부트리를 방문하고 나서 루트를 방문하고 그 다음에 오른쪽 하부트리를 방문한다.</dd>
+
+</dl>
+
+<h2>연습문제</h2>
+<ol>
+<li><div class="exercise">
+<code>printTreeInorder</code>를 수정하여 괄호를 피연산자 쌍과 연산자 주위에 둘러라.  결과가 올바른가 애매한가?  괄호가 항상 필요한가?
+</div></li>
+
+<li><div class="exercise">
+표현식 문자열을 받아 토큰 리스트를 돌려주는 함수를 작성하라.
+</div></li>
+
+<li><div class="exercise">
+표현식 트리 함수에서 에러가 일어날 만한 곳을 찾아 적절한 <code>raise</code> 서술문을 추가하라. 모양이 나쁜 표현식으로 코드를 테스트하라.
+</div></li>
+
+<li><div class="exercise">
+동물 지식 트리를 파일에 저장할 만한 다양한 방법을 생각하라. 가장 쉽다고 생각하는 방법을 구현하라.
+</div></li>
+</ol>
+
+<p>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap21.htm" ><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm" ><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap19.htm" ><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm" ><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+  </tr>
+</table>
+<hr>
+
+</body>
+</html>

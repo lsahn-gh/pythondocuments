@@ -1,0 +1,572 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>제 2 장 : 변수, 표현식 그리고 서술문</title>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+
+<body>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap03.htm" ><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm" ><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap01.htm" ><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm" ><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+  </tr>
+</table>
+<hr>
+
+
+<h2>제 2 장</h2>
+
+<h1>변수, 표현식 그리고 서술문</h1>
+
+
+<a name=1></a><br>
+<h3>2.1 값(Values)과 유형(types)</h3>
+
+<p>
+값(<b>value</b>)은---문자나 숫자같은--- 프로그램이 다루는 기본적인 것들중의 하나입니다. 지금까지 본 값들은 (<span class=code>1 + 1</span>을 더했을 때의 결과인) <span class=code>2</span>와 <span class=code><span class=quote>"Hello, World!"</span></span>입니다.</p>
+<p>
+이러한 값들은 서로 다른 유형(<b>types</b>)에 속합니다: <span class=code>2</span>는 정반입니다. 그리고 <span class=code><span class=quote>"Hello, World!"</span></span>는 문자열(<b>string</b>)입니다. 이른바 그 형은 "일련의(string)" 문자들을 포함하기 때문입니다. 여러분은 (그리고 파이썬은) 문자열이 인용 부호로 둘러싸여 있기 때문에 구별할 수 있습니다.</p>
+<p>
+print 서술문은 정수에도 작동합니다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> 4
+<br>4
+<br></span></p>
+
+
+<p>
+값이 어떤 유형을 가지는지 확신할 수 없다면, 파이썬이 알려줄 수 있습니다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt; type(<span class=quote>"Hello, World!"</span>)
+<br>&lt;type <span class=quote>'string'</span>>
+<br>&gt;&gt;&gt; type(17)
+<br>&lt;type <span class=quote>'int'</span>>
+<br></span></p>
+
+<p>
+당연히 문자열은 <span class=code>string</span> 유형에 속하고 정수는 <span class=code>int</span> 유형에 속합니다. 덜 명확하기는 하지만, 소수 부분을 가진 숫자들은 <span class=code>float</span> 유형에 속합니다. 왜냐하면 이러한 숫자들은 부동-소수점(<b>floating-point</b>)이라고 부르는 형식으로 표현되기 때문입니다.</p>
+
+
+
+
+<p><span class=code>&gt;&gt;&gt; type(3.2)
+<br>&lt;type <span class=quote>'float'</span>>
+<br></span></p>
+
+<p>
+<span class=code><span class=quote>"17"</span></span>과 <span class=code><span class=quote>"3.2"</span></span> 같은 값들은 어떤가? 마치 숫자처럼 보입니다. 그러나 문자열처럼 인용 부호 안에 있습니다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt; type(<span class=quote>"17"</span>)
+<br>&lt;type <span class=quote>'string'</span>>
+<br>&gt;&gt;&gt; type(<span class=quote>"3.2"</span>)
+<br>&lt;type <span class=quote>'string'</span>>
+<br></span></p>
+
+
+<p>
+알고보니 문자열이군요.</p>
+<p>
+거대한 정수를 타자하려 할 때, 컴마를 세자리 그룹 사이에 사용하고 싶은 유혹에 빠질수도 있습니다. <span class=code>1,000,000</span>처럼 말입니다. 이것은 파이썬에서 적법한 정수는 아닙니다. 그러나 적법합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> 1,000,000
+<br>1 0 0
+<br></span></p>
+
+
+<p>
+음, 전혀 예상한 바가 아니군요! <span class=code>1,000,000</span>은 터플이라고 판명되며, <a href="chap09.htm">제 9 장</a>에서 다루어 보겠습니다. 현재로서는 단지 정수에 컴마를 사용하지 말아야 한다는 것만 기억하세요.</p>
+
+<a name=2></a><br>
+<h3>2.2 변수</h3>
+<p>
+프로그래밍 언어의 가장 강력한 특징중의 하나는 변수(<b>variables</b>)를 다루는 능력입니다. 변수는 어떤 값을 가리키는 이름입니다.</p>
+
+<p>할당 서술문(<b>assignment statement</b>)은 새로운 변수를 만들고 그 변수에 값을 줍니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; message = <span class=quote>"What's up, Doc?"</span>
+<br>&gt;&gt;&gt; n = 17
+<br>&gt;&gt;&gt; pi = 3.14159
+<br></span></p>
+
+<p>
+이 예제는 세 개의 할당문이 있습니다. 첫 번째는 문자열 <span class=code><span class=quote>"What's up, Doc?"</span></span>을 <span class=code>message</span>라는 이름의 새로운 변수에 할당합니다. 두 번째는 정수 <span class=code>17</span>을 <span class=code>n</span>에 주고, 세 번째는 부동-소수점 수 <span class=code>3.14159</span>를 <span class=code>pi</span>에 줍니다.</p>
+<p>
+변수를 종이에 표현하는 일반적인 방법은 그 이름을 쓰고 화살표로 그 변수의 값을 지시하는 것입니다. 이러한 종류의 그림을 상태 다이어그램(<b>state diagram</b>)이라고 부르는데 각 변수들이 어떤 상태에 있는지 보여주기 때문입니다. (그것을 변수들의 마음의 상태라고 생각하세요). 다음 다이어그램은 서술문들이 할당한 결과를 보여줍니다:</p>
+
+<p align="center"><img src="illustrations/state2.png"></p>
+
+<p><span class=code><span class=keyword>print</span></span> 서술문은 변수와도 작동합니다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> message
+<br>What's up, Doc?
+<br>&gt;&gt;&gt; <span class=keyword>print</span> n
+<br>17
+<br>&gt;&gt;&gt; <span class=keyword>print</span> pi
+<br>3.14159
+<br></span></p>
+
+<p>
+각 경우에 그 결과는 변수의 값입니다. 변수도 유형이 있습니다; 역시 파이썬에게 변수가 어떤 유형을 가지는지 물어볼 수 있습니다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt; type(message)
+<br>&lt;type <span class=quote>'string'</span>>
+<br>&gt;&gt;&gt; type(n)
+<br>&lt;type <span class=quote>'int'</span>>
+<br>&gt;&gt;&gt; type(pi)
+<br>&lt;type <span class=quote>'float'</span>>
+<br></span></p>
+
+<p>
+한 변수의 유형은 그 변수가 가리키는 값의 유형입니다.</p>
+
+<a name=3></a><br>
+<h3>2.3 변수 이름과 키워드</h3>
+<p>
+프로그래머들은 일반적으로 변수에 대하여 의미 있는 이름을 선택합니다---프로그래머들은 그 변수가 어디에 사용되는지를 문서화합니다.</p>
+<p>
+변수 이름은 얼마든지 길 수 있습니다. 변수이름은 문자와 숫자 모두를 포함할 수 있습니다. 그러나 반드시 문자로 시작되어야 합니다. 대문자를 사용하는 것은 적법하기는 하지만, 관례적으로 그렇게 하지 않습니다. 만약 그렇게 한다면, 대소문자가 문제가 된다는 것을 기억하세요.  <span class=code>Bruce</span>와 <span class=code>bruce</span>는 서로 다른 변반입니다.</p>
+<p>
+밑줄 문자(<span class=code>_</span>)는 이름안에 나타날 수 있습니다. 그것은 때로 여러 단어를 가진 이름에 사용될 수 있습니다, <span class=code>my_name</span>이나 <span class=code>price_of_tea_in_china</span>와 같은 이름들에 말입니다.</p>
+<p>
+만약 변수에 불법한 이름을 주면, 구문 에러를 맞이합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; 76trombones = <span class=quote>"big parade"</span>
+<br>SyntaxError: invalid syntax
+<br>&gt;&gt;&gt; more$ = 1000000
+<br>SyntaxError: invalid syntax
+<br>&gt;&gt;&gt; <span class=keyword>class</span> = <span class=quote>"Computer Science 101"</span>
+<br>SyntaxError: invalid syntax
+<br></span></p>
+
+
+
+<p>
+<span class=code>76trombones</span>는 적법하지 않습니다, 왜냐하면 문자로 시작하지 않기 때문입니다. <span class=code>more$</span>는 적법하지 않습니다. 왜냐하면 불법한 문자인 달러 기호를 포함하기 때문입니다. 그렇지만  <span class=code><span class=keyword>class</span></span>는 무엇이 잘못인가?</p>
+<p>
+<span class=code><span class=keyword>class</span></span>는 파이썬의 키워드(<b>keywords</b>)중의 하나입니다. 키워드는 언어의 규칙과 구조를 정의합니다. 그래서 변수 이름으로 사용할 수 없습니다.</p>
+
+<p>파이썬에는 스물-여덟개의 키워드가 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>and       continue  else      for       import    not       raise
+<br>assert    def       except    from      in        or        return
+<br>break     del       exec      global    is        pass      try
+<br>class     elif      finally   if        lambda    print     while</span>
+<br></span></p>
+
+<p>
+이 목록을 항상 휴대하고 싶을 수도 있습니다. 만약 파이썬이 변수 이름에 대하여 불만을 토하는데 왜 그런지 모르겠다면, 그 이름이 이 목록에 있는지 살펴 보세요.</p>
+
+<a name=4></a><br>
+<h3>2.4 서술문</h3>
+<p>
+서술문은 일종의 지시어로서 파이썬 인터프리터가 실행할 수 있습니다. 지금까지 두 종류의 서술문을 보았습니다: print 그리고 할당이 그것입니다.</p>
+<p>
+명령어 줄에서 서술문을 타자하면, 파이썬은 그것을 실행하고  만약 있다면 그 결과를 표시합니다. print 서술문의 결과는 값입니다. 할당(Assignment) 서술문은 결과를 산출하지 않습니다.</p>
+<p>
+스크립트는 보통 일련의 서술문들을 포함합니다. 만약 하나 이상의 서술문이 있다면, 그 결과는 서술문이 실행됨에 따라 한 번에 하나씩 나타납니다.</p>
+
+<p>예를 들어, 다음 스크립트는</p>
+
+
+<p><span class=code><span class=keyword>print</span> 1
+<br>x = 2
+<br><span class=keyword>print</span> x
+<br></span></p>
+
+
+
+<p>다음과 같은 출력을 산출합니다.</p>
+
+
+<p><span class=code>1
+<br>2
+<br></span></p>
+
+<p>또, 할당 서술문은 아무런 출력도 산출하지 않습니다.</p>
+
+<a name=5></a><br>
+<h3>2.5 표현식을 평가하기</h3>
+<p>
+표현식은 값과 변수 그리고 연산자의 조합입니다. 만약 명령어 줄에서 표현식을 타자하면, 파이썬은 그것을 평가(<b>evaluates</b>)하여 그 결과를 표시합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; 1 + 1
+<br>2
+<br></span></p>
+
+
+
+<p>값은 그 자체로 표현식으로 간주됩니다. 그리고 변수도 그렇습니다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt; 17
+<br>17
+<br>&gt;&gt;&gt; x
+<br>2
+<br></span></p>
+
+<p>
+혼란스럽게도, 표현식을 평가하는 것은 값을 인쇄하는 것과는 전혀 같은 것이 아닙니다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt; message = <span class=quote>"What's up, Doc?"</span>
+<br>&gt;&gt;&gt; message
+<br><span class=quote>"What's up, Doc?"</span>
+<br>&gt;&gt;&gt; <span class=keyword>print</span> message
+<br></span></p>
+
+<p>
+표현식의 값을 표시할 때, 파이썬은 여러분이 값을 입력하기 위하여 사용하는 형식과 같은 형식을 사용합니다. 문자열의 경우라면 그것은 인용 부호를 포함한다는 것을 뜻합니다.</p>
+<p>
+스크립트에서 표현식은 그 자체로 적법한 서술문입니다. 그러나 아무것도 하지 않습니다. 다음 스크립트는</p>
+
+
+<p><span class=code>17
+<br>3.2
+<br><span class=quote>"Hello, World!"</span>
+<br>1 + 1
+<br></span></p>
+
+
+
+<p>
+아무런 출력도 산출하지 않습니다. 어떻게 스크립트를 변경하면 이 네개의 표현식의 값을 표시할 수 있을까요?</p>
+
+<a name=6></a><br>
+<h3>2.6 연산자와 피연산자</h3>
+<p>
+연산자(<b>Operators</b>)는 덧셈과 곱셈 같은 계산을 표현하는 특별한 심볼입니다. 연산자가 사용하는 값을  피연산자(<b>operands</b>)라고 부릅니다.</p>
+<p>
+다음은 그 의미가 명확하든 명확하지 않든 모두 적법한 파이썬 표현식입니다:</p>
+
+
+<p><span class=code>20+32   hour-1   hour*60+minute   minute/60   5**2   (5+9)*(15-7)
+<br></span></p>
+
+<p>
+파이썬에서 다음 심볼들 <span class=code>+</span>와 <span class=code>-</span> 그리고 <span class=code>/</span>와 그룹화를 위한 괄호의 사용은 수학에서 뜻하는 바와 같습니다.  별표 (<span class=code>*</span>)는 곱셈을 위한 심볼이고 <span class=code>**</span>는 지수를 위한 심볼입니다.</p>
+<p>
+변수 이름이 피연산자의 위치에 나타나면 변수이름은 연산이 수행되기 전에 그 값으로 대체됩니다.</p>
+
+<p>
+덧셈과 뺄셈 그리고 곱셈과 그리고 지수승은 모두 여러분이 예상한 바를 수행합니다. 그러나 나눗셈에 대해서는 놀랄지도 모르겠습니다. 다음의 연산은 예상하지 못한 결과를 가집니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; minute = 59
+<br>&gt;&gt;&gt; minute/60
+<br>0
+<br></span></p>
+
+
+<p>
+<span class=code>minute</span>의 값은 59이고, 59를 60으로 나눈 값은 0.98333입니다, 0이 아니지요. 이 불일치의 이유는 파이썬이 정수 나눗셈(<b>integer division</b>)을 수행하고 있기 때문입니다.</p>
+<p>
+피연산자 둘 모두가 정수일 때는, 그 결과 역시 정수이어야 합니다. 그리고 관례적으로 정수 나눗셈은 항상 내림(<i>down</i>)을 합니다. 다음 정수에 대단히 가까운 이러한 예에서 조차 말입니다.</p>
+<p>
+이러한 문제에 대한 가능한 해결책은 분수보다는 백분율로 계산하는 것입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; minute*100/60
+<br>98
+<br></span></p>
+
+<p>
+또다시 그 결과는 내림됩니다. 그러나 적어도 이제 정답에 가깝습니다. 또다른 대안은 부동-소수점 나눗셈을 사용하는 것입니다. 이것은 <a href="chap03.htm">제 3 장</a>에서 만납니다.</p>
+
+<a name=7></a><br>
+<h3>2.7 연산의 순서</h3>
+<p>
+하나 이상의 연산자가 표현식에 나타날 때, 평가의 순서는 선행 규칙(<b>rules of precedence</b>)에 달려 있습니다. 파이썬은 수학이 준수하는 수학적 연산자와 같은 선행 규칙을 따릅니다. 다음 약어 괄지곱합(<b>PEMDAS(펨다스)</b>)은 연산의 순서를 기억하는 유용한 방법입니다:</p>
+
+<ul> 
+<li><b>괄</b>호는 가장 높은 순위를 가지며, 하나의 표현식을 원하는 순서대로 평가하기 위하여 사용할 수 있다. 괄호로 싸인 표현식은 가장 먼저 평가되므로, <span class=code>2 * (3-1)</span>은 4이고,  <span class=code>(1+1)**(5-2)</span>은 8이다. 또한 더 쉽게 읽기 위하여 다음 <span class=code>(minute * 100) / 60</span> 예와 같이 괄호를 사용할 수도 있다. 그렇지만 결과에 영향을 주지는 않는다.</li>
+
+<li><b>지</b>수는 다음으로 높은 우선 순위를 가진다. 그래서 <span class=code>2**1+1</span>은 3이지 4가 아니며 <span class=code>3*1**3</span>은 3이지 27이 아니다.</li>
+
+<li><b>곱</b>셈과 <b>나</b>눗셈은 우선순위가 같으나, 덧셈이나 뺄셈보다는 우선순위가 높다. 덧셈과 뺄셈 또한 마찬가지로 우선 순위가 같다. 그래서 <span class=code>2*3-1</span>은 4가 아니라 5를 산출하며, <span class=code>2/3-1</span>은 <span class=code>-1</span>이지 <span class=code>1</span>이 아니다 (정수 나눗셈<span class=code>2/3</span>은 <span class=code>0</span>임을 기억하라).</li>
+
+<li>우선순위가 같은 연산자는 왼쪽에서 오른쪽으로 평가된다. 그래서 다음 예와 같은 <span class=code>minute*100/60</span> 표현식에서는 곱셈이 먼저 나타나며 <span class=code>5900/60</span>을 산출하는데, 그것은 이번에는 <span class=code>98</span>을 산출한다. 만약 연산자가 오른쪽에서 왼쪽으로 진행되었다면, 결과는 아마도 <span class=code>59/1</span>이 될 것이며 그것은 <span class=code>59</span>이므로, 잘못된 것이다. </li>
+</ul>
+
+<a name=8></a><br>
+<h3>2.8 문자열에 대한 연산</h3>
+<p>
+일반적으로 수학적 연산을 문자열에 대하여 수행할 수 없습니다. 그 문자열이 숫자처럼 보일지라도 말입니다. (<span class=code>message</span>가 <span class=code>string</span>을 가진다고 가정하면) 다음은 불법입니다:</p>
+
+
+<p><span class=code> message-1   <span class=quote>"Hello"</span>/123   message*<span class=quote>"Hello"</span>   <span class=quote>"15"</span>+2
+<br></span></p>
+
+<p>
+흥미롭게도, <span class=code>+</span> 연산자는 문자열과 작동합니다, 비록 예상한대로 정확하게는 아니지만 말입니다. 문자열에 대하여, <span class=code>+</span> 연산자는 결합(<b>concatenation</b>)을 나타냅니다, 이것은 문자열을 끝-과-끝을 연결함으로써 합친다는 것을 뜻합니다. 예를 들어:</p>
+
+
+
+
+<p><span class=code>fruit = <span class=quote>"banana"</span>
+<br>bakedGood = <span class=quote>" nut bread"</span>
+<br><span class=keyword>print</span> fruit + bakedGood
+<br></span></p>
+
+<p>
+이 프로그램의 출력은 <span class=code>banana nut bread</span>입니다.</p>
+<p>
+<span class=code>*</span> 연산자는 문자열에도 작동합니다; 반복을 수행합니다. 예를 들어, <span class=code><span class=quote>'Fun'</span>*3</span>은 <span class=code><span class=quote>'FunFunFun'</span></span>입니다. 피연산자중 하나는 반드시 문자열이어야 합니다; 다른 연산자는 반드시 정수이어야 합니다.</p>
+<p>
+한편으로, <span class=code>+</span>와 <span class=code>*</span>를 이렇게 해석하는 것은 덧셈과 곱셈에 유추하여 보면 의미가 있습니다. <span class=code>4*3</span>이 <span class=code>4+4+4</span>와 동등한 것과 마찬가지로, 우리는 <span class=code><span class=quote>"Fun"</span>*3</span>을 <span class=code><span class=quote>"Fun"</span>+<span class=quote>"Fun"</span>+<span class=quote>"Fun"</span></span>와 같을 것이라고 예상합니다. 그리고 실제로 그렇습니다. 다른 한편으로, 문자열 결합과 반복에는 정수 덧셈 그리고 정수 곱셈과는 다른 의미있는 방식이 있습니다.</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, 덧셈과 곱셈은 가지고 있으나 문자열 결합과 반복은 가지고 있지 않은 특성을 이름지어 보세요.</i> </p>
+
+<a name=9></a><br>
+<h3>2.9 작성</h3>
+<p>
+지금까지는 프로그램의 요소들을---변수, 표현식, 그리고 서술문---각각 살펴 보았습니다. 그 요소들을 조립하는 방법에 대해서는 논의하지 않고 말입니다.</p>
+<p>
+프로그래밍 언어의 가장 유용한 특징중의 하나는 작은 벽돌 조각을 취해 그것들을 작성(<b>compose</b>)하는 능력입니다. 예를 들어, 숫자를 더하는 법도 알고 인쇄하는 법도 압니다; 그러므로 그 둘을 동시에 할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt;  <span class=keyword>print</span> 17 + 3
+<br>20
+<br></span></p>
+
+<p>
+실제로, 덧셈은 인쇄 전에 일어나야 합니다. 그러므로 그 동작들은 실제로는 "동시에" 일어나는 것은 아닙니다. 요점은 숫자와 문자열 그리고 변수를 포함하여 어떤 표현식도 <span class=code><span class=keyword>print</span></span> 서술문 안에서 사용될 수 있다는 것입니다. 이미 이러한 예를 본 적이 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>print</span> <span class=quote>"Number of minutes since midnight: "</span>, hour*60+minute
+<br></span></p>
+
+<p>
+할당 서술문의 오른-쪽에 임의의 표현식을 놓을 수도 있습니다:</p>
+
+
+<p><span class=code>percentage = (minute * 100) / 60
+<br></span></p>
+
+
+
+<p>
+이러한 능력은 지금으로서는 인상적이지 않을 수도 있습니다. 그러나 다른 예제에서 <B>작성</B>으로 복잡한 계산을 말끔하고 간결하게 표현할 수 있다는 것을 보게 될 것입니다.</p>
+<p>
+경고: 어떤 표현식을 사용할 수 있는 곳에는 제한이 있습니다. 예를 들어, 할당 서술문의 왼-쪽은 표현식이 아니라 반드시 변수 <i>variable</i> 이름이 와야 합니다. 그래서 다음은 적법하지 않습니다: <span class=code>minute+1 = hour</span>.</p>
+
+<a name=10></a><br>
+<h3>2.10 주석</h3>
+<p>
+프로그램이 커지고 복잡해짐에 따라, 읽기가 더 어려워집니다. 형식 언어는 농밀합니다. 그리고 때로는 한 조각의 코드만을 보고서는 그 코드가 무엇을 하는지, 또는 왜 그렇게 하는지 이해하기가 어렵습니다.</p>
+<p>
+이런 이유로 프로그램에 기록을 덧붙여서 그 프로그램이 무엇을 하는지 자연 언어로 설명하는 것이 좋은 생각입니다. 이러한 기록을 주석(<b>comments</b>)이라고 부릅니다. 그리고 주석은 <span class=code><span class=comment>#</span></span> 심볼로 표식을 합니다:</p>
+
+
+<p><span class=code><span class=comment># compute the percentage of the hour that has elapsed
+</span><br>percentage = (minute * 100) / 60
+<br></span></p>
+
+<p>
+이 경우에 주석은 줄 그 자체로 나타납니다. 주석을 줄 끝에 놓을 수도 있습니다:</p>
+
+
+<p><span class=code>percentage = (minute * 100) / 60     <span class=comment># caution: integer division
+</span><br></span></p>
+
+<p>
+<span class=code><span class=comment>#</span></span>으로부터 그 라인의 끝까지에 있는 모든 것은 무시됩니다---프로그램에 전혀 영향을 미치지 않습니다. 메시지는 프로그래머를 위한 것이며 또는 이 코드를 이용하게 될 미래의 프로그래머를 위한 것입니다. 이 경우에 주석은 읽는이에게 정수 나눗셈의 지극히-놀라운 행위를 상기시켜 줍니다.</p>
+
+<a name=11></a><br>
+<h3>2.11 용어 해설</h3>
+
+<dl>
+
+<dt>값(value)</dt>
+<dd>변수에 저장될 수 있거나 또는 표현식으로 계산 가능한 숫자나 문자열 (또는 나중에 이름 붙여질 다른 어떤 것).</dd>
+
+<dt>유형(type)</dt>
+<dd>한 모둠의 값들. 한 값의 유형은 표현식에서 어떻게 사용될 지를 결정한다. 지금까지 본 유형은 정수(<span class=code>int</span>)와 부동-소수점수(<span class=code>float</span>) 그리고 문자열(<span class=code>string</span>)이다.</dd>
+
+<dt>부동-소수점(floating-point)</dt>
+<dd>분수 부분을 가진 숫자를 표현하는 형식.</dd>
+
+<dt>변수(variable)</dt>
+<dd>한 값을 가리키는 이름.</dd>
+
+<dt>서술문(statement)</dt>
+<dd>명령어나 행위를 표현하는 한 조각의 코드. 지금까지 본 서술문은 할당(assignments)과 <span class=code><span class=keyword>print</span></span> 서술문이다.</dd>
+
+<dt>할당(assignment)</dt>
+<dd>값을 변수에 할당하는 서술문.</dd>
+
+<dt>상태 다이어그램(state diagram)</dt>
+<dd>한 모둠의 변수들과 그것들이 가리키는 값들을 그래픽으로 표현한 것.</dd>
+
+<dt>키워드(keyword)</dt>
+<dd>
+컴파일러가 프로그램을 해석하기 위해 사용하는 예약어; <span class=code><span class=keyword>if</span></span>와 <span class=code><span class=keyword>def</span></span> 그리고 <span class=code><span class=keyword>while</span></span>과 같은 예약어는 변수 이름으로 사용할 수 없다.</dd>
+
+<dt>연산자(operator)</dt>
+<dd>덧셈이나 곱셈 또는 문자열 결합같은 간단한 계산을 표현하는 특수한 심볼.</dd>
+
+<dt>피연산자(operand)</dt>
+<dd>연산자가 처리하는 값 중의 하나.</dd>
+
+<dt>표현식(expression)</dt>
+<dd>한개의 결과값을 표현하는 변수와 연산자 그리고 값들의 조합.</dd>
+
+<dt>평가(evaluate)</dt>
+<dd>연산을 수행함으로써 하나의 값을 산출하여 표현식을 간단하게 하는 것.</dd>
+
+<dt>정수 나눗셈(integer division)</dt>
+<dd>정수를 정수로 나누어서 정수를 산출하는 연산. 정수 나눗셈은 분모가 분자를 나눌 수 있는 전체 몫만을 산출하며 나머지는 모두 버린다.</dd>
+
+<dt>우선 순위(rules of precedence)</dt>
+<dd>여러 연산자와 피연산자를 포함하여 표현식이 평가되는 순서를 통제하는 규칙의 모둠.</dd>
+
+<dt>결합(concatenate)</dt>
+<dd>두 피연산자의 끝-과-끝을 연결한다.</dd>
+
+<dt>작성(composition)</dt>
+<dd>간단한 표현식과 서술문을 조립하여 복합 표현식과 서술문으로 만들어 복잡한 계산을 간결하게 표현하는 능력.</dd>
+
+<dt>주석(comment)</dt>
+<dd>다른 프로그래머에게 (또는 그 소스 코드를 읽는 모든 사람에게) 의미를 주는 프로그램 내의 정보. 프로그램의 실행에는 전혀 영향을 미치지 않는다.</dd>
+
+
+
+</dl>
+
+<h2>연습문제</h2>
+<ol>
+<li><div class="exercise">
+할당 서술문을 인쇄하면 무슨 일이 일어나는지 기록하라:
+<pre class="python-shell">
+>>> print n = 7
+</pre>
+
+이건 어떤가?
+<pre class="python-shell">
+>>> print 7 + 5 
+</pre>
+
+또는 이것은?
+<pre class="python-shell">
+>>> print 5.2, "this", 4 - 2, "that", 5/2.0 
+</pre>
+
+<code>print</code> 서술문 다음에 무엇이 오는지 일반적 규칙을 알겠는가? <code>print</code> 서술문은 무엇을 돌려주는가?
+</div></li>
+
+<li><div class="exercise">
+다음 문장을 취해: <em>All work and no play makes Jack a dull boy.</em>
+각 단어를 별도의 변수로 저장한 다음, print 서술문을 사용하여 그 문장을 한 줄에 인쇄하라.
+</div></li>
+
+<li><div class="exercise">
+괄호를 표현식 <code>6 * 1 - 2</code>에 추가하여 그의 값을 4에서 -6으로 바꾸어 보라.
+</div></li>
+
+<li><div class="exercise">
+앞에서 작동했던 한 줄의 코드 앞에 주석을 두어라. 그리고 프로그램을 다시 실행하면 무슨 일이 일어나는지 기록해 보라.
+</div></li>
+
+<li><div class="exercise">
+<code>input</code>과 <code>raw_input</code>의 차이점은 <code>input</code>이 입력 문자열을 평가하는 반면 <code>raw_input</code>은 그렇지 않다는 것이다. 인터프리터에서 다음과 같이 시도해 보고 무슨 일이 일어나는지 기록하라:
+<pre class="python-interpreter">
+>>> x = input()
+3.14
+>>> type(x)
+</pre>
+
+<pre class="python-interpreter">
+>>> x = raw_input()
+3.14
+>>> type(x)
+</pre>
+
+<pre class="python-interpreter">
+>>> x = input()
+'The knights who say "ni!"'
+>>> x
+</pre>
+
+위의 예제를 따옴표 없이 시도하면 무슨 일이 일어나는가?
+<pre class="python-interpreter">
+>>> x = input()
+The knights who say "ni!"
+>>> x
+</pre>
+
+<pre class="python-interpreter">
+>>> x = raw_input()
+'The knights who say "ni!"'
+>>> x
+</pre>
+각 결과를 기술하고 설명하라.
+</div></li>
+
+<li><div class="exercise">
+파이썬 인터프리터를 시작하고 프롬프트에서 <code>bruce + 4</code>라고 타자하라.
+그렇게 하면 에러가 일어날 것이다:
+<pre class="python-interpreter">
+NameError: name 'bruce' is not defined
+</pre>
+값을 <code>bruce</code>에 할당하여 <code>bruce + 4</code>가 <code>10</code>으로 평가되도록 만들어 보라.
+</div></li>
+
+<li><div class="exercise">
+이름이 <code>madlib.py</code>인 프로그램 (파이썬 스크립트)을 작성하라. 사용자에게 명사 동사 형용사 복수 명사 과거분사 등등을 입력하도록 요구한 다음, 구문적으로 올바른 그러나 의미구조적으로 말이 안되는 문단을 만들어 보라 (참조 <a href="http://madlibs.org">http://madlibs.org</a>).
+</div></li>
+</ol>
+<p>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap03.htm" ><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm" ><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap01.htm" ><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm" ><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+  </tr>
+</table>
+</body></html>

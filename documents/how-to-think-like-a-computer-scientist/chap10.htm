@@ -1,0 +1,565 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>제 10 장 : 사전(Dictionaries)</title>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+
+<body>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap11.htm" ><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm" ><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap09.htm" ><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm" ><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+  </tr>
+</table>
+<hr>
+
+
+<h2>제 10 장</h2>
+
+<h1>사전</h1>
+
+
+<p>
+지금까지 배운 복합 유형(문자열과 리스트 그리고 터플)은 정수를 지표로 사용합니다. 지표에 다른 유형을 사용하면 무엇이든 에러를 맞이합니다.</p>
+
+<p>
+<b>사전(Dictionaries)</b>은 다른 복합 유형과 비슷하지만 변경불능 유형이라면 어느것도 지표로 사용할 수 있다는 점이 다릅니다. 일례로 사전 하나를 만들어 영어 단어를 스페인어로 번역해 보겠습니다. 이 사전에 대하여 지표는 <span class=code>문자열(strings)</span>입니다.</p>
+
+<p>
+사전을 만드는 한 가지 방법은 빈 사전으로 시작하여 원소들을 추가하는 것입니다. 빈 사전은<span class=code>{}</span>으로 표기됩니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; eng2sp = {}
+<br>&gt;&gt;&gt; eng2sp[<span class=quote>'one'</span>] = <span class=quote>'uno'</span>
+<br>&gt;&gt;&gt; eng2sp[<span class=quote>'two'</span>] = <span class=quote>'dos'</span>
+<br></span></p>
+
+
+
+<p>
+첫 번째 할당문은 <span class=code>eng2sp</span>라는 이름의 사전 하나를 만듭니다; 나머지 서술문은 그 사전에 원소들을 새로 추가합니다. 사전에 있는 현재 값을 보통 하던대로 인쇄할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> eng2sp
+<br>{<span class=quote>'one'</span>: <span class=quote>'uno'</span>, <span class=quote>'two'</span>: <span class=quote>'dos'</span>}
+<br></span></p>
+
+
+
+<p>
+사전의 원소들은 쉼표로-분리된 리스트 형태로 나타납니다. 각 항목에는 지표 하나와 값 하나가 쌍점으로 분리되어 포함됩니다. 사전에서 지표는 <b>키(keys)</b>라고 부릅니다. 그래서 그 원소들을 <b>키-값 짝(key-value pairs)</b>이라고 부릅니다.</p>
+
+<p>
+사전을 만드는 또 다른 방법은 이전의 출력결과와 같은 구문을 사용하여 키-값 짝의 리스트를 제공하는 것입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; eng2sp = {<span class=quote>'one'</span>: <span class=quote>'uno'</span>, <span class=quote>'two'</span>: <span class=quote>'dos'</span>, <span class=quote>'three'</span>: <span class=quote>'tres'</span>}
+<br></span></p>
+
+
+
+<p>
+<span class=code>eng2sp</span>의 값을 다시 인쇄해 보면, 당황스럽습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> eng2sp
+<br>{<span class=quote>'one'</span>: <span class=quote>'uno'</span>, <span class=quote>'three'</span>: <span class=quote>'tres'</span>, <span class=quote>'two'</span>: <span class=quote>'dos'</span>}
+<br></span></p>
+
+
+
+<p>
+키-값 짝이 순서대로가 아닙니다! 다행스럽게도 그 순서는 염려하지 않아도 됩니다. 왜냐하면 사전의 원소들은 정수 지표로 지표화되지 않기 때문입니다. 대신에 키를 사용하여 그에 상응하는 값들을 찾아 봅니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> eng2sp[<span class=quote>'two'</span>]
+<br><span class=quote>'dos'</span>
+<br></span></p>
+
+
+
+<p>
+비록 세 번째 키-값 짝으로 나타나지만 <span class=code><span class=quote>'two'</span></span>라는 키는 <span class=code><span class=quote>'dos'</span></span>라는 값을 산출합니다.</p>
+
+<a name=1></a><br>
+<h3>10.1 사전 연산</h3>
+
+<p>
+<span class=code><span class=keyword>del</span></span> 서술문은 키-값 짝을 사전에서 제거합니다. 예를 들어, 다음 사전은 다양한 과일과 그 과일이 저장되어 있는 개수를 담고 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; inventory = {<span class=quote>'apples'</span>: 430, <span class=quote>'bananas'</span>: 312, <span class=quote>'oranges'</span>: 525,
+<br><span class=quote>'pears'</span>: 217}
+<br>&gt;&gt;&gt; <span class=keyword>print</span> inventory
+<br>{<span class=quote>'oranges'</span>: 525, <span class=quote>'apples'</span>: 430, <span class=quote>'pears'</span>: 217, <span class=quote>'bananas'</span>: 312}
+<br></span></p>
+
+
+
+<p>
+누군가 배를 모두 사버리면 배라는 항목을 사전에서 제거할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>del</span> inventory[<span class=quote>'pears'</span>]
+<br>&gt;&gt;&gt; <span class=keyword>print</span> inventory
+<br>{<span class=quote>'oranges'</span>: 525, <span class=quote>'apples'</span>: 430, <span class=quote>'bananas'</span>: 312}
+<br></span></p>
+
+
+
+<p>
+또는 조만간 더 많은 배가 도착할 것 같다면, 단지 배에 관련된 값을 변경하기만 하면 됩니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; inventory[<span class=quote>'pears'</span>] = 0
+<br>&gt;&gt;&gt; <span class=keyword>print</span> inventory
+<br>{<span class=quote>'oranges'</span>: 525, <span class=quote>'apples'</span>: 430, <span class=quote>'pears'</span>: 0, <span class=quote>'bananas'</span>: 312}
+<br></span></p>
+
+
+
+<p>
+<span class=code>len</span> 함수는 사전에도 역시 작동합니다; <span class=code>len</span> 함수는 키-값 짝의 개수를 반환합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; len(inventory)
+<br>4
+<br></span></p>
+
+
+
+<a name=2></a><br>
+<h3>10.2 사전 메쏘드</h3>
+
+<p>
+<b>메쏘드(method)</b>는 함수와 유사합니다---메쏘드는 매개변수를 취하고 값을 반환합니다---그러나 구문이 다릅니다. 예를 들어, <span class=code>keys</span> 메쏘드는 사전을 취하고 그 사전에서 나타나는 키들을 담은 리스트를 반환합니다. 그러나 <span class=code>keys(eng2sp)</span>와 같은 구문 대신에, 다음과 같이 <span class=code>eng2sp.keys()</span>와 같은 구문을 사용합니다.</p>
+
+
+
+
+<p><span class=code>&gt;&gt;&gt; eng2sp.keys()
+<br>[<span class=quote>'one'</span>, <span class=quote>'three'</span>, <span class=quote>'two'</span>]
+<br></span></p>
+
+
+
+<p>
+이러한 형태의 점 표기법으로 함수의 이름인 <span class=code>keys</span>와, 그 함수를 적용하는 객체의 이름인 <span class=code>eng2sp</span>를 지정합니다. 반괄호는 이 메쏘드가 아무런 매개변수도 취하지 않는다는 것을 나타냅니다.</p>
+
+<p>
+메쏘드 호출은 <b>요청(invocation)</b>이라고 부릅니다; 이 경우에 <span class=code>eng2sp</span> 객체에게 <span class=code>keys</span>를 요청하고 있다고 말할 수 있습니다.</p>
+
+<p>
+<span class=code>values</span> 메쏘드도 유사합니다; 이 메쏘드는 사전에 있는 값들을 리스트에 담아 돌려줍니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; eng2sp.values()
+<br>[<span class=quote>'uno'</span>, <span class=quote>'tres'</span>, <span class=quote>'dos'</span>]
+<br></span></p>
+
+
+
+<p>
+<span class=code>items</span> 메쏘드는 터플을 담은 리스트의 형태로 각각의 키-값 짝에 대하여 하나씩 둘 모두를 반환합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; eng2sp.items()
+<br>[(<span class=quote>'one'</span>,<span class=quote>'uno'</span>), (<span class=quote>'three'</span>, <span class=quote>'tres'</span>), (<span class=quote>'two'</span>, <span class=quote>'dos'</span>)]
+<br></span></p>
+
+
+
+<p>
+위의 구문은 유용한 유형 정보를 제공합니다. 각괄호를 보면 이것이 리스트라는 것을 알 수 있습니다. 반괄호를 보면 리스트의 원소가 터플이라는 것을 알 수 있습니다.</p>
+
+<p>
+만약 메쏘드가 인자를 취하면 메쏘드는 함수 호출과 똑 같은 구문을 사용합니다. 예를 들어 다음 <span class=code>has_key</span> 메쏘드는 키 하나를 취하고 사전에 그 키가 나타나면 참(1)을 돌려줍니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; eng2sp.has_key(<span class=quote>'one'</span>)
+<br>1
+<br>&gt;&gt;&gt; eng2sp.has_key(<span class=quote>'deux'</span>)
+<br>0
+<br></span></p>
+
+
+
+<p>
+객체를 지정하지 않고 메쏘드를 호출하려고 하면 에러를 맞이합니다. 이런 경우에 에러 메시지는 별로 도움이 되지 않습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; has_key(<span class=quote>'one'</span>)
+<br>NameError: has_key
+<br></span></p>
+
+
+
+
+
+<a name=3></a><br>
+<h3>10.3 별명과 복사</h3>
+
+<p>
+사전은 변경가능하기 때문에, 별명화에 주의할 필요가 있습니다. 변수 두 개가 같은 객체를 가리킬 때마다, 한쪽 변수에 변경을 하면 다른쪽 변수에 영향을 미칩니다.</p>
+
+<p>
+원본을 유지하면서 사전을 변경하고자 한다면, <span class=code>copy</span> 메쏘드를 사용하세요. 예를 들어, <span class=code>opposites</span>는 반대말들의 짝을 담은 사전입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; opposites = {<span class=quote>'up'</span>: <span class=quote>'down'</span>, <span class=quote>'right'</span>: <span class=quote>'wrong'</span>, <span class=quote>'true'</span>: <span class=quote>'false'</span>}
+<br>&gt;&gt;&gt; alias = opposites
+<br>&gt;&gt;&gt; copy = opposites.copy()
+<br></span></p>
+
+
+
+<p>
+<span class=code>alias</span>와 <span class=code>opposites</span>는 같은 객체를 가리킵니다; <span class=code>copy</span>는 같은 사전의 새로운 복사본을 가리킵니다. 만약 <span class=code>alias</span>를 변경하면 <span class=code>opposites</span>도 역시 변경됩니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; alias[<span class=quote>'right'</span>] = <span class=quote>'left'</span>
+<br>&gt;&gt;&gt; opposites[<span class=quote>'right'</span>]
+<br><span class=quote>'left'</span>
+<br></span></p>
+
+
+
+<p>
+<span class=code>copy</span>를 변경하더라도 <span class=code>opposites</span>는 변경되지 않습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; copy[<span class=quote>'right'</span>] = <span class=quote>'privilege'</span>
+<br>&gt;&gt;&gt; opposites[<span class=quote>'right'</span>]
+<br><span class=quote>'left'</span>
+<br></span></p>
+
+
+
+<a name=4></a><br>
+<h3>10.4 희소 행렬</h3>
+
+<p>
+<a href="chap08.htm#14">섹션 8.14</a>에서 리스트의 리스트를 사용하여 행렬을 표현했습니다. 대부분이 0이 아닌 값들을 가진 행렬에 대해서는 그 방식이 훌륭한 선택입니다. 그러나 다음과 같은 희소 행렬을 생각해 보세요:</p>
+
+<p align="center"><img src="illustrations/sparse.png" ></p>
+
+<p>
+다음 리스트 표현은 0이 상당히 많이 담겨 있습니다:</p>
+
+
+<p><span class=code>matrix = [ [0,0,0,1,0],
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[0,0,0,0,0],
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[0,2,0,0,0],
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[0,0,0,0,0],
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[0,0,0,3,0] ]
+<br></span></p>
+
+
+
+<p>
+한가지 대안은 사전을 사용하는 것입니다. 키에 대해서는 행과 열의 숫자를 담은 터플을 사용할 수 있습니다. 다음은 같은 행렬을 사전으로 표현한 것입니다:</p>
+
+
+<p><span class=code>matrix = {(0,3): 1, (2, 1): 2, (4, 3): 3}
+<br></span></p>
+
+
+
+<p>
+행렬에서 0이 아닌 원소들에 대하여 하나씩, 단지 세 개의 키-값 짝만 있으면 됩니다. 각 키는 터플이고 각 값은 정반입니다.</p>
+
+<p>
+행렬의 원소에 접근하려면, <span class=code>[]</span> 연산자를 사용할 수 있습니다:</p>
+
+
+<p><span class=code>matrix[0,3]
+<br>1
+<br></span></p>
+
+
+
+<p>
+사전 표현에 대한 구문이 내포된 리스트 표현에 대한 구문과 같지 않다는 것을 주목하세요. 정수 지표를 두 개 사용하는 대신에, 정수들을 담은 터플을 지표로 한개 사용합니다.</p>
+
+<p>
+한 가지 문제가 있습니다. 0인 원소를 지정하면 사전에 그 키에 맞는 항목이 없기 때문에 에러를 맞이합니다:</p>
+
+
+
+
+<p><span class=code>&gt;&gt;&gt; matrix[1,3]
+<br>KeyError: (1, 3)
+<br></span></p>
+
+
+
+<p>
+<span class=code>get</span> 메쏘드로 이 문제를 해결할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; matrix.get((0,3), 0)
+<br>1
+<br></span></p>
+
+
+
+<p>
+첫 번째 인자가 그 키입니다; 두 번째 인자는 그 키가 사전에 없다면 <span class=code>get</span> 메쏘드가 반환해야 하는 값입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; matrix.get((1,3), 0)
+<br>0
+<br></span></p>
+
+
+
+<p>
+구문이 산뜻하게 마음에 들지는 않지만 <span class=code>get</span> 메쏘드 덕분에 희소 행렬에의 접근이라는 의미구조가 확실하게 개선됩니다.</p>
+
+<a name=5></a><br>
+<h3>10.5 힌트</h3>
+
+<p>
+<a href="chap05.htm#7" >섹션 5.7</a>에 있는 <span class=code>fibonacci</span> 함수를 가지고 놀다 보면, 그 함수에 더 큰 인자를 제공하면 그 만큼 더 실행 시간이 오래 걸린다는 것을 알게 될 것입니다. 게다가 실행 시간은 순식간에 폭증합니다. 컴퓨터에서 <span class=code>fibonacci(20)</span>을 실행하면 바로 완료됩니다. <span class=code>fibonacci(30)</span>을 수행하면 대략 2초가 걸리고, <span class=code>fibonacci(40)</span>을 실행하면 영원히 끝나지 않습니다.</p>
+
+<p>
+<span class=code>n=4</span>로 하여 <span class=code>fibonacci</span> 함수를 호출한 다음 <b>호출 그래프(call graph)</b>를 보고 그 이유를 생각해 봅시다:</p>
+
+<p align="center"><img src="illustrations/fibonacci.png"></p>
+
+<p>
+호출 그래프는 함수들을 틀에 넣어 모둠으로 보여 주는데 호출되는 함수의 틀과 호출하는 함수의 틀은 라인으로 연결되어 있습니다. 그래프의 제일 위에서, <span class=code>fibonacci</span>는 <span class=code>n=4</span>를 가지고 각각 <span class=code>n=3</span>이고 <span class=code>n=2인 </span><span class=code>fibonacci</span>를 호출합니다.  이번에는 <span class=code>fibonacci</span>가 <span class=code>n=3</span>을 가지고 각각 <span class=code>n=2</span>이고 <span class=code>n=1</span>인 <span class=code>fibonacci</span>를 호출합니다. 등등 이런식으로 계속됩니다.</p>
+
+
+
+<p>
+<span class=code>fibonacci(0)</span>과 <span class=code>fibonacci(1)</span>이 몇 번이나 호출되는지 세어보세요. 이런 방식으로 문제를 해결하는 것은 비효율적입니다. 그리고 인자가 커짐에 따라 상황은 점점 더 악화됩니다.</p>
+
+<p>
+좋은 해결책 한 가지는 이미 계산된 값들은 사전에 저장함으로써 그 값들을 추적기록하는 것입니다. 나중에 사용하기 위하여 이미 계산되어 저장되어 있는 값을 <b>힌트(hint)</b>라고 부릅니다. 다음은 힌트를 사용하여 <span class=code>fibonacci</span>를 구현한 것입니다:</p>
+
+
+<p><span class=code>previous = {0:1, 1:1}
+<br>
+<br><span class=keyword>def</span> <span class=function>fibonacci</span>(n):
+<br>&nbsp; <span class=keyword>if</span> previous.has_key(n):
+<br>&nbsp; &nbsp; <span class=keyword>return</span> previous[n]
+<br>&nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; newValue = fibonacci(n-1) + fibonacci(n-2)
+<br>&nbsp; &nbsp; previous[n] = newValue
+<br>&nbsp; &nbsp; <span class=keyword>return</span> newValue
+<br></span></p>
+
+
+
+<p>
+<span class=code>previous</span>라는 이름의 사전으로 이미 알고 있는 피보나치(Fibonacci) 수들을 추적기록합니다. 오직 두 짝만으로 시작하면 됩니다: 0은 1에 짝지워지고; 1은 1에 짝지워집니다.</p>
+
+<p>
+<span class=code>fibonacci</span>가 호출될 때마다, <span class=code>fibonacci</span> 함수는 사전을 점검하여 사전이 그 결과를 담고 있는지 확인합니다. 만약 존재한다면, <span class=code>fibonacci</span> 함수는 더 이상 재귀호출을 하지 않고 즉시 복귀할 수 있습니다. 존재하지 않는다면 새로운 값을 계산해야 합니다. 새롭게 만들어진 값은 그 함수가 반환되기 전에 사전에 추가됩니다.</p>
+
+<p>
+<span class=code>fibonacci</span> 함수를 이 버전으로 사용하면 눈깜빡할 사이에 <span class=code>fibonacci(40)</span>을 계산할 수 있습니다. 그러나 <span class=code>fibonacci(50)</span>를 시도하고자 한다면, 또다른 문제에 봉착합니다:</p>
+
+
+
+
+<p><span class=code>&gt;&gt;&gt; fibonacci(50)
+<br>OverflowError: integer addition
+<br></span></p>
+
+
+
+<p>
+나중에 보여 주겠지만 정답은 20,365,011,074입니다. 문제는 이 숫자가 너무 커서 파이썬 정수에 적합하지 않다는 것입니다. 이 숫자는 <b>넘쳐 흐릅니다(overflows)</b>.  다행스럽게도 이 문제는 손쉬운 해결책이 있습니다.</p>
+
+<a name=6></a><br>
+<h3>10.6 긴 정수</h3>
+
+<p>
+파이썬은 <span class=code>long int</span>라고 부르는 유형을 제공합니다. <span class=code>long int</span> 유형을 사용하면 어떠한 크기의 정수라도 다룰 수 있습니다. <span class=code>long int</span> 값을 만드는 방법은 두 가지가 있습니다. 한가지 방법은 맨끝에 대문자 <span class=code>L</span>을 가진 정수를 사용하는 것입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; type(1L)
+<br>&lt;type <span class=quote>'long int'</span>&gt;
+<br></span></p>
+
+
+
+<p>
+다른 한 가지 방법은 <span class=code>long</span> 함수를 사용해 값을 <span class=code>long int</span>로 변환하는 것입니다. <span class=code>long</span> 함수는 어떠한 수치유형도 받아들일 수 있으며 심지어 문자열로 된 숫자도 받아들입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; long(1)
+<br>1L
+<br>&gt;&gt;&gt; long(3.9)
+<br>3L
+<br>&gt;&gt;&gt; long(<span class=quote>'57'</span>)
+<br>57L
+<br></span></p>
+
+
+
+<p>
+모든 수학 연산이 <span class=code>long int</span>에 작동합니다. 그래서 <span class=code>fibonacci</span>를 적응시기키 위해 그렇게 많이 변경하지 않아도 됩니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; previous = {0:1L, 1:1L}
+<br>&gt;&gt;&gt; fibonacci(50)
+<br>20365011074L
+<br></span></p>
+
+
+
+<p>
+그저 <span class=code>previous</span>의 최초 내용을 변경하기만 해도, <span class=code>fibonacci</span> 함수의 행위가 변경됩니다. 연속열에 있는 최초의 숫자 두 개는 <span class=code>long int</span> 유형입니다. 그래서 연속열에서 잇따르는 모든 숫자들도 역시 <span class=code>long int</span> 유형이 됩니다.</p>
+
+
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, <span class=code>factorial</span>을 변환하여 <span class=code>long int</span>를 결과로 내도록 만들어 보세요.</i> </p>
+
+<a name=7></a><br>
+<h3>10.7 문자 세기</h3>
+
+<p>
+<a href="chap07.htm">제 7 장</a>에서 한 문자열에서 문자 하나가 나타나는 횟수를 세는 프로그램을 만들었습니다. 이 문제에 대한 더욱 보편적인 버전은 문자열에 있는 각 문자에 대하여 히스토그램을 만드는 것입니다. 즉, 얼마나 자주 각 문자가 나타나는가를 히스토그램으로 만드는 것입니다.</p>
+
+<p>
+그러한 히스토그램은 텍스트 파일을 압축하는데 유용하게 사용될 수도 있습니다. 서로 다른 문자가 서로 다른 빈도로 출현하기 때문에, 흔하게 나타나는 문자에 대해서는 짧은 코드를 사용하고 자주 출현하지 않는 문자에 대해서는 긴 코드를 사용하여 파일을 압축할 수 있습니다.</p>
+
+<p>
+사전을 사용하면 우아하게 히스토그램을 만들 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; letterCounts = {}
+<br>&gt;&gt;&gt; <span class=keyword>for</span> letter <span class=keyword>in</span> <span class=quote>"Mississippi"</span>:
+<br>...&nbsp; &nbsp;letterCounts[letter] = letterCounts.get (letter, 0) + 1
+<br>...
+<br>&gt;&gt;&gt; letterCounts
+<br>{<span class=quote>'M'</span>: 1, <span class=quote>'s'</span>: 4, <span class=quote>'p'</span>: 2, <span class=quote>'i'</span>: 4}
+<br></span></p>
+
+
+
+<p>
+빈 사전을 가지고 시작합니다. 문자열에 존재하는 각 문자에 대하여 현재 횟수를 찾습니다 (아마도 0이겠지요). 그리고 횟수를 증가시킵니다. 결국 사전에는 문자와 그의 출현빈도의 짝이 담깁니다..</p>
+
+<p>
+히스토그램을 알파벳 순서로 표시하는 것이 더 매력적일 것입니다. <span class=code>items</span> 메쏘드와 <span class=code>sort</span> 메쏘드를 사용하면 그렇게 할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; letterItems = letterCounts.items()
+<br>&gt;&gt;&gt; letterItems.sort()
+<br>&gt;&gt;&gt; <span class=keyword>print</span> letterItems
+<br>[(<span class=quote>'M'</span>, 1), (<span class=quote>'i'</span>, 4), (<span class=quote>'p'</span>, 2), (<span class=quote>'s'</span>, 4)]
+<br></span></p>
+
+
+
+<p>
+이전에 <span class=code>items</span> 메쏘드를 본 적이 있지만 <span class=code>sort</span> 메쏘드는 리스트에 응용되는 메쏘드로는 처음으로 마주하는 메쏘드입니다. 다른 리스트 메쏘드도 여러 개가 있습니다. <span class=code>append</span>와 <span class=code>extend</span> 그리고 <span class=code>reverse</span> 메쏘드도 그 중에 포함됩니다. 자세한 것은 파이썬 문서를 참조하세요.</p>
+
+
+
+<a name=8></a><br>
+<h3>10.8 용어 해설</h3>
+
+<dl>
+
+<dt>사전(dictionary)</dt>
+<dd>키-값 짝의 집단으로서 키로 값에 짝지워진다. 키는 변경불능 유형이면 아무거나 될 수 있다. 그리고 값은 어떤 유형도 될 수 있다.</dd>
+<dt>키(key)</dt>
+<dd>사전에서 항목을 찾는데 사용되는 값.</dd>
+<dt>키-값 짝(key-value pair)</dt>
+<dd>사전에 있는 항목들 중의 하나. 또는 "연관(association)"이라고도 부름.</dd>
+<dt>메쏘드(method)</dt>
+<dd>함수와는 다른 구문으로 호출되고 "객체에" 요청하는 일종의 함수.</dd>
+<dt>요청(invoke)</dt>
+<dd>메쏘드를 호출하는 것.</dd>
+<dt>힌트(hint)</dt>
+<dd>불필요한 계산을 피하기 위하여 미리 계산된 값을 임시 저장해 놓는 것.</dd>
+<dt>범람(overflow)</dt>
+<dd>너무 커서 수치 형식으로 표현될 수 없는 수치 결과.</dd>
+
+
+
+</dl>
+<h2>연습문제</h2>
+<ol>
+
+<li><div class="exercise">
+<p>
+프로그램을 작성하라. 이 프로그램은 명령어 줄에서 문자열을 읽어서 문자열에서 각 기호가 나타난 횟수와 함께 알파벳 순서로 알파벳 기호 테이블을 돌려준다. 대소문자 구별은 무시한다. 프로그램의 샘플 실행은 다음과 같다:</p>
+
+<pre class="shell">
+$ python letter_counts.py "ThiS is String with Upper and lower case Letters."
+a  2
+c  1
+d  1
+e  5
+g  1
+h  2
+i  4
+l  2
+n  2
+o  1
+p  2
+r  4
+s  5
+t  5
+u  1
+w  2
+$
+</pre>
+</div></li>
+
+</ol>
+
+<p>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap11.htm" ><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm" ><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap09.htm" ><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm" ><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+  </tr>
+</table>
+<hr>
+
+</body>
+</html>

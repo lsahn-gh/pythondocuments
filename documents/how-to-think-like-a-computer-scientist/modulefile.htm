@@ -1,0 +1,1219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Modules and files</title>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+
+<body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="fdl.htm"><img border="0" alt="Next" src="images/next.png"></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png"></a></td>
+    <td width="20" class=head><a href="doctest.htm"><img border="0" alt="Previous" src="images/prev.png"></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png"></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="images/index.png"></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+<h2>부록 F</h2>
+
+<h1>모듈과 파일</h1>
+
+<h2>모듈</h2>
+<span class="index" value="module" />
+<span class="index" value="standard library" />
+<span class="index" value="import statement" />
+<span class="index" value="statement!import" />
+
+<p>모듈(<b>module</b>)은 파이썬 정의와 서술문을 담은 파일로서 다른 파이썬 프로그램에 사용되는 것이 목적이다. 파이썬 <b>표준 라이브러리</b>에 함께 따라오는 파이썬 모듈이 많이 있다. 이미 그 중에 두 가지 <code>doctest</code> 모듈과 <code>string</code> 모듈을 보았다.</p>
+
+
+<h2>pydoc</h2>
+<span class="index" value="pydoc" />
+<span class="index" value="command prompt" />
+
+<p><b>pydoc</b>을 사용하여 시스템에 설치된 파이썬 라이브러리를 검색할 수 있다. <b>명령어 프롬프트</b>에서 다음과 같이 타자하자:</p>
+
+<pre class='shell'>
+$ pydoc -g
+</pre>
+
+<p>다음과 같은 화면이 나타날 것이다:</p>
+
+<p><img src="illustrations/pydoc_tk.png" /></p>
+
+<p>(<em>주의</em>: 에러가 있다면 연습문제 2를 참조하자)</p>
+
+<p>
+<q>브라우저 열기</q> 버튼을 클릭하여 <code>pydoc</code>이 생성한 문서를 담고 있는 웹 브라우저 창을 시작시키자:</p> 
+
+<p><img src="illustrations/pydoc_firefox.png" /></p>
+
+<p>다음은 시스템에 설치된 파이썬 라이브러리 목록이다. 모듈 이름을 클릭하면 그 모듈에 대한 문서가 담긴 새 페이지가 열린다. 예를 들어 <code>keyword</code>를 클릭하면 다음과 같은 페이지가 열린다:</p>
+
+<p><img src="illustrations/pydoc_keyword_firefox.png" /></p>
+
+<p>모듈에 대한 문서는 대부분 세 가지 색상의 구역으로 나뉘어 코드된다:</p>
+<ul>
+  <li><em>클래스는</em> 연분홍색</li>
+  <li><em>함수는</em> 노란색</li> 
+  <li><em>데이터는</em> 초록색</li>
+</ul>
+
+<p>
+클래스는 나중에 연구하겠지만 지금은 pydoc을 사용하여 모듈 안의 함수와 데이터를 보도록 하자. </p>
+
+<p>
+<code>keyword</code> 모듈에는 단 하나의 함수 <code>iskeyword</code>만 있는데, 이 함수는 그의 이름이 암시하듯이 건넨 문자열이 키워드이면 <code>True</code>를 돌려주는 불리언 함수이다:</p>
+
+<pre class='python-interpreter'>
+&gt;&gt;&gt; from keyword import *
+&gt;&gt;&gt; iskeyword('for')
+True
+&gt;&gt;&gt; iskeyword('all')
+False
+&gt;&gt;&gt;
+</pre>
+
+<p>데이터 항목인 <code>kwlist</code>는 현재 키워드가 모두 담긴 리스트이다:</p>
+
+<pre class='python-interpreter'>
+&gt;&gt;&gt; from keyword import *
+&gt;&gt;&gt; print kwlist
+['and', 'as', 'assert', 'break', 'class', 'continue', 'def', 'del', 'elif',
+'else', 'except', 'exec', 'finally', 'for', 'from', 'global', 'if', 'import',
+'in', 'is', 'lambda', 'not', 'or', 'pass', 'print', 'raise', 'return', 'try',
+'while', 'with', 'yield']
+&gt;&gt;&gt;
+</pre>
+
+<p>
+<code>pydoc</code>을 사용하여 파이썬에 따라오는 방대한 라이브러리를 탐험하시기를 권하는 바이다.  거기에서 수 많은 보물을 발견하실 수 있다!</p>
+
+
+<h2>모듈 만들기</h2>
+<span class="index" value="import statement" />
+
+<p>
+파일 이름에 확장자로 <code>.py</code>를 붙인 텍스트 파일이면 모듈을 만들수 있다:</p>
+
+<pre class="python">
+#  seqtools.py
+#
+def remove_at(pos, seq):
+    return seq[:pos] + seq[pos+1:]
+</pre>
+
+<p>
+이제 모듈을 스크립트와 파이썬 쉘에서 사용할 수 있다. 그렇게 하려면, 먼저 모듈을 <em>반입해야 한다</em>.  모듈을 반입하는 방식은 두 가지가 있다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; from seqtools import remove_at
+&gt;&gt;&gt; s = "A string!"
+&gt;&gt;&gt; remove_at(4, s)
+'A sting!'
+</pre>
+
+<p>그리고:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; import seqtools
+&gt;&gt;&gt; s = "A string!"
+&gt;&gt;&gt; seqtools.remove_at(4, s)
+'A sting!'
+</pre>
+
+<p>
+첫 예제에서 <code>remove_at</code>은 이전에 본 함수와 꼭 마찬가지로 호출된다. 두 번째 예에서 모듈의 이름과 점(.)이 함수 이름 앞에 사용되었다.</p> 
+
+<p>
+어느 경우든  반입할 때 <code>.py</code> 파일 확장자를 포함시키지 않음에 주의하자. 파이썬은 모듈의 파일 이름이 <code>.py</code>로 끝난다고 예상한다. 그래서 파일 확장자는 <b>import 서술문</b>에 포함시키지 않는다.</p>
+
+<p>
+모듈을 사용하면 아주 방대한 프로그램을 관리할만한 크기로 부분부분 조각내어 관련 부분들을 무리지어 유지관리할 수 있다.</p>
+
+
+<h2>이름공간</h2>
+<span class="index" value="namespace" />
+<span class="index" value="naming collision" />
+
+<p>
+이름공간(<b>namespace</b>)은 구문적 컨테이너로서 같은 이름을 다른 모듈이나 함수에 사용할 수 있게 해준다 (곧 보겠지만, 클래스와 메쏘드에서도 마찬가지다).</p>
+
+<p>
+각 모듈은 자신의 이름공간을 결정한다. 그래서 같은 이름을 여러 모듈에서 식별 문제를 일으키지 않고 사용할 수 있다.</p>
+
+<pre class='python'>
+# module1.py
+
+question = "What is the meaning of life, the Universe, and everything?"
+answer = 42
+</pre>
+
+<pre class='python'>
+# module2.py
+
+question = "What is your quest?"
+answer = "To seek the holy grail." 
+</pre>
+
+<p>
+이제 두 모듈을 모두 반입할 수 있고 따로따로 <code>question</code>과 <code>answer</code>에 접근할 수 있다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; import module1
+&gt;&gt;&gt; import module2
+&gt;&gt;&gt; print module1.question
+What is the meaning of life, the Universe, and everything?
+&gt;&gt;&gt; print module2.question
+What is your quest?
+&gt;&gt;&gt; print module1.answer
+42
+&gt;&gt;&gt; print module2.answer
+To seek the holy grail.
+&gt;&gt;&gt;
+</pre>
+
+<p>
+대신에 <code>from module1 import *</code>와 <code>from module2 import *</code>를 사용했다면, 이름 충돌(<b>naming collision</b>)이 일어났을 것이고 <code>module1</code>의 <code>question</code>과 <code>answer</code>에 접근할 수 없었을 것이다.</p>
+
+<p>함수도 각자 이름공간이 있다:</p>
+
+<pre class='python'>
+def f():
+    n = 7
+    print "printing n inside of f: %d"  % n
+
+def g():
+    n = 42
+    print "printing n inside of g: %d"  % n
+
+n = 11
+print "printing n before calling f: %d"  % n
+f()
+print "printing n after calling f: %d"  % n
+g()
+print "printing n after calling g: %d"  % n
+</pre>
+
+<p>이 프로그램을 실행하면 다음과 같이 출력된다:</p>
+
+<pre class='shell'>
+printing n before calling f: 11
+printing n inside of f: 7
+printing n after calling f: 11
+printing n inside of g: 42
+printing n after calling g: 11
+</pre>
+
+<p>
+여기에서 세 개의 <code>n</code>은 이름공간이 다르기 때문에 충돌하지 않는다.</p>
+
+<p>
+이름공간은 여러 프로그래머가 같은 프로젝트를 이름충돌 없이 진행할 수 있도록 해준다.</p>
+
+
+<h2>속성과 점 연산자</h2>
+<span class="index" value="attribute" />
+<span class="index" value="dot operator" />
+<span class="index" value="operator!." />
+<span class="index" value="string module" />
+<span class="index" value="module!string" />
+
+<p>
+모듈 안에 정의된 변수를 그 모듈의 속성(<b>attributes</b>)이라고 부른다.  속성은 점 연산자(<code>.</code>)를 사용하여 접근한다. <code>module1</code>과 <code>module2</code>의 <code>question</code> 속성은 <code>module1.question</code>과 <code>module2.question</code>를 사용하여 접근한다.</p>
+
+<p>
+모듈에는 함수 뿐만 아니라 속성도 있으며, 점 연산자가 같은 방식으로 접근에 사용된다. <code>seqtools.remove_at</code>는 <code>seqtools</code> 모듈의 <code>remove_at</code> 함수를 가리킨다.</p>
+
+<p>제 7 장에서 <code>string</code> 모듈의 <code>find</code> 함수를 소개했다.  <code>string</code> 모듈에는 유용한 함수가 많이 있다:</p>
+
+<pre class='python-interpreter'>
+&gt;&gt;&gt; import string
+&gt;&gt;&gt; string.capitalize('maryland')
+'Maryland'
+&gt;&gt;&gt; string.capwords("what's all this, then, amen?")
+"What's All This, Then, Amen?"
+&gt;&gt;&gt; string.center('How to Center Text Using Python', 70)
+'                   How to Center Text Using Python                    '
+&gt;&gt;&gt; string.upper('angola')
+'ANGOLA'
+&gt;&gt;&gt; 
+</pre>
+
+<p>
+pydoc을 사용하여 string모듈에 있는 다른 함수와 속성을 열람하자.</p>
+
+
+<h2>문자열과 리스트 메쏘드</h2>
+<span class="index" value="string methods" />
+<span class="index" value="methods!string" />
+<span class="index" value="list methods" />
+<span class="index" value="methods!list" />
+
+<p>파이썬 언어가 발전하면서 <code>string</code> 모듈에서 대부분의 함수는 문자열 객체의 메쏘드(<b>methods</b>)에도 추가되었다. 메쏘드는 꼭 함수처럼 작동하지만 호출하는 구문이 약간 다르다:</p>
+
+<pre class='python-interpreter'>
+&gt;&gt;&gt; 'maryland'.capitalize()
+'Maryland'
+&gt;&gt;&gt; "what's all this, then, amen?".title()
+"What'S All This, Then, Amen?"
+&gt;&gt;&gt; 'How to Center Text Using Python'.center(70)
+'                   How to Center Text Using Python                    '
+&gt;&gt;&gt; 'angola'.upper()
+'ANGOLA'
+&gt;&gt;&gt;
+</pre>
+
+<p>문자열 메쏘드는 문자열 객체 안에 구축되어 있다. 그리고 그 객체 뒤에 점 연산자를 붙이고 메쏘드 이름을 주어서 요청(<em>invoked</em>)한다(즉, 호출한다).</p>
+
+<p>
+나중에 자신의 메쏘드를 가진 객체를 따로 만드는 법을 배우겠다.  지금은 파이썬의 내장 객체에 따라오는 메쏘드만 사용하겠다.</p> 
+
+<p>점 연산자는 리스트 객체의 내장 메쏘드에 접근하는데에도 사용된다:</p>
+
+<pre class='python-interpreter'>
+&gt;&gt;&gt; mylist = []
+&gt;&gt;&gt; mylist.append(5)
+&gt;&gt;&gt; mylist.append(27)
+&gt;&gt;&gt; mylist.append(3)
+&gt;&gt;&gt; mylist.append(12)
+&gt;&gt;&gt; mylist
+[5, 27, 3, 12]
+&gt;&gt;&gt;
+</pre>
+
+<p><code>append</code>는 리스트 메쏘드로서 건네진 인자를 리스트의 끝에 추가한다. 다른 메쏘드가 무엇이 있는지 다음 예제를 시험해 보자:</p>
+
+<pre class='python-interpreter'>
+&gt;&gt;&gt; mylist.insert(1, 12)
+&gt;&gt;&gt; mylist
+[5, 12, 27, 3, 12]
+&gt;&gt;&gt; mylist.count(12)
+2
+&gt;&gt;&gt; mylist.extend([5, 9, 5, 11])
+&gt;&gt;&gt; mylist
+[5, 12, 27, 3, 12, 5, 9, 5, 11])
+&gt;&gt;&gt; mylist.index(9)
+6
+&gt;&gt;&gt; mylist.count(5)
+3
+&gt;&gt;&gt; mylist.reverse()
+&gt;&gt;&gt; mylist
+[11, 5, 9, 5, 12, 3, 27, 12, 5]
+&gt;&gt;&gt; mylist.sort()
+&gt;&gt;&gt; mylist
+[3, 5, 5, 5, 9, 11, 12, 12, 27]
+&gt;&gt;&gt; mylist.remove(12)
+&gt;&gt;&gt; mylist
+[3, 5, 5, 5, 9, 11, 12, 27]
+&gt;&gt;&gt;
+</pre>
+
+<p>작동 방식을 이해하여 자신감이 붙을 때까지 이 예제의 리스트 메쏘드를 실험해 보자.</p>
+
+
+<h2>텍스트 파일을 읽고 쓰기</h2>
+<span class="index" value="volatile memory" />
+<span class="index" value="non-volatile memory" />
+<span class="index" value="file" />
+
+<p>프로그램이 실행중이면, 그 데이터는 <em>램</em>(RAM)에 저장된다.  램은 빠르고 값싸지만 휘발성(<b>volatile</b>)이 있다. 다시 말해, 프로그램이 끝나거나 컴퓨터가 꺼지면 램에 있는 데이터는 사라진다는 뜻이다.  컴퓨터를 켜거나 프로그램을 시작할 때 데이터를 다음에도 사용하려면 비 휘발성(<b>non-volatile</b>)의 저장 매체에 저장해야 한다. 하드 드라이브라 usb 드라이브 또는 CD-RW 같은 저장 매체에 말이다.</p>
+
+<p>
+비 휘발성 저장 매체에 있는 데이터는 이름 붙은 장소에, 즉 파일(<b>files</b>)이라는 매체에 저장된다. 파일을 읽고 쓰면 프로그램은 정보를 저장할수 있다.</p>
+
+<p>파일 작업은 공책 작업과 많이 비슷하다. 공책에 쓰려면 열어야 한다. 쓰기가 끝나면 닫아야 한다. 공책이 열려 있는 동안 그 안에 쓰거나 읽을 수 있다. 어떤 경우든 공책에서 어디에 있는지 알고 있다. 순서대로 공책을 읽을 수도 있고 그냥 건너 뛸 수도 있다.</p>
+
+<p>
+이 모든 것은 파일에도 역시 적용된다. 파일을 열려면 그 이름을 지정하고 읽을지 쓸지 지시한다.</p>
+
+<p>파일을 열면 파일 객체가 생성된다. 다음 예제에서, <code>myfile</code> 변수는 새로운 파일 객체를 가리킨다.</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; myfile = open('test.dat', 'w')
+&gt;&gt;&gt; print myfile
+&lt;open file 'test.dat', mode 'w' at 0x2aaaaab80cd8&gt;
+</pre>
+
+<p>
+open 함수는 두 개의 인자를 취한다. 첫 인자는 파일의 이름이고 두 번째 인자는 모드(<b>mode</b>)이다.  모드 <code>'w'</code>는 파일을 읽기용으로 연다는 뜻이다.</p>
+
+<p><code>test.dat</code>이라는 파일이 없다면 그 이름으로 파일이 생성된다.  이미 있다면 쓰려는 파일로 교체된다.</p>
+
+<p>파일 객체를 인쇄하면 파일의 이름과 모드 그리고 객체의 위치를 보여준다.</p>
+
+<p>
+파일에 데이터를 넣으려면 그 파일 객체에 <code>write</code> 메쏘드를 요청한다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; myfile.write("Now is the time")
+&gt;&gt;&gt; myfile.write("to close the file")
+</pre>
+
+<p>
+파일을 닫으면 시스템에게 쓰기가 끝났다고 알려주며 그 파일을 읽을 수 있도록 만들어 준다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; myfile.close()
+</pre>
+
+<p>이제 파일을 다시 열 수 있다. 이 번에는 읽기용으로 열어서 그 내용을 문자열로 읽는다. 이 번에 모드 인자는 읽기용인 <code>'r'</code>이다:
+</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; myfile = open('test.dat', 'r')
+</pre>
+
+<p>존재하지 않는 파일을 열려고 시도하면 에러를 맞이한다:</p>
+
+<span class="index" value="runtime error" />
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; myfile = open('test.cat', 'r')
+IOError: [Errno 2] No such file or directory: 'test.cat'
+</pre>
+
+<p>놀라울 것도 없이 <code>read</code> 메쏘드는 파일로부터 데이터를 읽는다. 아무 인자도 없으면 파일의 전체 내용을 단 하나의 문자열로 읽는다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; text = myfile.read()
+&gt;&gt;&gt; print text
+Now is the timeto close the file
+</pre>
+
+<p>
+문자열 사이에 공백문자를 인쇄하지 않았기 때문에 <q>time</q>과 <q>to</q> 사이에 공백문자가 없다.</p>
+
+<p><code>read</code>는 얼마나 많은 문자를 읽어야 할지 지시하는 인자를 받을 수 있다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; myfile = open('test.dat', 'r')
+&gt;&gt;&gt; print myfile.read(5)
+Now i
+</pre>
+
+<p>파일에 충분히 문자가 없으면 <code>read</code>는 나머지 문자를 돌려준다. 파일의 끝에 다다르면 <code>read</code>는 빈 문자열을 돌려준다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; print myfile.read(1000006)
+s the timeto close the file
+&gt;&gt;&gt; print myfile.read()
+   
+&gt;&gt;&gt;
+</pre>
+
+<p>
+다음 함수는 파일을 복사한다. 한 번에 50개씩 문자를 읽어서 쓴다.  첫 인자는 원래 파일의 이름이고; 두 번째 인자는 새 파일의 이름이다:</p>
+
+<pre class="python">
+def copy_file(oldfile, newfile):
+    infile = open(oldfile, 'r')
+    outfile = open(newfile, 'w')
+    while True:
+        text = infile.read(50)
+        if text == "":
+            break
+        outfile.write(text)
+    infile.close()
+    outfile.close()
+    return
+</pre>
+
+<p>다음 함수는 <code>infile</code>의 끝에 이를 때까지 50개의 문자를 <code>infile</code>에서 읽어서 똑같이 50개의 문자를 <code>outfile</code>에 쓰면서 회돌이를 계속한다. 끝에 이르면 <code>text</code>는 비고 <code>break</code> 서술문이 실행된다.
+</p>
+
+
+<h2>텍스트 파일</h2>
+<span class="index" value="text file" />
+<span class="index" value="file!text" />
+<span class="index" value="continue statement" />
+<span class="index" value="statement!continue" />
+
+<p>
+<b>텍스트 파일</b>은 인쇄가능한 문자와 공백문자가 담긴 파일으로서 새줄 문자로 가른 줄들로 조직된다. 파이썬은 특히 텍스트 파일을 처리에 적합하도록 디자인 되어 있으므로 그런 작업을 쉽게 할 수 있다.</p>
+
+<p>
+보여주기 위하여 새줄문자로 가른 세 줄짜리 텍스트를 텍스트 파일을 만들어 보겠다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; outfile = open("test.dat","w")
+&gt;&gt;&gt; outfile.write("line one\nline two\nline three\n")
+&gt;&gt;&gt; outfile.close()
+</pre>
+
+<p>
+<code>readline</code> 메쏘드는 다음 새줄문자까지 모든 문자를 읽는다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; infile = open("test.dat","r")
+&gt;&gt;&gt; print inf.readline()
+line one
+   
+&gt;&gt;&gt;
+</pre>
+
+<p><code>readlines</code> 메쏘드는 나머지 줄을 문자열 리스트로 돌려준다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; print infile.readlines()
+['line two\012', 'line three\012']
+</pre>
+
+<p>이 경우 출력은 리스트 형태이다. 즉 문자열에 따옴표가 나타나며 새줄문자가 피신 연속열 <code>\\012</code>로 나타난다는 뜻이다.</p>
+
+<p>파일의 끝에 이르면 <code>readline</code> 메쏘드는 빈 문자열을 돌려주고 <code>readlines</code> 메쏘드는 빈 리스트를 돌려준다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; print infile.readline()
+   
+&gt;&gt;&gt; print infile.readlines()
+[]
+</pre>
+
+<p>
+다음은 줄-처리 프로그램의 예이다. <code>filter</code>는 <code>oldfile</code>의 사본을 만든다. <code>#</code>로 시작하는 줄은 모두 빼고 말이다:</p>
+
+<pre class="python">
+def filter(oldfile, newfile):
+    infile = open(oldfile, 'r')
+    outfile = open(newfile, 'w')
+    while True:
+        text = infile.readline()
+        if text == "":
+           break
+        if text[0] == '#':
+           continue
+        outfile.write(text)
+    infile.close()
+    outfile.close()
+    return
+</pre>
+
+<p>
+<b>continue 서술문</b>은 회돌이의 현재 반복은 끝내지만 회돌이는 계속한다.  실행의 흐름은 회돌의 최상위로 이동하고 조건을 점검해서 그에 맞게 처리를 계속한다.</p>
+
+<p>
+그리하여 <code>text</code>가 빈 문자열이면 회돌이를 종료한다. <code>text</code>의 첫 문자가 우물정자이면 실행의 흐름은 회돌이의 최상위로 이동한다. 두 조건이 모두 실패할 경우에만 <code>text</code>를 새 파일로 복사한다.</p>
+
+
+<h2>디렉토리</h2>
+<span class="index" value="file system" />
+<span class="index" value="directory" />
+<span class="index" value="path" />
+<span class="index" value="delimiter" />
+
+<p>비휘발성 저장 매체에 저장된 파일은 <b>파일 시스템</b>이라는 규칙의 집합으로 조직된다.  파일 시스템은 파일과 <b>디렉토리</b>로 구성되는데, 디렉토리는 파일과 기타 다른 디렉토리를 담는 그릇이다.
+</p>
+
+<p>열거나 씀으로써 새 파일을 만들 때, 그 새 파일은 현재 디렉토리로 간다 (프로그램을 실행할 때 여러분이 있는 곳). 비슷하게, 읽기전용으로 파일을 열때, 파이썬은 현재 디렉토리에서 그 파일을 찾는다.
+</p>
+
+<p>파일을 다른 어디에선가 열고 싶으면, 그 파일에 대하여 경로(<b>path</b>)를 지정해야 한다. 경로는 파일이 위치한 디렉토리 (또는 폴더)의 이름이다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; wordsfile = open('/usr/share/dict/words', 'r')
+&gt;&gt;&gt; wordlist = wordsfile.readlines()
+&gt;&gt;&gt; print wordlist[:5]
+['\n', 'A\n', "A's\n", 'AOL\n', "AOL's\n", 'Aachen\n']
+</pre>
+
+<p>
+다음 예제는 시스템에서 최상위 <code>/</code> 디렉토리 아래, <code>usr</code> 디렉토리 아래, <code>share</code> 디렉토리 아래, <code>dict</code>라는 디렉토리에서 <code>words</code>라는 파일을 연다. 다음 각 줄을 <code>readlines</code>을 사용하여 리스트로 읽는다. 그리고 그 리스트에서 앞쪽 5 개의 원소를 인쇄한다.</p>
+
+<p>파일 이름에 <code>/</code>를 사용하면 안된다; 디렉토리와 파일이름을 사이의 가름자(<b>delimiter</b>)로 예약되어 있기 때문이다.</p>
+
+<p><code>/usr/share/dict/words</code> 파일은 유닉스 기반의 시스템에 존재하며 알파벳 순서로 단어 리스트가 담겨 있다.</p>
+
+
+<h2>기호 세기</h2>
+<span class="index" value="ord function" />
+<span class="index" value="function!ord" />
+<span class="index" value="chr function" />
+<span class="index" value="function!chr" />
+
+<p>
+<code>ord</code> 함수는 문자의 정수 표현을 돌려준다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; ord('a')
+97
+&gt;&gt;&gt; ord('A')
+65
+&gt;&gt;&gt;
+</pre>
+
+<p>다음 에제는 왜 <code>'Apple' &lt; 'apple'</code>이 <code>True</code>로 평가되는지 설명해 준다.</p>
+
+<p><code>chr</code> 함수는 <code>ord</code>의 반대이다. 이 함수는 정수를 인자로 취해 그의 문자 표현을 돌려준다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; for i in range(65, 71):
+...     print chr(i)
+...
+A
+B
+C
+D
+E
+F
+&gt;&gt;&gt;
+</pre>
+
+<p>다음 <code>countletters.py</code> 프로그램은 <a href="resources/ch10/alice_in_wonderland.txt">Alice in Wonderland</a>라는 책에서 각 문자가 나타난 횟수를 센다:</p>
+
+<pre class='python'>
+#
+# countletters.py
+#
+
+def display(i):
+    if i == 10: return 'LF'
+    if i == 13: return 'CR' 
+    if i == 32: return 'SPACE' 
+    return chr(i)
+
+infile = open('alice_in_wonderland.txt', 'r')
+text = infile.read()
+infile.close()
+
+counts = 128 * [0]
+
+for letter in text:
+    counts[ord(letter)] += 1
+
+outfile = open('alice_counts.dat', 'w')
+outfile.write("%-12s%s\n" % ("Character", "Count"))
+outfile.write("=================\n")
+
+for i in range(len(counts)):
+    if counts[i]:
+        outfile.write("%-12s%d\n" % (display(i), counts[i]))
+
+outfile.close()
+</pre>
+
+<p>
+다음 프로그램을 실행하고 생성된 출력 파일을 텍스트 편집기를 사용하여 보자. 아래의 연습문제에서 프로그램을 분석해 보시기 바란다.</p>
+
+
+<h2><code>sys</code> 모듈과 <code>argv</code></h2>
+<span class="index" value="sys module" />
+<span class="index" value="module!sys" />
+<span class="index" value="Jython" />
+<span class="index" value="argv" />
+<span class="index" value="command line" />
+<span class="index" value="command line arguments" />
+
+<p>
+<code>sys</code> 모듈에는 파이썬 인터프리터가 실행되는 환경(<em><a href="">environment</a></em>)에 접근하는 함수와 변수가 담겨 있다.</p>
+
+<p>다음 예제는 이 변수들중 몇 가지 값을 보여준다:</p>
+
+<pre class='python-interpreter'>
+&gt;&gt;&gt; import sys
+&gt;&gt;&gt; sys.platform
+'linux2'
+&gt;&gt;&gt; sys.path
+['', '/home/jelkner/lib/python', '/usr/lib/python25.zip', '/usr/lib/python2.5',
+'/usr/lib/python2.5/plat-linux2', '/usr/lib/python2.5/lib-tk',
+'/usr/lib/python2.5/lib-dynload', '/usr/local/lib/python2.5/site-packages',
+'/usr/lib/python2.5/site-packages', '/usr/lib/python2.5/site-packages/Numeric', 
+'/usr/lib/python2.5/site-packages/gst-0.10',
+'/var/lib/python-support/python2.5', '/usr/lib/python2.5/site-packages/gtk-2.0',
+'/var/lib/python-support/python2.5/gtk-2.0']
+&gt;&gt;&gt; sys.version
+'2.5.1 (r251:54863, Mar  7 2008, 04:10:12) \n[GCC 4.1.3 20070929 (prerelease)
+(Ubuntu 4.1.2-16ubuntu2)]'
+&gt;&gt;&gt; 
+</pre>
+
+<p>같은 머신에서 <b>Jython</b>을 시작하면 같은 변수에 대하여 값들이 다르게 산출된다:</p>
+
+<pre class='python-interpreter'>
+&gt;&gt;&gt; import sys
+&gt;&gt;&gt; sys.platform
+'java1.6.0_03'
+&gt;&gt;&gt; sys.path
+['', '/home/jelkner/.', '/usr/share/jython/Lib', '/usr/share/jython/Lib-cpython']
+&gt;&gt;&gt; sys.version
+'2.1'
+&gt;&gt;&gt; 
+</pre>
+
+<p>그 결과는 물론 여러분의 머신에서도 다를 것이다.</p>
+
+<p>
+<code>argv</code> 변수에는 파이썬 스크립트가 실행될 때 <b>명령어 줄</b>에서 읽은 문자열 리스트가 담긴다. 이런 <b>명령어 줄 인자</b>는 기동과 동시에 정보를 프로그램에 건네는 데 사용될 수 있다.</p>
+
+<pre class="python">
+#
+# demo_argv.py
+#
+import sys
+
+print sys.argv 
+</pre>
+
+<p>유닉스 명령어 프롬프트에서 다음 프로그램을 실행하면 어떻게 <code>sys.argv</code>가 작동하는지 보여준다:</p>
+
+<pre class="shell">
+$ python demo_argv.py this and that 1 2 3
+['demo_argv.py', 'this', 'and', 'that', '1', '2', '3']
+$ 
+</pre>
+
+<p><code>argv</code>는 문자열 리스트이다. 첫 인자가 프로그램의 이름이라는 사실에 주목하자. 인자는 공백으로 나뉘고, <code>string.split</code>이 작동하는 방식과 마찬가지로 리스트로 갈라져 들어간다. 그 안에 공백문자를 가진 인자를 원한다면 따옴표를 사용하라:</p>
+
+<pre class="shell">
+$ python demo_argv.py "this and" that "1 2" 3
+['demo_argv.py', 'this and', 'that', '1 2', '3']
+$ 
+</pre>
+
+<p>
+<code>argv</code>로 명령어 줄에서 직접 입력을 받는 유용한 프로그램을 작성할 수 있다. 예를 들어, 다음은 일련의 숫자를 합하는 프로그램이다:</p>
+
+<pre class="python">
+#
+# sum.py
+#
+from sys import argv
+
+nums = argv[1:]
+
+for index, value in enumerate(nums):
+    nums[index] = float(value)
+
+print sum(nums)
+</pre>
+
+<p>다음 프로그램에서 <code>from &lt;module&gt; import &lt;attribute&gt;</code> 스타일로 반입한다. 그래서 <code>argv</code>는 모듈의 메인 이름공간 안으로 들어온다.</p> 
+
+<p>이제 다음과 같이 명령어 프롬프트에서 프로그램을 실행할 수 있다:</p>
+
+<pre class="shell">
+$ python sum.py 3 4 5 11
+23
+$ python sum.py 3.5 5 11 100
+119.5
+</pre>
+
+<p>연습문제로 비슷한 프로그램을 작성해 보라.</p>
+
+
+<h2>어휘집</h2>
+<span class="index" value="module" />
+<span class="index" value="standard library" />
+<span class="index" value="pydoc" />
+<span class="index" value="command prompt" />
+<span class="index" value="import statement" />
+<span class="index" value="statement!import" />
+<span class="index" value="namespace" />
+<span class="index" value="naming collision" />
+<span class="index" value="attribute" />
+<span class="index" value="dot operator" />
+<span class="index" value="operator!." />
+<span class="index" value="method" />
+<span class="index" value="volatile memory" />
+<span class="index" value="non-volatile memory" />
+<span class="index" value="file" />
+<span class="index" value="mode (file object)" />
+<span class="index" value="text file" />
+<span class="index" value="continue statement" />
+<span class="index" value="statement!continue" />
+<span class="index" value="file system" />
+<span class="index" value="directory" />
+<span class="index" value="path" />
+<span class="index" value="delimiter" />
+<span class="index" value="command line" />
+<span class="index" value="command line arguments" />
+<span class="index" value="Jython" />
+<span class="index" value="argv" />
+
+<dl>
+<dt>모듈(module):</dt>
+<dd>파이썬 정의와 서술문을 담고 있는 파일. 다른 파이썬 프로그램에서 사용되는 것이 목적이다. <code>import</code> 서술문을 사용하면 한 모듈의 내용을 다른 프로그램에서 사용할 수 있다.</dd>
+
+<dt>표준 라이브러리:</dt>
+<dd>라이브러리는 소프트웨어 개발에서 도구로 사용되는 소프트웨어 집단이다. 프로그래밍 언어의 표준 라이브러리는 핵심 프로그래밍 언어와 함께 배포되는 그런 도구 집합이다. 파이썬에는 방대한 표준 라이브러리가 함께 따라온다.</dd>
+
+<dt>pydoc:</dt>
+<dd>파이썬 표준 라이브러리에 함께 따라오는 문서 생성기.</dd>
+
+<dt>명령어 프롬프트:</dt>
+<dd>
+<a href="http://en.wikipedia.org/wiki/Command_line">명령어 줄 인터페이스</a>로 표시되는 문자열로서 명령어를 받을 준비가 되었다는 표시이다.</dd>
+
+<dt>import 서술문:</dt>
+<dd>
+모듈에 포함된 객체를 사용할 수 있도록 해주는 서술문. 두 가지 형태의 반입 서술문이 있다.  가상적으로 <code>mymod</code> 모듈에 <code>f1</code> 함수와 <code>f2</code> 함수 그리고 변수로 <code>v1</code>과 <code>v2</code>가 들어 있을 경우, 이 두 형태의 예를 들면:
+
+<pre class='python'>
+import mymod 
+</pre>
+첫 형태이다.
+<pre class='python'>
+from mymod import f1, f2, v1, v2 
+</pre>
+모든 객체를 반입한다
+</dd>
+
+<dt>이름공간(namespace):</dt>
+<dd>구문적 컨테이너로서 이름에 대한 문맥을 제공하여 같은 이름이 명확하게 다른 이름공간에 존재하도록 해 준다. 파이썬에서 모듈과 클래스 그리고 함수오 메쏘드는 모두 이름공간을 형성한다.</dd>
+
+<dt>이름 충돌:</dt>
+<dd>주어진 이름 공간에서 두개 이상의 이름을 명료하게 결정하지 못하는 상황.
+<pre class='python'>
+from string import *
+</pre>
+위와 같이 하는 대신에 다음과 같이 사용하면
+<pre class='python'>
+import string
+</pre>
+이름 충돌이 방지된다
+</dd>
+
+<dt>속성(attribute):</dt>
+<dd>
+모듈 안에 정의된 변수 (또는 클래스나 실체 안에 -- 나중에 보게된다). 모듈 속성은 <b>점 연산자(<code>.</code>)</b>로 접근한다
+.
+</dd>
+
+<dt>점 연산자(dot operator):</dt>
+<dd>
+점 연산자(<code>.</code>)로 모듈이 속성과 함수에 접근할 수 있다 (또는 클래스나 실체의 속성이나 메쏘드에 -- 나중에 보게된다).
+</dd>
+
+<dt>메쏘드(method):</dt>
+<dd>
+객체의 함수-류 속성.  메쏘드는 점 연산자를 사용하여 객체에 요청(<em>invoked</em>)된다 (호출된다). 예를 들어:
+<pre class='python-interpreter'>
+&gt;&gt;&gt; s = "this is a string."
+&gt;&gt;&gt; s.upper()
+'THIS IS A STRING.'
+&gt;&gt;&gt;
+</pre>
+문자열 <code>s</code>에 메쏘드 <code>upper</code>를 요청한다고 말한다.  <code>s</code>는 묵시적으로 <code>upper</code>에 첫 인자로 건네진다.
+</dd>
+
+<dt>휘발성 메모리:</dt>
+<dd>
+상태를 유지하기 위해 전기를 요구하는 메모리. 컴퓨터의 <em>주 메모리</em>(RAM)는 휘발성이다. RAM에 저장된 정보는 컴퓨터가 꺼지면 다 사라진다.
+</dd>
+
+<dt>비-휘발성 메모리:</dt>
+<dd>
+전력 없이 그의 상태를 유지할 수 있는 메모리. 하드 드라이브와 플래시 메모리 그리고 CD-RW는 비-휘발성 메모리의 예이다.
+</dd>
+
+<dt>파일:</dt>
+<dd>이름 붙은 개체, 보통 하드 드라이브나 플로피 디스크 또는 CD-ROM에 저장되며, 문자열 스트림이 담긴다.</dd>
+
+<dt>모드:</dt>
+<dd>컴퓨터 프로그램 안에서 연산 방법을 구별한다. 파이썬에서 파일은 다음 세가지 모드 중 하나로 열 수 있다: read ('r'), write ('w'), and append ('a').
+</dd>
+
+<dt>경로:</dt>
+<dd>파일의 정확한 위치를 지정하는 일련의 디렉토리 이름.
+</dd>
+
+<dt>텍스트 파일:</dt>
+<dd>인쇄가능한 문자들이 담긴 파일로서 새줄 문자로 나뉜 줄들로 조직된다.</dd>
+
+<dt>continue 서술문:</dt>
+<dd>회돌이에서 현재 반복을 끝내는 서술문. 실행의 흐름은 회돌의 최상위로 이동하고, 조건을 평가하고 그에 맞게 진행된다.</dd>
+
+<dt>파일 시스템:</dt>
+<dd>
+파일을 그리고 그 안에 든 데이터를 이름짓고 접근하며 조직하는 방법.</dd>
+
+<dt>디렉토리:</dt>
+<dd>이름 붙은 파일 집단, 이른바 폴더라고 부른다. 디렉토리는 파일과 다른 디렉토리를 담을 수 있고, 이를 그 디렉토리의 하부 디렉토리(<em>subdirectories</em>)라고 지칭한다.</dd>
+
+<dt>경로:</dt>
+<dd>파일 시스템 안에서 파일의 위치와 이름. 예를 들어:
+<pre class='shell'>
+/usr/share/dict/words
+</pre>
+이름이 <code>words</code>라는 파일이다. <code>usr</code>의 하부디렉토리인 <code>share</code> 디렉토리 아래의 <code>dict</code> 하부디렉토리에서 발견된다.</dd>
+
+<dt>구분자(delimiter):</dt>
+<dd>테스트에서 여러 부분 사이의 경계를 지정하는데 사용되는 1개 이상의 문자열.</dd>
+
+<dt>명령어 줄:</dt>
+<dd><em>명령어 줄 인터페이스</em>에서 <em>명령어 인터프리터</em>에 읽어 들인 문자열 (더 자세한 정보는 Wikipedia 글 <a href="http://en.wikipedia.org/wiki/Command_line">명령어 줄 인터페이스</a>를 참조하자).</dd>
+
+<dt>명령어 줄 인자:</dt>
+<dd>
+<em>명령어 프롬프트</em>(CLI)에서 프로그램을 요청할 때 함께 프로그램에 건넨 값.</dd>
+
+<dt>Jython:</dt>
+<dd>
+파이썬을 Java로 구현한 언어 (Jython 홈페이지 <a href="http://www.jython.org">http://www.jython.org</a>에서 더 자세한 정보를 얻자.)
+</dd>
+
+<dt><code>argv</code>:</dt>
+<dd>
+<code>argv</code>는 <em>argument vector</em>의 약어로서  <code>sys</code> 모듈에 있는 변수이다. 실행시간에 프로그램에 건넨 명령어 줄 인자들의 리스트가 저장되어 있다.
+</dd>
+</dl>
+
+
+<h2>연습문제</h2>
+<ol>
+<li><div class="exercise">
+다음을 완성하라:
+<ul>
+  <li>pydoc 서버를 명령어 프롬프트에서 <code>pydoc -g</code> 명령어로 실행하라.</li>
+  <li><q>브라우저 열기</q> 버튼을 pydoc tk 창에서 클릭하라.</li>
+  <li><code>calendar</code> 모듈을 찾아 클릭하라.</li> 
+  <li><em>Functions</em> 섹션을 살펴보면서, 다음과 같이 파이썬 쉘에서 시험해 보라:
+  <pre class='python-interpreter'>
+  &gt;&gt;&gt; import calendar
+  &gt;&gt;&gt; year = calendar.calendar(2008)
+  &gt;&gt;&gt; print year                      # 여기에서 무슨 일이 일어나는가?
+  </pre></li>
+  <li><code>calendar.isleap</code>을 실험해 보자. 이 함수는 인자로 무엇을 예상하는가?  무엇을 결과로 돌려주는가?  이 함수는 어떤 종류의 함수인가?</li>
+</ul>
+이 연습문제를 풀면서 배운 것들을 자세하게 적어보라.
+</div></li>
+
+<li><div class="exercise">
+<p><code>Tkinter</code>가 컴퓨터에 설치되어 있지 않다면, <code>pydoc -g</code>는 에러를 돌려줄 것이다. 열어야 하는 그래픽 창이  <code>Tkinter</code>를 요구하기 때문이다. 대안으로 웹 서버를 직접 여는 방법도 있다:</p>
+<pre class='shell'>
+$ pydoc -p 7464
+</pre>
+<p>이렇게 하면 pydoc 웹 서버가 7464 포트에 열린다. 이제 다음에 웹 브라우저를 클릭하라:</p>
+<pre>
+http://localhost:7464
+</pre>
+<p>
+그러면 시스템에 설치된 파이썬 라이브러리를 열람할 수 있다. </p>
+<p>
+이런 접근법으로 <code>pydoc</code>를 시작하고 <code>math</code> 모듈을 살펴보라.</p>
+<ol style='list-style-type: lower-alpha;'>
+  <li>얼마나 많은 함수가 <code>math</code> 모듈에 있는가?</li>
+  <li><code>math.ceil</code>는 어떤 일을 하는가?  <code>math.floor</code>는 어떤가?
+  (<em>힌트:</em> <code>floor</code>과 <code>ceil</code> 모두 부동소수점수를 인자로 예상한다.)
+  </li>
+  <li>그 동안 <code>math</code> 모듈을 사용하지 않고서 <code>math.sqrt</code>와 같은 값을 어떻게 계산해 왔는지 기술하라.</li>
+  <li><code>math</code> 모듈에 있는 데이터 상수 두 개는 무엇인가?</li>
+</ol>
+<p>
+이 연습문제에서 배울 것들을 자세하게 기록하라.</p>
+</div></li>
+
+<li><div class="exercise">
+<code>pydoc</code>을 사용하여 <code>copy</code> 모듈을 조사하라.  <code>deepcopy</code>는 무슨 일을 하는가?  지난 장에서 풀어본 연습문제 중에 <code>deepcopy</code>가 쓸모가 있을 만한 문제는 무엇인가?
+</div></li>
+
+<li><div class="exercise">
+<code>mymodule1.py</code>라는 모듈을 만들어라.  <code>myage</code> 속성을 현재 나이에 설정하고 <code>year</code> 속성을 현재 해에 설정하라.  또다른 모듈 <code>mymodule2.py</code>를 만들어라.  <code>myage</code> 속성을 0으로 설정하고 <code>year</code> 속성을 태어난 해로 설정하라.
+<br /><br />
+이제 <code>namespace_test.py</code> 파일을 만들어라.  위의 모듈을 모두 반입하고 다음과 같은 서술문을 작성하라:
+<pre class='python'>
+print (mymodule2.myage - mymodule1.myage) == (mymodule2.year - mymodule1.year)
+</pre>
+<code>namespace_test.py</code>를 실행하면 올해 생일이 지났는지 여부에 따라서 <code>True</code>나 <code>False</code>를 출력으로 받을 것이다.
+</div></li>
+
+<li><div class="exercise">
+다음 서술문을 앞의 연습문제로부터 <code>mymodule1.py</code>와 <code>mymodule2.py</code> 그리고 <code>namespace_test.py</code>에 추가하라:
+<pre class='python'>
+print "My name is %s" % __name__
+</pre>
+<code>namespace_test.py</code>를 실행하라. 무슨 일이 일어나는가? 왜인가?  이제 다음을 <code>mymodule1.py</code> 아래에 추가하라:
+<pre class='python'>
+if __name__ == '__main__':
+    print "This won't run if I'm  imported."
+</pre>
+<code>mymodule1.py</code>과 <code>namespace_test.py</code>를 다시 실행하라.  어느 경우에 새로운 인쇄 서술문이 보이는가In
+which case do you see the new print statement? 
+</div></li>
+
+<li><div class="exercise">
+파이썬 쉘에서 다음과 같이 시도해 보라:
+<pre class='python-shell'>
+&gt;&gt;&gt; import this
+</pre>
+팀 피터스(Tim Peter)는 이름공간에 관하여 무엇이라고 말하는가?
+</div></li>
+
+<li><div class="exercise">
+<code>pydoc</code>을 사용하여 <code>string</code> 모듈에서 다른 함수 세 가지를 찾아 테스트하라. 찾은 것들을 기록하라.
+</div></li>
+
+<li><div class="exercise">
+리스트 메쏘드에 관하여 배운 것들을 사용하여 지난 장의 <code>matrix_mult</code>를 재작성하라.
+</div></li>
+
+<li><div class="exercise">
+<span class="index" value="dir" />
+<span class="index" value="function!dir" />
+제 7 장에서 처음 본 <code>dir</code> 함수는 인자로 건넨 객체의 <em>속성</em> 리스트를 인쇄한다. 다른 말로 하면, <code>dir</code> 함수는 인자의 <em>이름공간</em>의 내용을 돌려준다.
+<br /><br />
+<code>dir(str)</code>과 <code>dir(list)</code>를 사용하여 이 장에서 예제로 소개하지 않은 문자열 메쏘드와 리스트 메쏘드를 최소한 세가지 찾아라. 두개의 밑줄 문자(__)로 시작하는 것들은 무시해도 좋다. 새로운 메쏘드의 이름과 사용법을 포함하여, 발견한 것들을 자세하게 적어두어라..
+<br /><br />
+(<em>힌트:</em>  탐험하고 싶은 함수의 문서화 문자열을 인쇄하라. 예를 들어, <code>str.join</code>이 어떻게 작동하는지 보고 싶으면,
+<code>print str.join.__doc__</code>)
+</div></li>
+
+<li><div class="exercise">
+인터프리터 세션에서 다음과 같이 파이썬 인터프리터의 응답을 기대한다면:
+<ol style="list-style-type: lower-alpha;">
+  <li><pre class='python-interpreter'>
+  &gt;&gt;&gt; s = "If we took the bones out, it wouldn't be crunchy, would it?"
+  &gt;&gt;&gt; s.split()
+  </pre></li>
+
+  <li><pre class='python-interpreter'>
+  &gt;&gt;&gt; type(s.split())
+  </pre></li>
+
+  <li><pre class='python-interpreter'>
+  &gt;&gt;&gt; s.split('o')
+  </pre></li>
+
+  <li><pre class='python-interpreter'>
+  &gt;&gt;&gt; s.split('i')
+  </pre></li>
+
+  <li><pre class='python-interpreter'>
+  &gt;&gt;&gt; '0'.join(s.split('o'))
+  </pre></li>
+</ol>
+왜 이런 결과를 얻는지 확실하게 이해하도록 하라. 그런 다음 배운 것들을 응용하여 <code>str</code> 객체의 <code>split</code> 메쏘드와 <code>join</code> 메쏘드를 사용하여 함수의 몸체를 채워라:
+<pre class='python'>
+def myreplace(old, new, s):
+    """
+    Replace all occurances of old with new in the string s.
+
+       &gt;&gt;&gt; myreplace(',', ';', 'this, that, and, some, other, thing')
+       'this; that; and; some; other; thing'
+       &gt;&gt;&gt; myreplace(' ', '**', 'Words will now be separated by stars.')
+       'Words**will**now**be**seperated**by**stars.'
+    """
+</pre>
+해답은 모두 doctest를 통과해야 한다.
+</div></li>
+
+<li><div class="exercise">
+아래에 다음과 같은 내용으로 <code>wordtools.py</code> 파일을 만들어라:
+<pre class='python'>
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
+</pre> 
+왜 이 서술문이 이 모듈을 사용과 테스트에 편리하게 만드는지 설명하라. 다른 모듈로부터 <code>wordtools.py</code>가 반입될 때 <code>__name__</code>의 값은 무엇이 되는가? 메인 프로그램으로 실행되면 무엇이 되는가?
+<br /><br />
+이제 몸체를 다음 함수들에게 추가하여 doctest를 통과시켜라:
+<pre class='python'>
+def cleanword(word):
+    """
+      &gt;&gt;&gt; cleanword('what?')
+      'what'
+      &gt;&gt;&gt; cleanword('"now!"')
+      'now'
+      &gt;&gt;&gt; cleanword('?+="word!,@$()"')
+      'word'
+    """
+
+def has_dashdash(s):
+    """
+      &gt;&gt;&gt; has_dashdash('distance--but')
+      True
+      &gt;&gt;&gt; has_dashdash('several')
+      False
+      &gt;&gt;&gt; has_dashdash('critters')
+      False
+      &gt;&gt;&gt; has_dashdash('spoke--fancy')
+      True
+      &gt;&gt;&gt; has_dashdash('yo-yo')
+      False
+    """
+
+def extract_words(s):
+    """
+      &gt;&gt;&gt; extract_words('Now is the time!  "Now", is the time? Yes, now.')
+      ['now', 'is', 'the', 'time', 'now', 'is', 'the', 'time', 'yes', 'now']
+      &gt;&gt;&gt; extract_words('she tried to curtsey as she spoke--fancy')
+      ['she', 'tried', 'to', 'curtsey', 'as', 'she', 'spoke', 'fancy']
+    """
+
+def wordcount(word, wordlist):
+    """
+      &gt;&gt;&gt; wordcount('now', ['now', 'is', 'time', 'is', 'now', 'is', 'is'])
+      ['now', 2]
+      &gt;&gt;&gt; wordcount('is', ['now', 'is', 'time', 'is', 'now', 'is', 'the', 'is'])
+      ['is', 4]
+      &gt;&gt;&gt; wordcount('time', ['now', 'is', 'time', 'is', 'now', 'is', 'is'])
+      ['time', 1]
+      &gt;&gt;&gt; wordcount('frog', ['now', 'is', 'time', 'is', 'now', 'is', 'is'])
+      ['frog', 0]
+    """
+
+def wordset(wordlist):
+    """
+      &gt;&gt;&gt; wordset(['now', 'is', 'time', 'is', 'now', 'is', 'is'])
+      ['is', 'now', 'time']
+      &gt;&gt;&gt; wordset(['I', 'a', 'a', 'is', 'a', 'is', 'I', 'am'])
+      ['I', 'a', 'am', 'is']
+      &gt;&gt;&gt; wordset(['or', 'a', 'am', 'is', 'are', 'be', 'but', 'am'])
+      ['a', 'am', 'are', 'be', 'but', 'is', 'or']
+    """
+
+def longestword(wordset):
+    """
+      &gt;&gt;&gt; longestword(['a', 'apple', 'pear', 'grape'])
+      5
+      &gt;&gt;&gt; longestword(['a', 'am', 'I', 'be'])
+      2
+      &gt;&gt;&gt; longestword(['this', 'that', 'supercalifragilisticexpialidocious'])
+      34
+    """
+</pre>
+프로그램에 포함된 도구들을 사용할 수 있도록 이 모듈을 저장하라.
+</div></li>
+
+<li><div class="exercise">
+<a href="resources/ch10/unsorted_fruits.txt">unsorted_fruits.txt</a>에는 26개의 과일이 담긴 목록이 있다. 각각의 이름은 각각 다른 알파벳으로 시작한다.
+<br /><br />
+<code>sort_fruits.py</code> 파일을 만들어라. 이 파일은 <code>unsorted_fruits.txt</code> 파일에서 과일을 읽어 알파벳 순서로  <code>sorted_fruits.txt</code> 파일에 출력한다.
+</div></li>
+
+<li><div class="exercise">
+<code>countletters.py</code>에 관하여 다음 질문에 답하라:
+<ol style="list-style-type: lower-alpha;">
+  <li>세 줄이 무슨 일을 하는지 자세하게 설명하라:
+  <pre class='python'>
+infile = open('alice_in_wonderland.txt', 'r')
+text = infile.read()
+infile.close()
+  </pre>
+  이 줄들이 실행되고 난 후에 <code>type(text)</code>는 무엇을 돌려주겠는가?</li>
+
+  <li>표현식 <code>128 * [0]</code>은 무엇으로 평가되는가?  <a href="http://en.wikipedia.org/wiki/ASCII">ASCII</a>에 관하여 Wikipedia에서 읽어보고 읽은 것을 근거로 왜 <code>counts</code> 변수가 <code>128 * [0]</code>에 할당된다고 생각하는가?</li>
+
+  <li>What does
+  <pre class='python'>
+for letter in text:
+    counts[ord(letter)] += 1
+  </pre>
+  do to <code>counts</code>?</li>
+
+  <li><code>display</code> 함수의 목적을 설명하라.  왜 값이 <code>10</code>, <code>13</code>, 그리고 <code>32</code>인지 점검하는가?
+  그런 값들에 무슨 특별한 뜻이 있는가?</li>
+
+  <li>다음 줄이 무엇을 하는지 자세하게 기술하라
+  <pre class='python'>
+outfile = open('alice_counts.dat', 'w')
+outfile.write("%-12s%s\n" % ("Character", "Count"))
+outfile.write("=================\n")
+  </pre>
+  실행이 끝나면 <code>alice_counts.dat</code>에 무엇이 있는가?</li>
+
+  <li>마지막으로, 다음은 무엇을 하는지 자세하게 설명하라
+  <pre class='python'>
+for i in range(len(counts)):
+    if counts[i]:
+        outfile.write("%-12s%d\n" % (display(i), counts[i]))
+  </pre>
+<code>if counts[i]</code>의 목적은 무엇인가?</li>
+</ol>
+</div></li>
+
+<li><div class="exercise">
+ <code>alice_words.txt</code>라는 텍스트 파일을 만드는 <code>alice_words.py</code>라는 프로그램을 작성하라. <code>alice_in_wonderland.txt</code>에서 발견되는 모든 단어들을 각 단어가 나타난 횟수와 함께 알파벳 순서로 보여준다. 출력 파일의 첫 10 줄은 아마도 다음과 같이 보일 것이다:
+<pre class='shell'>
+Word              Count
+=======================
+a                 631
+a-piece           1
+abide             1
+able              1
+about             94
+above             3
+absence           1
+absurd            2
+</pre>
+책에서 <code>alice</code>라는 단어는 몇 번 나타나는가?
+</div></li>
+
+<li><div class="exercise">
+<q>Alice in Wonderland</q>에서 가장 긴 단어는 무엇인가?  어떤 문자로 구성되어 있는가?
+</div></li>
+
+<li><div class="exercise">
+<code>mean.py</code>라는 프로그램을 작성하라. 이 프로그램은 일련의 숫자를 명령어 줄에서 받아 평균 값을 돌려준다.
+<pre class='shell'>
+$ python mean.py 3 4
+3.5
+$ python mean.py 3 4 5
+4.0
+$ python mean.py 11 15 94.5 22
+35.625
+</pre>
+프로그램 세션에서 입력이 같으면 위의 샘플 세션과 같이 출력되어야 한다.
+</div></li>
+
+<li><div class="exercise">
+<code>median.py</code>라는 프로그램을 작성하라. 이 프로그램은 일련의 숫자를 명령어 줄에서 받아 중위수를 돌려준다.
+<pre class='shell'>
+$ python median.py 3 7 11
+7
+$ python median.py 19 85 121
+85
+$ python median.py 11 15 16 22
+15.5
+</pre>
+프로그램 세션에 똑 같이 입력하면 위의 샘플 세션과 같이 출력되어야 한다.
+</div></li>
+
+<li><div class="exercise">
+<code>countletters.py</code> 프로그램이 명령어 줄 인자로 열 파일을 받도록 수정하라.  어떻게 출력 파일의 이름을 처리할 것인가?
+</div></li>
+</ol>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="fdl.htm"><img border="0" alt="Next" src="images/next.png"></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png"></a></td>
+    <td width="20" class=head><a href="doctest.htm"><img border="0" alt="Previous" src="images/prev.png"></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png"></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="images/index.png"></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+</body>
+</html>

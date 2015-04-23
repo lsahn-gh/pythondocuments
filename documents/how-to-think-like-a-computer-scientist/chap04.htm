@@ -1,0 +1,816 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>제 4 장 : 조건문과 재귀(Conditionals and recursion)</title>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+
+<body>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap05.htm"><img border="0" alt="Next" src="./images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="./images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap03.htm"><img border="0" alt="Previous" src="./images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="./images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="./images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="./images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="./images/blank.png" ></td>
+  </tr>
+</table>
+<hr>
+
+
+<h2>제 4 장</h2>
+
+<h1>조건문과 재귀</h1>
+
+
+<a name=1></a><br>
+<h3>4.1 나머지 연산자</h3>
+<p>
+나머지 연산자(<b>modulus operator</b>)는 정수에 (그리고 정수 표현식에) 작동합니다. 그리고 첫 번째 피연산자가 두 번째 피연산자로 나뉘어지고 나면 나머지를 돌려줍니다. 파이썬에서 나머지 연산자는 백분률 기호(<span class=code>%</span>)입니다. 구문은 다른 연산자들과 똑 같습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; quotient = 7 / 3
+<br>&gt;&gt;&gt; <span class=keyword>print</span> quotient
+<br>2
+<br>&gt;&gt;&gt; remainder = 7 % 3
+<br>&gt;&gt;&gt; <span class=keyword>print</span> remainder
+<br>1
+<br></span></p>
+
+
+
+<p>
+그래서 7 나누기 3은 몫이 2이고 나머지가 1입니다.</p>
+<p>
+나머지 연산자는 놀랍도록 유용합니다. 예를 들어, 한 숫자가 다른 숫자로 나누어질 수 있는지 점검할 수 있습니다---만약 <span class=code>x % y</span>가 0이면 <span class=code>x</span>는 <span class=code>y</span>로 나누어질 수 있습니다.</p>
+<p>
+숫자로부터 제일-오른쪽의 자리(들)를 추출할 수도 있습니다. 예를 들어, <span class=code>x % 10</span>은 <span class=code>x</span> (십진수)의 가장 오른쪽 자리를 산출합니다. 비슷하게 <span class=code>x % 100</span>은 마지막 두 자리를 산출합니다.</p>
+
+<a name=2></a><br>
+<h3>4.2 불리언 표현식</h3>
+
+<p>불리언 표현식(<b>boolean expression</b>)은 거짓이거나 참 중의 하나인 표현식입니다. 파이썬에서 참인 표현식은 값이 1이고 거짓인 표현식은 값이 0입니다.</p>
+
+<p>
+연산자 <span class=code>==</span>는 값 두개를 비교하여 불리언 표현식을 생산합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; 5 == 5
+<br>1
+<br>&gt;&gt;&gt; 5 == 6
+<br>0
+<br>&gt;&gt;&gt;
+<br></span></p>
+
+
+
+<p>
+첫 번째 서술문에서 두 피연산자는 동등합니다. 그래서 표현식은 1(참(true))로 평가됩니다; 두 번째 서술문에서 5는 6이고 동등하지 않습니다. 그래서 0(거짓(false))을 얻습니다.</p>
+<p>
+<span class=code>==</span> 연산자는 비교 연산자(<b>comparison operators</b>) 중의 하나입니다; 다른 것들은 다음과 같습니다:</p>
+
+
+<PRE><p><span class=code>      x != y               <span class=comment># x는 y와 같지 않다.
+</span><br>      x > y                <span class=comment># x는 y보다 크다.
+</span><br>      x < y                <span class=comment># x는 y보다 작다.
+</span><br>      x >= y               <span class=comment># x는 y 이상이다.
+</span><br>      x <= y               <span class=comment># x는 y 미만이다.
+</span><br></span></p>
+</PRE>
+<p>
+이러한 연산자들에 익숙하시겠지만 파이썬의 심볼은 수학적 심볼과는 다릅니다. 흔히 저지르는 잘못은 두 개의 등호 기호(<span class=code>==</span>) 대신에 한 개의 등호 기호(<span class=code>=</span>)를 사용하는 것입니다. <span class=code>=</span>는 할당 연산자이고 <span class=code>==</span>는 비교 연산자라는 것을 기억하세요. <span class=code>=<</span> 또는 <span class=code>=></span>와 같은 것은 전혀 없습니다.</p>
+
+<a name=3></a><br>
+<h3>4.3 논리 연산자</h3>
+<p>
+논리 연산자(<b>logical operators</b>)는 세 개가 있습니다: <span class=code><span class=keyword>and</span></span>와 <span class=code><span class=keyword>or</span></span> 그리고 <span class=code><span class=keyword>not</span></span>이 그것입니다. 이러한 연산자의 의미구조는 영어에서의 의미와 비슷합니다. 예를 들어, <span class=code>x > 0 <span class=keyword>and</span> x < 10</span>은 오직 <span class=code>x</span>가 0보다 크고 <i>그리고(and)</i> 10보다 작을 때만 참입니다.</p>
+
+<p><span class=code>n%2 == 0 <span class=keyword>or</span> n%3 == 0</span>가 참일 때는 조건들중 <i>아무거나(either)</i> 참일 때입니다. 다시 말해서, 그 숫자가 2 <i>또는(or)</i> 3으로 나누어질 때만 참입니다.</p>
+<p>
+마지막으로 <span class=code><span class=keyword>not</span></span> 연산자는 불리언 표현식을 부인합니다. 그래서 <span class=code><span class=keyword>not</span>(x > y)</span>는 <span class=code>(x > y)</span>가 거짓이면 참입니다. 다시 말하면, <span class=code>x</span>가 <span class=code>y</span>보다 작거나 같으면 참입니다.</p>
+<p>
+엄밀히 말해 논리 연산자들의 피연산자는 반드시 불리언 표현식어야 합니다. 그러나 파이썬은 그렇게 엄격하지는 않습니다. 0이 아닌(nonzero) 어떤 숫자도 "참(true)"으로 해석합니다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt;  x = 5
+<br>&gt;&gt;&gt;  x <span class=keyword>and</span> 1
+<br>1
+<br>&gt;&gt;&gt;  y = 0
+<br>&gt;&gt;&gt;  y <span class=keyword>and</span> 1
+<br>0
+<br></span></p>
+
+
+
+<p>
+일반적으로, 이런 것은 훌륭한 스타일이라고 간주할 수 없습니다. 하나의 값을 0과 비교하기를 원한다면 명시적으로 비교하여야 합니다.</p>
+
+<a name=4></a><br>
+<h3>4.4 조건적 실행</h3>
+<p>
+유용한 프로그램을 작성하려면 거의 언제나 조건을 점검하여 프로그램의 행위를 적절하게 변경할 수 있어야 합니다. 조건적 서술문(<b>Conditional statements</b>)으로 이렇게 할 수 있습니다. 가장 단순한 형태는 <span class=code><span class=keyword>if</span></span> 서술문입니다:</p>
+
+
+<p><span class=code><span class=keyword>if</span> x > 0:
+<br>  <span class=keyword>print</span> <span class=quote>"x is positive"</span>
+<br></span></p>
+
+
+
+<p>
+<span class=code><span class=keyword>if</span></span> 서술문 뒤에 있는 불리언 표현식을 조건(<b>condition</b>)이라고 부릅니다. 조건이 참이라면 들여쓰기된 서술문들이 실행됩니다. 그렇지 않으면 아무일도 일어나지 않습니다.</p>
+<p>
+다른 복합 서술문처럼, <span class=code><span class=keyword>if</span></span> 서술문은 머리부와 서술문 구역으로 구성됩니다:</p>
+
+
+<p><span class=code>HEADER:
+<br>  FIRST STATEMENT
+<br>  ...
+<br>  LAST STATEMENT
+<br></span></p>
+
+<p>
+머리부는 새로운 줄에서 시작되고 쌍점(:)으로 끝납니다. 뒤따르는 들여쓰기된 서술문들은 구역(<b>block</b>)이라고 부릅니다. 들여쓰기 되지 않은 첫 번째 서술문이 구역의 끝을 표시합니다. 복합 서술문 안에 있는 서술문 구역을 그 서술문의 몸체(<b>body</b>)라고 부릅니다.</p>
+<p>
+갯수에 제한 없이 서술문은 if 서술문의 몸체에 나타날 수 있습니다. 그러나 적어도 한 개는 있어야 합니다. 몸체에 서술문이 없는 것이 유용할 때가 가끔 있습니다 (보통 아직 여러분이 작성하지 않은 코드를 위한 위치 유지자로서 말입니다). 그런 경우, 아무 일도 하지 않는 <span class=code><span class=keyword>pass</span></span> 서술문을 사용하면 됩니다.</p>
+
+
+
+<a name=5></a><br>
+<h3>4.5 대안적 실행</h3>
+<p>
+두 번째 형태의 <span class=code><span class=keyword>if</span></span> 서술문은 대안적 실행입니다. 여기에서는 두 가지 가능성이 있으며 조건에 따라 어떤 가능성이 실행될지 결정됩니다. 구문은 이렇게 보입니다:</p>
+
+
+<p><span class=code><span class=keyword>if</span> x%2 == 0:
+<br>  <span class=keyword>print</span> x, <span class=quote>"is even"</span>
+<br><span class=keyword>else</span>:
+<br>  <span class=keyword>print</span> x, <span class=quote>"is odd"</span>
+<br></span></p>
+
+
+
+<p>
+<span class=code>x</span>를 2로 나눌 때 나머지가 0이면 <span class=code>x</span>는 짝수입니다. 그리고 프로그램은 그 결과에 대한 메시지를 표시합니다. 조건이 거짓이면 두 번째 모둠의 서술문들이 실행됩니다. 조건은 참 아니면 거짓이어야 하므로, 대안들 중 하나는 정확하게 실행됩니다. 그 대안들을 분기(<b>branches</b>)라고 부릅니다. 왜냐하면 그 때문에 실행의 흐름이 나뉘기 때문입니다.</p>
+
+
+
+<p>
+지나는 길에 한 말씀 드리자면, 가끔 숫자의 패리티(짝수 또는 홀수)를 점검할 필요가 있을 경우 이 코드를 함수안에 "포장해" 넣으면 됩니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>printParity</span>(x):
+<br>  <span class=keyword>if</span> x%2 == 0:
+<br>    <span class=keyword>print</span> x, <span class=quote>"is even"</span>
+<br>  <span class=keyword>else</span>:
+<br>    <span class=keyword>print</span> x, <span class=quote>"is odd"</span>
+<br></span></p>
+
+
+
+<p>
+<span class=code>x</span>의 어떤 값에 대해서도 <span class=code>printParity</span>는 적절한 메시지를 표시합니다. 그것을 호출할 때 어떠한 정수 표현식도 인자로 제공할 수 있습니다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt; printParity(17)
+<br>&gt;&gt;&gt; printParity(y+1)
+<br></span></p>
+
+
+
+<a name=6></a><br>
+<h3>4.6 사슬처럼 엮인 조건</h3>
+
+<p>
+어떤 때는 가능성이 두 가지 이상 있으며 분기가 두 가지 이상 필요합니다. 그러한 계산을 표현하는 하나의 방법을 사슬처럼 엮인 조건(<b>chained conditional</b>)이라고 부릅니다:</p>
+
+
+<p><span class=code><span class=keyword>if</span> x < y:
+<br>  <span class=keyword>print</span> x, <span class=quote>"is less than"</span>, y
+<br><span class=keyword>elif</span> x > y:
+<br>  <span class=keyword>print</span> x, <span class=quote>"is greater than"</span>, y
+<br><span class=keyword>else</span>:
+<br>  <span class=keyword>print</span> x, <span class=quote>"and"</span>, y, <span class=quote>"are equal"</span>
+<br></span></p>
+
+
+
+<p><span class=code><span class=keyword>elif</span></span>는 "else if"의 약어입니다. 정확하게 분기가 또 실행될 것입니다. <span class=code><span class=keyword>elif</span></span> 서술문의 개수에는 제한이 없습니다. 그러나 마지막 분기는 반드시 <span class=code><span class=keyword>else</span></span> 서술문이어야 합니다:</p>
+
+
+<p><span class=code><span class=keyword>if</span> choice == <span class=quote>'A'</span>:
+<br>  functionA()
+<br><span class=keyword>elif</span> choice == <span class=quote>'B'</span>:
+<br>  functionB()
+<br><span class=keyword>elif</span> choice == <span class=quote>'C'</span>:
+<br>  functionC()
+<br><span class=keyword>elif</span> choice == <span class=quote>'D'</span>:
+<br>  functionD()
+<br><span class=keyword>else</span>:
+<br>  <span class=keyword>print</span> <span class=quote>"Invalid choice."</span>
+<br></span></p>
+
+
+
+<p>
+각 조건이 순서대로 점검됩니다. 만약 첫 번째 조건이 거짓이면 다음 조건이 점검됩니다 등등. 그 중에 하나가 참이라면 그에 상응하는 분기가 실행되고 그 서술문은 끝납니다. 하나 이상의 분기가 참이라고 할지라도 오직 첫 번째로 참인 분기만 실행됩니다.</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, 이 예제들을 <span class=code>compare(x, y)</span>와 <span class=code>dispatch(choice)</span>라고 부르는 함수에 포장해 넣어 보세요.</i> </p>
+
+<a name=7></a><br>
+<h3>4.7 내포된 조건</h3>
+<p>
+하나의 조건은 또 다른 조건안에 내포될 수도 있습니다. 삼중 분기 예제는 다음과 같이 작성할 수 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>if</span> x == y:
+<br>  <span class=keyword>print</span> x, <span class=quote>"and"</span>, y, <span class=quote>"are equal"</span>
+<br><span class=keyword>else</span>:
+<br>  <span class=keyword>if</span> x < y:
+<br>    <span class=keyword>print</span> x, <span class=quote>"is less than"</span>, y
+<br>  <span class=keyword>else</span>:
+<br>    <span class=keyword>print</span> x, <span class=quote>"is greater than"</span>, y
+<br></span></p>
+
+<p>
+바깥쪽의 조건에는 분기가 두 개 있습니다. 첫 번째 분기에는 간단한 결과출력 서술문이 있습니다. 두 번째 분기에는 또 다른 <span class=code><span class=keyword>if</span></span> 서술문이 있습니다. 여기에서 이 서술문에는 분기가 두 개 있습니다. 두 개의 분기 모두 결과출력 서술문입니다. 물론 그들 역시 조건적 서술문일 수 있습니다.</p>
+<p>
+서술문을 들여쓰기 하기 때문에 구조가 잘 보임에도 불구하고 조건을 내포하면 재빨리 읽기가 아주 어려워집니다. 일반적으로 될 수 있으면 피하는 편이 좋습니다.</p>
+<p>
+논리적 연산자들은 가끔 내포된 조건 서술문들을 간결하게 하는 방법을 제공합니다. 예를 들어, 다음의 코드를 한 개의 조건을 사용하여 다시 작성할 수 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>if</span> 0 < x:
+<br>  <span class=keyword>if</span> x < 10:
+<br>    <span class=keyword>print</span> <span class=quote>"x is a positive single digit."</span>
+<br></span></p>
+
+
+
+<p>
+<span class=code><span class=keyword>print</span></span> 서술문은 두 조건 모두를 통과시킬 때만 실행됩니다. 그래서 <span class=code><span class=keyword>and</span></span> 연산자를 사용할 수 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>if</span> 0 < x <span class=keyword>and</span> x < 10:
+<br>  <span class=keyword>print</span> <span class=quote>"x is a positive single digit."</span>
+<br></span></p>
+
+
+
+<p>
+이러한 종류의 조건들은 많이 사용됩니다. 그래서 파이썬은 수학적 표기법과 비슷한 구문을 대안으로 제공합니다:</p>
+
+
+<p><span class=code><span class=keyword>if</span> 0 < x < 10:
+<br>  <span class=keyword>print</span> <span class=quote>"x is a positive single digit."</span>
+<br></span></p>
+
+
+
+<p>
+이 조건은 복합 불리언 표현식 그리고 내포된 조건문과 의미구조적으로 똑 같습니다.</p>
+
+<a name=8></a><br>
+<h3>4.8 <span class=code><span class=keyword>return</span></span> 서술문</h3>
+<p>
+<span class=code><span class=keyword>return</span></span> 서술문으로 함수의 실행을 그 끝에 다다르기 전에 끝낼 수 있습니다. 이 서술문을 사용하는 한가지 이유는 에러 조건을 탐지할 때입니다:</p>
+
+
+<p><span class=code><span class=keyword>import</span> math
+<br>
+<br><span class=keyword>def</span> <span class=function>printLogarithm</span>(x):
+<br>  <span class=keyword>if</span> x <= 0:
+<br>    <span class=keyword>print</span> <span class=quote>"Positive numbers only, please."</span>
+<br>    <span class=keyword>return</span>
+<br>
+<br>  result = math.log(x)
+<br>  <span class=keyword>print</span> <span class=quote>"The log of x is"</span>, result
+<br></span></p>
+
+
+
+<p>
+<span class=code>printLogarithm</span> 함수는 <span class=code>x</span>라는 이름의 매개변수를 취합니다. 이 함수는 제일 먼저 <span class=code>x</span>가 0 이하인지 점검합니다. 그렇다면 에러 메시지를 표시하고 <span class=code><span class=keyword>return</span></span>을 사용하여 함수를 빠져 나옵니다. 실행의 흐름은 즉시 호출자에게 되돌아 갑니다. 그리고 함수의 나머지 줄들은 실행되지 않습니다.</p>
+
+<p>
+math 모듈의 함수를 사용하려면 그것을 반입해야 한다는 것을 기억하세요.</p>
+
+<a name=9></a><br>
+<h3>4.9 재귀(Recursion)</h3>
+<p>
+함수가 함수를 호출하는 것이 적법하다고 말하였습니다. 그리고 그러한 예를 여럿 보았습니다. 그러나 함수가 자신을 호출하는 것도 또한 가능하다는 사실은 언급하지 않았습니다. 왜 그것이 좋은 것인지는 이해가 안 갈지도 모릅니다. 그러나 그것은 프로그램이 할수 있는 가장 신비하고 흥미로운 것들 중의 하나임은 분명합니다.</p>
+
+<p>
+예를 들어, 다음의 함수를 보세요:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>countdown</span>(n):
+<br>  <span class=keyword>if</span> n == 0:
+<br>    <span class=keyword>print</span> <span class=quote>"Blastoff!"</span>
+<br>  <span class=keyword>else</span>:
+<br>    <span class=keyword>print</span> n
+<br>    countdown(n-1)
+<br></span></p>
+
+
+
+<p>
+<span class=code>countdown</span>은 매개변수, <span class=code>n</span>이 양의 정수일 것이라고 예상합니다. 만약 <span class=code>n</span>이 0이면 다음 단어 "Blastoff(발사)!"를 출력하고, 그렇지 않으면 <span class=code>n</span>을 출력하고 <span class=code>countdown</span>이라는 이름의 함수(자기 자신)를 호출하여 <span class=code>n-1</span>을 인자로 건네줍니다.</p>
+
+<p>
+만약 이 함수를 이렇게 호출하면 무슨 일이 일어날까?:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; countdown(3)
+<br></span></p>
+
+
+
+<p>
+<span class=code>countdown</span>의 실행은 <span class=code>n=3</span>과 함께 시작합니다, 그리고 <span class=code>n</span>은 0이 아니므로, 값 3을 출력하고, 그리고 나서 자신을 호출합니다...</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"><span class=code>countdown</span>의 실행은 <span class=code>n=2</span>와 함께 시작합니다, 그리고 <span class=code>n</span>은 0이 아니므로, 값 2를 호출하고, 그리고 나서 자신을 호출합니다...
+
+<p style="margin-left: 30px; margin-right: 30px;"><span class=code>countdown</span>의 실행은 <span class=code>n=1</span>과 함께 시작합니다, 그리고 <span class=code>n</span>은 0이 아니므로, 값 1을 출력하고, 그리고 나서 자신을 호출합니다...
+
+<p style="margin-left: 30px; margin-right: 30px;"><span class=code>countdown</span>의 실행은 <span class=code>n=0</span>과 함께 시작합니다, 그리고 <span class=code>n</span>는 0이므로, 단어, "Blastoff(발사)!"를 출력하고 그리고 나서 반환됩니다. </p>
+
+<span class=code>n=1</span>을 가진 <span class=code>countdown</span>이 반환됩니다.</p>
+
+<span class=code>n=2</span>을 가진 <span class=code>countdown</span>이 반환됩니다.</p>
+
+<p>
+<span class=code>n=3</span>을 가진 <span class=code>countdown</span>이 반환됩니다.</p>
+
+<p>
+이제 <span class=code>__main__</span>에 돌아와 있습니다 (참 짧은 여행이었군요). 그래서 전체 출력결과는 이렇게 보입니다:</p>
+
+
+<p><span class=code>3
+<br>2
+<br>1
+<br>Blastoff!
+<br></span></p>
+
+
+
+<p>두 번째 예로서, <span class=code>newLine</span> 함수와 <span class=code>threeLines</span> 함수를 다시 살펴 보겠습니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>newline</span>():
+<br>  <span class=keyword>print
+<br>
+<br>def</span> threeLines():
+<br>  newLine()
+<br>  newLine()
+<br>  newLine()
+<br></span></p>
+
+<p>
+이러한 작업에도 불구하고 두 개의 새줄(newlines)을 원하거나 106개의 새줄을 원한다면 별 도움이 되지 않을 것입니다. 더 좋은 대안은 이렇게 될 것입니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>nLines</span>(n):
+<br>  <span class=keyword>if</span> n > 0:
+<br>    <span class=keyword>print</span>
+<br>    nLines(n-1)
+<br></span></p>
+
+
+
+<p>
+이 프로그램은 <span class=code>countdown</span>과 유사합니다; <span class=code>n</span>이 0보다 크다면, 새줄(newline) 한 개를 출력하고 자신을 호출하여 새줄 <span class=code>n-1</span>개를 추가로 출력합니다. 그런식으로, 새줄의 총 개수는 <span class=code>1 + (n - 1)</span>이며, 수치를 정확하게 계산했다면, 이것은 <span class=code>n</span>이 됩니다.</p>
+
+<p>
+자신을 호출하는 함수의 처리과정을 재귀(<b>recursion</b>)라고 부릅니다. 그리고 그러한 함수들을 재귀적(recursive)이라고 말합니다.</p>
+
+
+
+<a name=10></a><br>
+<h3>4.10 재귀 함수용 스택 다이어그램</h3>
+<p>
+<a href="chap03.htm#11">섹션 3.11</a>에서는 스택 다이어그램을 사용하여 함수 호출을 하는 동안의 함수의 상태를 표현했습니다. 스택 다이어그램이 재귀적인 함수를 이해하는데 도움을 줄 수 있습니다.</p>
+<p>
+함수가 호출될 때마다, 파이썬은 새로운 함수틀(frame)을 생성합니다. 여기에는 함수의 지역 변수들과 매개변수들이 있습니다. 재귀적인 함수는 스택에 하나 이상의 틀(frame)이 동시에 있을 수 있습니다.</p>
+<p>
+다음 그림은 <span class=code>n = 3</span>으로 호출된 <span class=code>countdown</span>에 대한 스택 다이어그램을 보여줍니다:</p>
+
+<p align="center"><img src="./illustrations/stack2.png" ></p>
+
+<p>
+예와 같이, 스택의 꼭대기는 <span class=code>__main__</span>을 위한 틀입니다. 이 틀은 <span class=code>__main__</span>에 어떤 변수도 만들지 않았고 거기에 어떤 매개변수도 건네주지 않았으므로 비어 있습니다.</p>
+
+<p>
+<span class=code>countdown</span> 틀(frames) 네 개는 매개변수 <span class=code>n</span>에 대하여 서로 다른 값을 가집니다. 스택의 바닥은, 여기에는 <span class=code>n=0</span>인데, 기저 케이스(<b>base case</b>)라고 부릅니다. 기저 케이스는 재귀 호출을 만들지 않습니다, 그래서 더 이상 틀이 없습니다.</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, <span class=code>n=4</span>로 호출되는 <span class=code>nLines</span>에 대한 스택 다이어그램을 그려 보세요.</i> </p>
+
+
+
+<a name=11></a><br>
+<h3>4.11 무한 재귀(Infinite recursion)</h3>
+
+<p>
+만약 재귀가 기저 케이스에 절대로 다다르지 않는다면 계속해서 재귀 호출을 영원히 만듭니다. 프로그램은 절대로 끝나지 않습니다. 이것은 무한 재귀(<b>infinite recursion</b>)라고 부릅니다. 일반적으로 그것은 좋은 생각이 아니라고 여겨집니다. 다음은 무한 재귀를 하는 작은 프로그램입니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>recurse</span>():
+<br>  recurse()
+<br></span></p>
+
+
+
+<p>
+대부분의 프로그래밍 환경에서 무한 재귀를 가진 프로그램은 실제로 영원히 실행되지는 않습니다. 파이썬은 최대 재귀 깊이에 다다르면 에러 메시지를 보고합니다:</p>
+
+
+<p><span class=code>  File <span class=quote>"<stdin>"</span>, line 2, <span class=keyword>in</span> recurse
+<br>  (98 repetitions omitted)
+<br>  File <span class=quote>"<stdin>"</span>, line 2, <span class=keyword>in</span> recurse
+<br>RuntimeError: Maximum recursion depth exceeded
+<br></span></p>
+
+
+
+<p>
+이 역추적은 앞 장에서 본 것보다 약간 더 깁니다. 에러가 발생하면 스택에는 재귀(<span class=code>recurse</span>) 프레임이 100개가 있습니다!</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, 무한 재귀를 가진 함수 하나를 작성해 보세요. 그리고 그것을 파이썬 인터프리터에서 실행해 보세요.</i> </p>
+
+<a name=12></a><br>
+<h3>4.12 키보드 입력</h3>
+<p>
+지금까지 작성해 본 프로그램들은 사용자로부터 입력을 받아들이지 않는다는 점에서 약간 덜 다듬어졌습니다. 그 함수들은 매번 같은 일을 할 뿐입니다.</p>
+<p>
+파이썬은 키보드로부터 입력을 얻는 내장 함수를 제공합니다. 가장 간단한 함수는 <span class=code>raw_input</span>이라고 부릅니다. 이 함수가 호출되면, 프로그램은 멈추고 사용자가 무언가를 타자하기를 기다립니다. 사용자가 리턴(Return)키 또는 엔터(Enter)키를 누르면, 프로그램은 재개되고 <span class=code>raw_input</span>은 사용자가 타자한 것을 문자열(<span class=code>string</span>)로 돌려줍니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; input = raw_input ()
+<br>What are you waiting <span class=keyword>for</span>?
+<br>&gt;&gt;&gt; <span class=keyword>print</span> input
+<br>What are you waiting <span class=keyword>for</span>?
+<br></span></p>
+
+
+
+<p>
+<span class=code>raw_input</span>이 호출되기 전에, 사용자에게 무엇을 입력할지를 알려주는 메시지를 인쇄하는 것이 좋은 생각입니다. 이 메시지를 재촉메시지(<b>prompt</b>)이라고 부릅니다. 재촉메시지를 인자로 <span class=code>raw_input</span>에 공급해 줄 수 있습니다:</p>
+
+
+
+
+<p><span class=code>&gt;&gt;&gt; name = raw_input (<span class=quote>"What...is your name? "</span>)
+<br>What...<span class=keyword>is</span> your name? Arthur, King of the Britons!
+<br>&gt;&gt;&gt; <span class=keyword>print</span> name
+<br>Arthur, King of the Britons!
+<br></span></p>
+
+
+
+<p>
+그 응답이 정수이기를 바란다면, <span class=code>input</span> 함수를 사용하면 됩니다:</p>
+
+
+<p><span class=code>prompt = <span class=quote>"What...is the airspeed velocity of an unladen swallow?\n"</span>
+<br>speed = input(prompt)
+<br></span></p>
+
+
+
+<p>
+사용자가 숫자로된 문자열을 타자하면 그것은 정수로 변환되고 <span class=code>speed</span>에 할당됩니다. 불행하게도 사용자가 숫자가 아닌 문자를 타자하면 프로그램은 충돌합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; speed = input (prompt)
+<br>What...<span class=keyword>is</span> the airspeed velocity of an unladen swallow?
+<br>What do you mean, an African <span class=keyword>or</span> a European swallow?
+<br>SyntaxError: invalid syntax
+<br></span></p>
+
+
+
+<p>
+이러한 종류의 에러를 피하기 위하여 일반적으로 <span class=code>raw_input</span>을 사용하여 문자열을 얻고 그리고 나서 변환함수를 사용하여 다른 유형으로 변환하는 것이 좋은 생각입니다.</p>
+
+<a name=13></a><br>
+<h3>4.13 용어 해설</h3>
+
+<dl>
+
+<dt>나머지 연산자(modulus operator)</dt>
+<dd>연산자, 백분률 기호(<span class=code>%</span>)로 표기되며, 정수에 작동하고 한 숫자를 다른 숫자로 나눌 때 그 나머지를 산출한다.</dd>
+
+<dt>불리언 표현식(boolean expression)</dt>
+<dd>참 또는 거짓 중에 하나인 표현식.</dd>
+
+<dt>비교 연산자(comparison operator)</dt>
+<dd>값 두 개를 비교하는 연산자들중의 하나: <span class=code>==</span>, <span class=code>!=</span>, <span class=code>></span>, <span class=code><</span>, <span class=code>>=</span>, and <span class=code><=</span>.</dd>
+
+<dt>논리 연산자(logical operator)</dt>
+<dd>불리언 표현식들을 묶는 연산자들중의 하나: <span class=code><span class=keyword>and</span></span>, <span class=code><span class=keyword>or</span></span>, and <span class=code><span class=keyword>not</span></span>.</dd>
+
+<dt>조건적 서술문(conditional statement)</dt>
+<dd>어떤 조건에 따라서 실행의 흐름을 제어하는 서술문.</dd>
+
+<dt>조건(condition)</dt>
+<dd>조건 서술문 안에 있는 불리언 표현식으로 어느 분기가 실행될지 결정한다.</dd>
+
+<dt>복합 서술문(compound statement)</dt>
+<dd>머리부와 몸체로 구성된 서술문. 머리부는 쌍점(:)으로 끝난다. 몸체는 머리부에 상대적으로 들여쓰기 된다.</dd>
+
+<dt>구역(block)</dt>
+<dd>같은 들여쓰기를 가지는 연속적인 서술문들의 그룹.</dd>
+
+<dt>몸체(body)</dt>
+<dd>복합 서술문에 있는 구역으로 머리부 다음에 온다.</dd>
+
+<dt>내포(nesting)</dt>
+<dd>한 구조 안에 있는 또 다른 프로그램 구조, 예를 들어, 조건 서술문의 분기 안에 또 다른 조건 서술문이 있는 것과 같은 것.
+</dd>
+
+<dt>재귀(recursion)</dt>
+<dd>현재 실행되고 있는 함수를 호출하는 처리과정.</dd>
+
+<dt>기저 케이스(base case)</dt>
+<dd>재귀 함수에서 재귀 호출을 결과로 하지 않는 조건 서술문의 분기.</dd>
+
+<dt>무한 재귀(infinite recursion)</dt>
+<dd>기저 케이스에 절대로 도달하지 않고 자신을 반복적으로 호출하는 함수. 결국, 무한 재귀는 실행시간 에러를 야기한다.</dd>
+
+<dt>재촉메시지(prompt)</dt>
+<dd>사용자에게 데이타를 입력하라고 말해주는 시각적인 실마리.</dd>
+
+
+
+</dl>
+<h2>연습문제</h2>
+<ol>
+<li><div class="exercise">
+<p>
+다음 숫치 표현식을 머리로 평가해 보라. 다음 파이썬 인터프리터를 사용하여 결과를 점검하라:</p>
+  <ol style="list-style-type: lower-alpha;">
+    <li><code>&gt;&gt;&gt; 5 % 2</code></li>
+    <li><code>&gt;&gt;&gt; 9 % 5</code></li>
+    <li><code>&gt;&gt;&gt; 15 % 12</code></li>
+    <li><code>&gt;&gt;&gt; 12 % 15</code></li>
+    <li><code>&gt;&gt;&gt; 6 % 6</code></li>
+    <li><code>&gt;&gt;&gt; 0 % 7</code></li>
+    <li><code>&gt;&gt;&gt; 7 % 0</code></li>
+  </ol>
+<p>마지막 예에서 무슨 일이 일어나는가?  왜 그런가?  마지막 예를 제외하고 모든 것에 컴퓨터의 응답을 제대로 예측할 수 있었다면, 앞으로 나아갈 시간이다.  그렇지 않다면, 시간을 두고 예제를 보충 연습하라.  나머지 연산자가 어떻게 작동하는지 완전히 이해하여 자신감을 가질 때까지 연습하라.</p>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python">
+if x &lt; y:
+    print x, "is less than", y
+elif x &gt; y:
+    print x, "is greater than", y
+else:
+    print x, "and", y, "are equal"
+</pre>
+이 코드를  <code>compare(x, y)</code>라고 부르는 함수에 싸넣어라(<em>Wrap</em>). <code>compare</code>를 세 번 호출하라: 각각 첫 인자와 두 번째 인자가 작거나 크거나 같도록 말이다.
+</div></li>
+
+<li><div class="exercise">
+<p>
+불리언 표현식을 잘 이해하려면, 진리표를 만들어 보면 도움이 된다. 두 개의 진리 표현식은 진리표가 같으면 <em>논리적으로 동등하다</em>.
+</p>
+<p>
+다음 파이썬 스크립트는 p와 q라는 두 변수의 진리 표현식에 대하여 진리표를 인쇄한다: 
+</p>
+<pre class="python">
+expression = raw_input("Enter a boolean expression in two variables, p and q: ")
+
+print " p      q      %s"  % expression
+length = len( " p      q      %s"  % expression)
+print length*"="
+
+for p in True, False:
+    for q in True, False:
+        print "%-7s %-7s %-7s" % (p, q, eval(expression))
+</pre>
+<p>
+나중에 이 스크립트의 작동방식에 대하여 배운다. 지금은 불리언 표현식에 관하여 배우기 위해 사용한다. 이 프로그램을 이름이 <code>p_and_q.py</code> 파일에 복사하고, 명령어 줄에서 실행하고 다음과 같이: 불리언 표현식을 프롬프트에서 요구하면  <code>p or q</code>를 건네라. 다음과 같이 출력될 것이다:
+</p>
+<pre class="boxed">
+ p      q      p or q
+=====================
+True    True    True   
+True    False   True   
+False   True    True   
+False   False   False
+</pre>
+<p>
+이제 작동 방식을 보았으므로, 함수에 싸서 더 사용하기 쉽게 만들어 보자:
+</p>
+<pre class="python">
+def truth_table(expression):
+    print " p      q      %s"  % expression
+    length = len( " p      q      %s"  % expression)
+    print length*"="
+
+    for p in True, False:
+        for q in True, False:
+            print "%-7s %-7s %-7s" % (p, q, eval(expression))
+</pre>
+<p>
+파이썬 쉘에 반입해서 p와 q에 불리언 표현식이 담긴 문자열을 인자로 하여 <code>truth_table</code>을 호출할 수 있다:
+</p>
+<pre class="python-interpreter">
+&gt;&gt;&gt; from p_and_q import *
+&gt;&gt;&gt; truth_table("p or q")
+ p      q      p or q
+=====================
+True    True    True   
+True    False   True   
+False   True    True   
+False   False   False
+&gt;&gt;&gt;
+</pre>
+<p>
+다음 불리언 표현식으로 <code>truth_table</code> 함수를 호출하여, 매번 산출되는 진리표를 기록하라:
+</p>
+  <ol style="list-style-type: lower-alpha;">
+    <li>not(p or q)</li>
+    <li>p and q</li>
+    <li>not(p and q)</li>
+    <li>not(p) or not(q)</li>
+    <li>not(p) and not(q)</li>
+  </ol> 
+<p>
+이 중 어느 것이 논리적으로 동등한가?
+</p>
+</div></li>
+
+<li><div class="exercise">
+<p>
+다음 표현식을 파이썬 쉘에 입력하라:
+</p>
+<pre class='python'>
+True or False
+True and False
+not(False) and True
+True or 7
+False or 7
+True and 0
+False or 8
+"happy" and "sad"
+"happy" or "sad"
+"" and "sad"
+"happy" and ""
+</pre>
+<p>
+이 결과를 분석하라. 다양한 유형과 논리 연산자의 값에 관하여 무엇을 관찰할 수 있는가?  관찰한 것을 <code>and</code> 표현과과 <code>or</code> 표현식에 관한 간단한 <em>규칙</em>의 형태로 기술할 수 있는가?
+</p>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python">
+if choice == 'a':
+    function_a()
+elif choice == 'b':
+    function_b()
+elif choice == 'c':
+    function_c()
+else:
+    print "Invalid choice."
+</pre>
+<p>
+이 코드를 <code>dispatch(choice)</code>라는 함수에 함수에 싸넣자. 다음 호출되었다는 메시지를 인쇄하도록 <code>function_a</code>와 <code>function_b</code> 그리고 <code>function_c</code>를 정의하자. 예를 들어:
+</p>
+<pre class="python">
+def function_a():
+    print "function_a was called..."
+</pre>
+<p>
+네 개의 함수 (<code>dispatch</code>와 <code>function_a</code> 그리고 <code>function_b</code>와 <code>function_c</code>)를 <code>ch4prob4.py</code>라는 스크립트에 넣자.  이 스크립트의 맨 아래에 <code>dispatch('b')</code>에 대한 호출을 추가하라. 출력은 다음과 같을 것이다:
+</p>
+<pre class="boxed">
+function_b was called...
+</pre>
+<p>
+마지막으로, 사용자가 'a', 'b', 또는 'c'를 입력할 수 있도록 스크립트를 수정하라. 스크립트를 파이썬 쉘에 반입하여 테스트해 보자.
+</p>
+</div></li>
+
+<li><div class="exercise">
+<p>
+이름이 <code>is_divisible_by_3</code>인 함수를 작성하라. 이 함수는 인자로 정수를 하나 취해 인자가 3의 배수이면 "이 숫자는 3으로 나눌 수 있습니다."를 인쇄하고 그렇지 않으면 "이 숫자는 3으로 나눌 수 없습니다."를 인쇄한다.
+</p>
+<p>
+이제 이름이 <code>is_divisible_by_5</code>인 비슷한 함수를 작성하라.
+</p>
+</div></li>
+
+<li><div class="exercise">
+<p>
+앞 연습문제에서 작성한 함수를 이름이 <code>is_divisible_by_n(x, n)</code> 함수로 일반화하라. 이 일반 함수는 두 개의 정수를 인자로 취해 첫 인자가 두 번째 인자로 나뉠 수 있는지 인쇄한다.  이를 이름이 <code>ch04e06.py</code> 파일에 저장하라. 그것을 쉘에 반입해서 시험해 보자. 샘플 세션은 다음과 같이 보일 것이다:
+</p>
+<pre class="python-interpreter">
+&gt;&gt;&gt; from ch04e06 import *
+&gt;&gt;&gt; is_divisible_by_n(20, 4)
+Yes, 20 is divisible by 4
+&gt;&gt;&gt; is_divisible_by_n(21, 8)
+No, 21 is not divisible by 8
+</pre>
+</div></li>
+
+<li><div class="exercise">
+다음 출력결과는 무엇인가?
+<pre class="python">
+if "Ni!":
+    print 'We are the Knights who say, "Ni!"'
+else:
+    print "Stop it! No more of this!"
+
+if 0:
+    print "And now for something completely different..."
+else:
+    print "What's all this, then?"
+</pre>
+
+무슨 일이 일어났는지 그리고 왜 일어났는지 설명하라.
+</div></li>
+
+<li><div class="exercise">
+<code>house.py</code> 이름의 파일에서 다음 gasp 스크립트는 단순한 집을 gasp 캔버스에 그린다:
+
+<pre class="python">
+from gasp import *             # gasp 라이브러리에서 모든 것을 반입한다
+
+begin_graphics()               # 그래픽 갠버스를 연다
+
+Box((20, 20), 100, 100)        # 집
+Box((55, 20), 30, 50)          # 문
+Box((40, 80), 20, 20)          # 왼쪽 창
+Box((80, 80), 20, 20)          # 오른쪽 창
+Line((20, 120), (70, 160))     # 왼쪽 지붕
+Line((70, 160), (120, 120))    # 오른쪽 지붕
+
+pause()                        # 키가 누릴 때까지 캔버스를 열어둔다.
+end_graphics()                 # 캔버스를 닫는다 (스크립트가 여기에서 끝나기 때문에
+                               # 어쨌거나 닫힌다. 그러나 명시적으로
+                               # 지정하는 편이 더 좋다).
+</pre>
+
+<ul>
+  <li>이 스크립트를 실행하고 다음과 같이 보이는 창을 얻는지 확인하라:
+  <br />
+  <img src="illustrations/gasp02.png" alt="Gasp illustration 2" /><br />
+  </li>
+  <li>집 코드를 <code>draw_house()</code>라는 함수에 싸넣어라.</li>
+  <li>이제 이 스크립트를 실행하라. 집이 보이는가? 왜 안 보이는가?</li>
+  <li><code>draw_house()</code>에 대한 호출을 스크립트의 끝에 추가하여
+  집이 화면으로 돌아오도록 하라.</li>
+  <li>함수에 x와 y 매개변수<em>Parameterize</em>를 더하라 -- 그러면 헤더는 <code>def draw_house(x, y):</code>와 같이 보일 것이다. 
+  집의 위치를 캔버스에 건넬 수 있다.</li>
+  <li><code>draw_house</code>를 이용하여 캔버스에 각각 다른 위치에 다섯 개의 집을 지어보라.</li> 
+</ul>
+</div></li>
+</ol>
+
+<p>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap05.htm"><img border="0" alt="Next" src="./images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="./images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap03.htm"><img border="0" alt="Previous" src="./images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="./images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="./images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="./images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="./images/blank.png" ></td>
+  </tr>
+</table>
+<hr>
+
+</body>
+</html>

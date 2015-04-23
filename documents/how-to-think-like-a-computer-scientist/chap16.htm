@@ -1,0 +1,498 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>제 16 장 : 상속(inheritance)</title>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+
+<body>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap17.htm"><img border="0" alt="Next" src="images/next.png"></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png"></a></td>
+    <td width="20" class=head><a href="chap15.htm"><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+
+<h2>제 16 장</h2>
+
+<h1>상속</h1>
+
+
+<a name=1></a><br>
+<h3>16.1 상속</h3>
+<p>
+객체-지향 프로그래밍에 상당히 자주 관련되는 프로그래밍 사양은 <b>상속(inheritance)</b>입니다. 상속이란 기존의 클래스를 수정하여 새로운 클래스를 정의하는 능력입니다.</p>
+<p>
+이러한 특징에서 얻을 수 있는 기본적인 이점은 기존의 클래스를 변경하지 않고서도 새로운 메쏘드들을 클래스에 추가할 수 있다는 것입니다. 새로운 클래스가 기존 클래스의 모든 메쏘드들을 물려받기 때문에 "상속(inheritance)"이라고 부릅니다. 이러한 비유법을 확장하여, 기존 클래스를 종종 <b>부모(parent)</b> 클래스라고 부릅니다. 새로운 클래스는 <b>자손(child)</b> 클래스나 때로는 하위클래스(subclass)라고 부르기도 합니다.</p>
+<p>
+상속은 강력한 특징입니다. 어떤 프로그램들은 상속이 없다면 복잡해졌을 테지만 상속을 사용하면 간결하고 간단하게 작성될 수 있습니다. 또, 상속은 코드 재사용을 촉진할 수 있습니다. 왜냐하면 부모 클래스들의 행위를 수정할 필요없이 알맞게 재단할 수 있기 때문입니다. 어떤 경우에는 상속 구조가 문제의 본래 구조를 반영하기 때문에 프로그램을 더 쉽게 이해할 수 있습니다.</p>
+<p>
+반면에, 상속때문에 프로그램을 읽기가 어려워질 수 있습니다. 메쏘드가 요청될 때 그의 정의를 어디에서 발견해야할 지가 때로는 분명하지 않습니다. 해당 코드가 여러 모듈에 흩어져 있을 수 있습니다. 또, 상속을 사용하여 할 수 있는 많은 것들이 그것을 사용하지 않아도 (사용했을 때 만큼이나) (또는 약간 더) 우아하게 작성될 수 있습니다. 문제의 본래 구조가 상속에 관련되지 않는다면, 이러한 스타일의 프로그래밍은 이익보다는 손해가 될 수 있습니다.</p>
+<p>
+이 장에서는 노처녀(Old Maid) 카드 게임을 실행하는 프로그램의 일부로서 상속을 사용하는 법을 보여 드리겠습니다. 우리의 목표중 하나는 다른 카드 게임을 구현할 수 있도록 재사용 될 수 있는 코드를 작성하는 것입니다.</p>
+
+<a name=2></a><br>
+<h3>16.2 카드 한 패</h3>
+<p>
+카드 게임이라면 거의 대부분 한 패의 카드를 표현할 필요가 있습니다. 물론 패는 채와 유사합니다. 둘 다 한 모둠의 카드로 구성되며 둘 다 모두 카드를 추가하고 제거하는 것과 같은 처리들을 요구합니다. 또 채와 패 모두를 뒤섞을 수 있는 능력을 원할 수도 있습니다.</p>
+<p>
+패는 또한 채와 다릅니다. 게임에 따라서 채에는 아무 의미도 없는 어떤 처리를 패에 수행하기를 원할 수 있습니다. 예를 들어, 포커에서 패를 분류(스트레이트, 플러시, 등등)하거나 또는 그것을 다른 패와 비교할 수 있습니다. 브리지에서는 패 끗수 선언을 하기 위하여 패에 대하여 점수를 계산하기를 원할 수 있습니다.</p>
+<p>
+이러한 상황에서 상속을 사용하면 좋습니다. <span class=code>패(Hand)</span>가 <span class=code>채(Deck)</span>의 하위클래스라면 패는 <span class=code>채(Deck)</span>가 가진 메쏘드를 모두 가질 것이고 새로 메쏘드를 더 추가할 수 있습니다.</p>
+<p>
+클래스 정의에서 부모 클래스의 이름은 괄호 안에 나타납니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Hand(Deck):
+<br>&nbsp; <span class=keyword>pass</span>
+<br></span></p>
+
+<p>
+이 서술문은 새로운 <span class=code>Hand</span> 클래스가 기존의 <span class=code>Deck</span> 클래스로부터 상속되었음을 보여줍니다.</p>
+<p>
+<span class=code>Hand</span> 구성자는 패에 대한 속성들을 초기화합니다. 그 속성은 <span class=code>name</span>과 <span class=code>cards</span>입니다. 문자열 <span class=code>name</span>은 이 패를 구별하여 줍니다. 아마도 그 패를 가지고 있는 사람의 이름에 따라서 구별하여 주겠지요.  <span class=code>name</span>은 빈 문자열을 기본 값으로 가지는 선택적인 매개변수입니다. <span class=code>cards</span>는 손에 있는 카드의 목록으로서, 빈 리스트로 초기화됩니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Hand(Deck):
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__init__</span>(self, name=<span class=quote>""</span>):
+<br>&nbsp; &nbsp; self.cards = []
+<br>&nbsp; &nbsp; self.name = name
+<br></span></p>
+
+<p>
+어떤 카드게임도 마찬가지로 채로부터 카드를 제거하고 추가하는 것이 필요합니다. 카드를 제거하는 것은 이미 고려가 되어 있는데, <span class=code>Hand</span>가 <span class=code>Deck</span>으로부터 <span class=code>removeCard</span>를 상속받았기 때문입니다. 그러나 <span class=code>addCard</span>는 작성할 필요가 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Hand(Deck):
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>addCard</span>(self,card) :
+<br>&nbsp; &nbsp; self.cards.append(card)
+<br></span></p>
+
+<p>
+생략부호는 다른 메쏘드들을 생략했다는 것을 나타냅니다. 리스트 메쏘드 <span class=code>append</span>는 새로운 카드를 카드 리스트의 마지막에 추가합니다.</p>
+
+<a name=3></a><br>
+<h3>16.3 카드를 나누어 주기</h3>
+<p>
+이제 <span class=code>Hand</span> 클래스를 가지고 있으므로 카드들을 <span class=code>Deck</span>에서 꺼내어 손에 나누어 주고 싶습니다.  이 메쏘드가 <span class=code>Hand</span> 클래스로 들어가야 할지 또는 <span class=code>Deck</span> 클래스로 들어가야 할지는 명확하지 않지만 한 개의 채와 여러 패에 대하여 처리를 하므로 <span class=code>Deck</span>에 놓는 것이 더 자연스럽습니다.</p>
+<p>
+<span class=code>deal</span>은 상당히 일반적이어야 합니다. 왜냐하면 게임마다 서로 요구조건이 다를 것이기 때문입니다.  전체 채를 한꺼번에 다 나누어 주고 싶을 수도 있고, 각각의 패에 하나의 카드를 나누어 주고 샆을 수도 있습니다.</p>
+<p>
+<span class=code>deal</span>은 두 개의 매개변수를 가지는데, 패들을 담은 리스트 (또는 터플)과 나누어 줄 카드의 전체 개수입니다.  만약 채에 충분한 카드가 없다면, 그 메쏘드는 모든 카드를 나누어 주고 멈춥니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Deck :
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>deal</span>(self, hands, nCards=999):
+<br>&nbsp; &nbsp; nHands = len(hands)
+<br>&nbsp; &nbsp; <span class=keyword>for</span> i <span class=keyword>in</span> range(nCards):
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>if</span> self.isEmpty(): <span class=keyword>break</span>&nbsp; &nbsp; <span class=comment># 카드가 떨어지면 멈춘다.
+</span><br>&nbsp; &nbsp; &nbsp; card = self.popCard()&nbsp; &nbsp; &nbsp; &nbsp;<span class=comment># 제일 위의 카드를 택한다.
+</span><br>&nbsp; &nbsp; &nbsp; hand = hands[i % nHands]&nbsp; &nbsp; <span class=comment># 다음 차례는 누구인가?
+</span><br>&nbsp; &nbsp; &nbsp; hand.addCard(card)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class=comment># 패에 카드를 추가한다.
+</span><br></span></p>
+
+<p>
+두 번째 매개변수, <span class=code>nCards</span>는 선택적입니다; 기본으로 설정된 값은 상당히 큰 숫자인데, 이것은 곧 채 안에 있는 모든 카드가 확실하게 처리될 것이라는 것을 뜻합니다.</p>
+<p>
+회돌이 변수 <span class=code>i</span>는 0에서부터 <span class=code>nCards-1</span>까지 증가합니다. 회돌이를 돌 때마다, 리스트 메쏘드 <span class=code>pop</span>을 사용하여 카드가 한 장씩 제거됩니다. <span class=code>pop</span> 메쏘드는 리스트에 있는 가장 마지막 항목을 반환하고 제거합니다.</p>
+<p>
+나머지 연산자 (<span class=code>%</span>)를 이용하면 원형 분배 방식으로 (한 패에 한 번에 하나씩) 카드를 나누어 줄 수 있습니다.  <span class=code>i</span>가 리스트에 있는 패들의 개수와 같게 되면 표현식 <span class=code>i % nHands</span>는 돌돌 말려 리스트의 처음으로 돌아 갑니다 (index 0).</p>
+
+<a name=4></a><br>
+<h3>16.4 패를 출력하기</h3>
+<p>
+패의 내용물을 출력하기 위해 <span class=code>printDeck</span>과 <span class=code>Deck</span>으로 부터 상속된 <span class=code>__str__</span> 메쏘드를 이용할 수 있습니다.  예를 들어:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; deck = Deck()
+<br>&gt;&gt;&gt; deck.shuffle()
+<br>&gt;&gt;&gt; hand = Hand(<span class=quote>"frank"</span>)
+<br>&gt;&gt;&gt; deck.deal([hand], 5)
+<br>&gt;&gt;&gt; <span class=keyword>print</span> hand
+<br>Hand frank contains
+<br>2 of Spades
+<br> 3 of Spades
+<br>&nbsp; 4 of Spades
+<br>&nbsp; &nbsp;Ace of Hearts
+<br>&nbsp; &nbsp; 9 of Clubs
+<br></span></p>
+
+<p>
+기가 막힌 패는 아닙니다만, 스트레이트 플러시의 가능성을 가진 패이군요.</p>
+<p>
+비록 기존의 메쏘드들을 상속받는 것이 편리하기는 하지만, <span class=code>Hand</span> 객체에는 출력을 할 때 포함하기를 원하는 추가적인 정보가 있습니다. 그렇게 하기 위해, <span class=code>__str__</span> 메쏘드를 <span class=code>Hand</span> 클래스에 제공할 수 있습니다. <span class=code>Hand</span> 클래스는 <span class=code>Deck</span> 클래스에 있는 <span class=code>__str__</span> 메쏘드를 덮어 씁니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Hand(Deck)
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__str__</span>(self):
+<br>&nbsp; &nbsp; s = <span class=quote>"Hand "</span> + self.name
+<br>&nbsp; &nbsp; <span class=keyword>if</span> self.isEmpty():
+<br>&nbsp; &nbsp; &nbsp; s = s + <span class=quote>" is empty\n"</span>
+<br>&nbsp; &nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; &nbsp; s = s + <span class=quote>" contains\n"</span>
+<br>&nbsp; &nbsp; <span class=keyword>return</span> s + Deck.__str__(self)
+<br></span></p>
+
+<p>
+초기에 <span class=code>s</span>는 패를 구별하는 문자열입니다. 패가 비어 있다면 프로그램은 <span class=code><span class=keyword>is</span> empty</span>라는 단어들을 추가하고 <span class=code>s</span>를 반환합니다.</p>
+<p>
+그렇지 않으면, 프로그램은 <span class=code>contains</span>라는 단어와 <span class=code>Deck</span>의 문자열 표현을 추가합니다. 이 표현은 <span class=code>Deck</span> 클래스의 <span class=code>self</span>에 <span class=code>__str__</span> 메쏘드를 요청하여 계산됩니다.</p>
+<p>
+현재의 <span class=code>Hand</span>를 참조하는 <span class=code>self</span>를 <span class=code>Deck</span> 메쏘드에 보내는 것이 이상하게 느껴질지도 모르겠습니다. <span class=code>Hand</span>가 일종의 <span class=code>Deck</span>라는 사실을 기억하기 전까지는 말이지요. <span class=code>Hand</span> 객체는 <span class=code>Deck</span> 객체가 할 수 있는 모든 것을 할 수 있습니다. 그래서 <span class=code>Hand</span>를 <span class=code>Deck</span> 메쏘드에 보내는 것은 적법합니다.</p>
+<p>
+일반적으로 부모 클래스의 실체 대신에 하위클래스의 실체를 사용하는 것은 항상 적법합니다.</p>
+
+<a name=5></a><br>
+<h3>16.5 <span class=code>CardGame</span> 클래스</h3>
+
+<p>
+<span class=code>CardGame</span> 클래스는 모든 게임에 공통적인 일들을 처리합니다. 채를 생성하고 그것을 뒤섞는 것과 같은 기본적으로 자질구레한 일들을 처리합니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> CardGame:
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__init__</span>(self):
+<br>&nbsp; &nbsp; self.deck = Deck()
+<br>&nbsp; &nbsp; self.deck.shuffle()
+<br></span></p>
+
+<p>
+여기에서 초기화 메쏘드가 속성들을 초기화하는 수준을 넘어서서 의미있는 계산을 수행하는 첫 번째 예를 봅니다.</p>
+<p>
+특별한 게임을 구현하기 위해 <span class=code>CardGame</span>으로부터 상속을 받을 수 있으며 새로운 게임에다 여러 특징을 추가할 수 있습니다. 한 예로서 노처녀(Old Maid) 게임을 흉내내는 프로그램을 작성해 보겠습니다.</p>
+<p>
+노처녀(Old Maid)게임의 목적은 손에서 카드를 제거하는 것입니다. 계급과 색상을 기준으로 카드가 일치하면 카드를 제거합니다. 예를 들어, 클럽 4는 스페이드 4와 일치하는데 두 벌 모두 검정색이기 때문입니다. 하트 잭은 다이아몬드 잭과 일치하는데 둘 다 빨간색이기 때문입니다.</p>
+<p>
+게임을 시작하기 위해 스페이드 퀸이 일치하지 않도록 클럽 퀸이 채에서 제거됩니다. 52 개의 나머지 카드는 원형 분배 방식으로 나누어집니다. 나누어주기가 끝나면 모든 선수들은 가능한 한 많이 카드를 일치시켜서 버립니다.</p>
+<p>
+더 이상 일치되는 카드가 없으면 놀이가 시작됩니다. 이번에는 여전히 카드를 가지고 있는 왼쪽으로 가장 가까운 동료로부터 (보지 않고서) 각 선수가 카드 하나를 집어 듭니다. 선택된 카드가 그 선수의 패에 있는 카드와 일치하면 그 쌍은 제거됩니다. 그렇지 않으면, 그 카드는 그 선수의 패에 추가됩니다. 결국 모든 가능한 일치가 이루어지고, 패자의 패에는 스페이드 퀸만이 남습니다.</p>
+
+<p>
+여기에서는 컴퓨터로 게임을 시뮬에이션하면서 컴퓨터가 모든 패들을 칩니다. 불행하게도, 실제 게임 같은 어떤 느낌이 없습니다. 실제 게임이라면 노처녀(Old Maid)게임을 하는 선수는 동료가 그 카드를 선택하도록 어떤 노력을 합니다. 그 카드를 더욱 눈에 띄게 보여주기도 하며 또는 더 눈에 띄게 보여주기에 실패하기도 하고 심지어 그 카드를 더 눈에 띄게 보여주지 않는데에 실패하기도 합니다. 컴퓨터는 그저 동료의 카드를 무작위로 선택합니다.</p>
+
+<a name=6></a><br>
+<h3>16.6 <span class=code>OldMaidHand</span> 클래스</h3>
+<p>
+노처녀(Old Maid) 게임을 놀기 위하여 한 패는 <span class=code>Hand</span>의 일반적인 능력을 넘어서는 어떤 능력들을 요구합니다. <span class=code>OldMaidHand</span>라는 클래스를 새롭게 정의해 보겠습니다.  이 새로운 클래스는 <span class=code>Hand</span>로부터 상속을 받아서 <span class=code>removeMatches</span>라고 부르는 메쏘드를 추가적으로 제공합니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> OldMaidHand(Hand):
+<br>&nbsp; <span class=keyword>def</span> <span class=function>removeMatches</span>(self):
+<br>&nbsp; &nbsp; count = 0
+<br>&nbsp; &nbsp; originalCards = self.cards[:]
+<br>&nbsp; &nbsp; <span class=keyword>for</span> card <span class=keyword>in</span> originalCards:
+<br>&nbsp; &nbsp; &nbsp; match = Card(3 - card.suit, card.rank)
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>if</span> match <span class=keyword>in</span> self.cards:
+<br>&nbsp; &nbsp; &nbsp; &nbsp; self.cards.remove(card)
+<br>&nbsp; &nbsp; &nbsp; &nbsp; self.cards.remove(match)
+<br>&nbsp; &nbsp; &nbsp; &nbsp; <span class=keyword>print</span> <span class=quote>"Hand %s: %s matches %s"</span> % (self.name,card,match)
+<br>&nbsp; &nbsp; &nbsp; &nbsp; count = count + 1
+<br>&nbsp; &nbsp; <span class=keyword>return</span> count
+<br></span></p>
+
+<p>
+카드의 리스트를 복사하면서 시작합니다. 그래서 원본으로부터 카드들을 제거하면서 그 복사본을 순회할 수 있습니다. <span class=code>self.cards</span>는 회돌이 안에서 변경되므로 그것을 사용하여 순회를 제어하면 안됩니다. 파이썬은 변경되고 있는 리스트를 순회하게 되면 상당한 혼란에 빠질 수 있습니다!</p>
+<p>
+패에 있는 각 카드에 대하여 일치하는 카드가 무엇인지를 알아보고 그것을 찾아 갑니다. 일치된 카드는 계급이 같고 색깔이 같지만 벌이 다른 카드입니다. 다음의 표현식 <span class=code>3 - card.suit</span>는 클럽(suit 0)을 스페이드(suit 3)로 바꾸고 다이아몬드(suit 1)을 하트(suit 2)로 바꿉니다. 정반대의 처리도 역시 작동한다는 것에 대해 틀림없이 만족하리라고 생각합니다. 일치된 카드가 패에도 있다면 두 카드는 제거됩니다.</p>
+
+<p>다음의 예제는 <span class=code>removeMatches</span>를 사용하는 법을 보여줍니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; game = CardGame()
+<br>&gt;&gt;&gt; hand = OldMaidHand(<span class=quote>"frank"</span>)
+<br>&gt;&gt;&gt; game.deck.deal([hand], 13)
+<br>&gt;&gt;&gt; <span class=keyword>print</span> hand
+<br>Hand frank contains
+<br>Ace of Spades
+<br> 2 of Diamonds
+<br>&nbsp; 7 of Spades
+<br>&nbsp; &nbsp;8 of Clubs
+<br>&nbsp; &nbsp; 6 of Hearts
+<br>&nbsp; &nbsp; &nbsp;8 of Spades
+<br>&nbsp; &nbsp; &nbsp; 7 of Clubs
+<br>&nbsp; &nbsp; &nbsp; &nbsp;Queen of Clubs
+<br>&nbsp; &nbsp; &nbsp; &nbsp; 7 of Diamonds
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;5 of Clubs
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Jack of Diamonds
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;10 of Diamonds
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 10 of Hearts
+<br>
+<br>&gt;&gt;&gt; hand.removeMatches()
+<br>Hand frank: 7 of Spades matches 7 of Clubs
+<br>Hand frank: 8 of Spades matches 8 of Clubs
+<br>Hand frank: 10 of Diamonds matches 10 of Hearts
+<br>&gt;&gt;&gt; <span class=keyword>print</span> hand
+<br>Hand frank contains
+<br>Ace of Spades
+<br> 2 of Diamonds
+<br>&nbsp; 6 of Hearts
+<br>&nbsp; &nbsp;Queen of Clubs
+<br>&nbsp; &nbsp; 7 of Diamonds
+<br>&nbsp; &nbsp; &nbsp;5 of Clubs
+<br>&nbsp; &nbsp; &nbsp; Jack of Diamonds
+<br></span></p>
+
+<p>
+<span class=code>OldMaidHand</span> 클래스에 <span class=code>__init__</span> 메쏘드가 전혀 없다는 것을 주목하세요. <span class=code>__init__</span> 메쏘드는 <span class=code>Hand</span> 클래스로부터 상속 받습니다.</p>
+
+<a name=7></a><br>
+<h3>16.7 <span class=code>OldMaidGame</span> 클래스</h3>
+<p>
+이제 게임 그 자체에 관심을 돌릴 수 있습니다. <span class=code>OldMaidGame</span>은 <span class=code>CardGame</span>의 하위클래스로서 <span class=code>play</span>라고 부르는 새로운 메쏘드를 가집니다. 이 메쏘드는 선수 목록을 매개변수로 취합니다.</p>
+<p>
+<span class=code>__init__</span>이 <span class=code>CardGame</span>으로부터 상속되었으므로 새로운 <span class=code>OldMaidGame</span> 객체는 새롭게 섞여진 채 하나를 담고 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> OldMaidGame(CardGame):
+<br>&nbsp; <span class=keyword>def</span> <span class=function>play</span>(self, names):
+<br>&nbsp; &nbsp; <span class=comment># 클럽 퀸을 제거한다.
+</span><br>&nbsp; &nbsp; self.deck.removeCard(Card(0,12))
+<br>
+<br>&nbsp; &nbsp; <span class=comment># 선수마다 패를 만들어준다.
+</span><br>&nbsp; &nbsp; self.hands = []
+<br>&nbsp; &nbsp; <span class=keyword>for</span> name <span class=keyword>in</span> names :
+<br>&nbsp; &nbsp; &nbsp; self.hands.append(OldMaidHand(name))
+<br>
+<br>&nbsp; &nbsp; <span class=comment># 카드를 분배한다.
+</span><br>&nbsp; &nbsp; self.deck.deal(self.hands)
+<br>&nbsp; &nbsp; <span class=keyword>print</span> <span class=quote>"---------- Cards have been dealt"</span>
+<br>&nbsp; &nbsp; self.printHands()
+<br>
+<br>&nbsp; &nbsp; <span class=comment># 최초 일치된 카드들을 제거한다.
+</span><br>&nbsp; &nbsp; matches = self.removeMatches()
+<br>&nbsp; &nbsp; <span class=keyword>print</span> <span class=quote>"---------- Matches discarded, play begins"</span>
+<br>&nbsp; &nbsp; self.printHands()
+<br>
+<br>&nbsp; &nbsp; <span class=comment># 50장의 카드가 모두 일치할 때까지 논다.
+</span><br>&nbsp; &nbsp; turn = 0
+<br>&nbsp; &nbsp; numHands = len(self.hands)
+<br>&nbsp; &nbsp; <span class=keyword>while</span> matches &lt; 25:
+<br>&nbsp; &nbsp; &nbsp; matches = matches + self.playOneTurn(turn)
+<br>&nbsp; &nbsp; &nbsp; turn = (turn + 1) % numHands
+<br>
+<br>&nbsp; &nbsp; <span class=keyword>print</span> <span class=quote>"---------- Game is Over"</span>
+<br>&nbsp; &nbsp; self.printHands()
+<br></span></p>
+
+<p>
+게임중에서 몇몇 단계는 메쏘드들로 분리되었습니다. <span class=code>removeMatches</span>는 패의 리스트를 순회하면서 각각의 항목에다 <span class=code>removeMatches</span>를 요청합니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> OldMaidGame(CardGame):
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>removeMatches</span>(self):
+<br>&nbsp; &nbsp; count = 0
+<br>&nbsp; &nbsp; <span class=keyword>for</span> hand <span class=keyword>in</span> self.hands:
+<br>&nbsp; &nbsp; &nbsp; count = count + hand.removeMatches()
+<br>&nbsp; &nbsp; <span class=keyword>return</span> count
+<br></span></p>
+
+
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, <span class=code>self.hands</span>를 순회하는 <span class=code>printHands</span>를 작성하고 각 패들을 출력하세요.</i> </p>
+
+<p>
+<span class=code>count</span>는 누산자로서 각 패에서 일치하는 개수들을 더해 총 합계를 반환합니다.</p>
+<p>
+일치된 총 합계가 스물-다섯에 다다르면, 오십장의 카드가 패들로부터 제거된 것이고, 이것은 곧 오직 한 장의 카드만이 남겨지고 게임이 끝났다는 것을 뜻합니다.</p>
+<p>
+다음의 <span class=code>turn</span>변수는 어느 선수의 차례인지를 추적유지합니다. 그 변수는 0에서 시작하여 한번에 하나씩 증가합니다; 그것이 <span class=code>numHands</span>에 다다르면, 나머지(modulus) 연산자가 그것을 돌돌 말아 다시 0으로 되돌립니다.</p>
+<p>
+다음의 <span class=code>playOneTurn</span> 메쏘드는 누구의 차례인지를 나타내 주는 매개변수 하나를 취합니다. 반환값은 이렇게 회전하는 동안에 일치가 이루어진 개반입니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> OldMaidGame(CardGame):
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>playOneTurn</span>(self, i):
+<br>&nbsp; &nbsp; <span class=keyword>if</span> self.hands[i].isEmpty():
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>return</span> 0
+<br>&nbsp; &nbsp; neighbor = self.findNeighbor(i)
+<br>&nbsp; &nbsp; pickedCard = self.hands[neighbor].popCard()
+<br>&nbsp; &nbsp; self.hands[i].addCard(pickedCard)
+<br>&nbsp; &nbsp; <span class=keyword>print</span> <span class=quote>"Hand"</span>, self.hands[i].name, <span class=quote>"picked"</span>, pickedCard
+<br>&nbsp; &nbsp; count = self.hands[i].removeMatches()
+<br>&nbsp; &nbsp; self.hands[i].shuffle()
+<br>&nbsp; &nbsp; <span class=keyword>return</span> count
+<br></span></p>
+
+
+
+<p>
+만약 한 선수의 패가 비면, 그 선수는 게임에서 빠집니다. 그래서 그 선수는 아무 것도 하지 않고 0을 반환합니다.</p>
+<p>
+그렇지 않으면, 일 회전은 카드를 가지고 있는 첫 번째 왼쪽 선수를 찾는 것과, 그 동료로부터 하나의 카드를 취하는 것, 그리고 일치하는 가를 점검하는 것으로 이루어집니다. 돌아오기 전에, 패에 있는 카드들은 뒤섞여져 다음 선수가 무작위로 선택할 수 있도록 합니다.</p>
+<p>
+<span class=code>findNeighbor</span>메쏘드는 바로 왼쪽의 선수에서 시작하여 원을 빙 돌아가면서 여전히 카드를 가지고 있는 선수를 찾습니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> OldMaidGame(CardGame):
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>findNeighbor</span>(self, i):
+<br>&nbsp; &nbsp; numHands = len(self.hands)
+<br>&nbsp; &nbsp; <span class=keyword>for</span> next <span class=keyword>in</span> range(1,numHands):
+<br>&nbsp; &nbsp; &nbsp; neighbor = (i + next) % numHands
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>if not</span> self.hands[neighbor].isEmpty():
+<br>&nbsp; &nbsp; &nbsp; &nbsp; <span class=keyword>return</span> neighbor
+<br></span></p>
+
+<p>
+만약 프로그램이 카드를 찾지 못한 채로 한 바퀴를 다 돌아오면, 그 함수는 <span class=code>None</span>을 반환하는데, 이것은 프로그램의 다른 어떤 곳에서 에러를 야기할 것입니다. 다행스럽게도, (그 게임의 마지막이 정확하게 탐지되는 한) 그러한 일이 절대로 일어나지 않을 것이라는 것을 증명할 수 있습니다.</p>
+
+<p>
+<span class=code>printHands</span> 메쏘드를 생략하였지만, 여러분이 직접 그것을 작성할 수 있습니다.</p>
+<p>
+다음에 보여주는 출력은 최상위 열 다섯장 (10자리수 이상)만을 세 사람의 선수에게 나누어 주는 게임에서 잘라내 온 것입니다. 이 작은 채에서는, 놀이가 스물-다섯번 대신에 일곱번의 일치가 이루어진 후에 멈춤니다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>import</span> cards
+<br>&gt;&gt;&gt; game = cards.OldMaidGame()
+<br>&gt;&gt;&gt; game.play([<span class=quote>"Allen"</span>,<span class=quote>"Jeff"</span>,<span class=quote>"Chris"</span>])
+<br>---------- Cards have been dealt
+<br>Hand Allen contains
+<br>King of Hearts
+<br> Jack of Clubs
+<br>&nbsp; Queen of Spades
+<br>&nbsp; &nbsp;King of Spades
+<br>&nbsp; &nbsp; 10 of Diamonds
+<br>
+<br>Hand Jeff contains
+<br>Queen of Hearts
+<br> Jack of Spades
+<br>&nbsp; Jack of Hearts
+<br>&nbsp; &nbsp;King of Diamonds
+<br>&nbsp; &nbsp; Queen of Diamonds
+<br>
+<br>Hand Chris contains
+<br>Jack of Diamonds
+<br> King of Clubs
+<br>&nbsp; 10 of Spades
+<br>&nbsp; &nbsp;10 of Hearts
+<br>&nbsp; &nbsp; 10 of Clubs
+<br>
+<br>Hand Jeff: Queen of Hearts matches Queen of Diamonds
+<br>Hand Chris: 10 of Spades matches 10 of Clubs
+<br>---------- Matches discarded, play begins
+<br>Hand Allen contains
+<br>King of Hearts
+<br> Jack of Clubs
+<br>&nbsp; Queen of Spades
+<br>&nbsp; &nbsp;King of Spades
+<br>&nbsp; &nbsp; 10 of Diamonds
+<br>
+<br>Hand Jeff contains
+<br>Jack of Spades
+<br> Jack of Hearts
+<br>&nbsp; King of Diamonds
+<br>
+<br>Hand Chris contains
+<br>Jack of Diamonds
+<br> King of Clubs
+<br>&nbsp; 10 of Hearts
+<br>
+<br>Hand Allen picked King of Diamonds
+<br>Hand Allen: King of Hearts matches King of Diamonds
+<br>Hand Jeff picked 10 of Hearts
+<br>Hand Chris picked Jack of Clubs
+<br>Hand Allen picked Jack of Hearts
+<br>Hand Jeff picked Jack of Diamonds
+<br>Hand Chris picked Queen of Spades
+<br>Hand Allen picked Jack of Diamonds
+<br>Hand Allen: Jack of Hearts matches Jack of Diamonds
+<br>Hand Jeff picked King of Clubs
+<br>Hand Chris picked King of Spades
+<br>Hand Allen picked 10 of Hearts
+<br>Hand Allen: 10 of Diamonds matches 10 of Hearts
+<br>Hand Jeff picked Queen of Spades
+<br>Hand Chris picked Jack of Spades
+<br>Hand Chris: Jack of Clubs matches Jack of Spades
+<br>Hand Jeff picked King of Spades
+<br>Hand Jeff: King of Clubs matches King of Spades
+<br>---------- Game <span class=keyword>is</span> Over
+<br>Hand Allen <span class=keyword>is</span> empty
+<br>
+<br>Hand Jeff contains
+<br>Queen of Spades
+<br>
+<br>Hand Chris <span class=keyword>is</span> empty
+<br>
+<br></span></p>
+
+
+
+<p>그래서 제프(Jeff)가 패자가 됩니다.</p>
+
+<a name=8></a><br>
+<h3>16.8 용어해설</h3>
+
+<dl>
+
+<dt>상속(inheritance)</dt>
+<dd>새로운 클래스를 정의하는 능력으로서 그 클래스는 이전에 정의된 클래스를 수정한 버전이다.</dd>
+
+<dt>부모 클래스(parent class)</dt>
+<dd>자손클래스에게 상속을 해 주는 클래스.</dd>
+
+<dt>자손 클래스(child class)</dt>
+<dd> 기존의 클래스로부터 상속받아 새롭게 생성된 클래스; "하위클래스(subclass)"라고 부르기도 한다.</dd>
+
+
+
+</dl>
+<h2>연습문제</h2>
+<ol>
+<li><div class="exercise">
+<code>print_hands</code> 메쏘드를 <code>OldMaidGame</code> 클래스에 추가하라. 이 메쏘드는 <code>self.hands</code>를 순회하며 각 패를 인쇄한다.
+</div></li>
+</ol>
+
+<p>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap17.htm"><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap15.htm"><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+</body>
+</html>

@@ -1,0 +1,529 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>제 12 장 : 클래스와 객체(Classes and objects)</title>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+
+<body>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap13.htm"><img border="0" alt="Next" src="images/next.png"></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png"></a></td>
+    <td width="20" class=head><a href="chap11.htm"><img border="0" alt="Previous" src="images/prev.png"></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png"></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="images/index.png"></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+
+<h2>제 12 장</h2>
+
+<h1>클래스와 객체</h1>
+
+
+<a name=1></a><br>
+<h3>12.1 사용자-정의 복합유형</h3>
+
+<p>
+파이썬의 내장 유형들을 사용해 보았기 때문에, 언제든지 사용자-정의 유형을 만들 수 있습니다: <span class=code>Point</span>라는 사용자 정의 유형을 만들어 보겠습니다.</p>
+
+<p>
+수학적인 점의 개념을 생각해 보세요. 이차원에서 점 하나는 숫자 두 개(좌표)로서 이 좌표는 한 개의 객체로 집합적으로 취급됩니다. 수학적 표기법으로 점은 좌표를 구분짓는 쉼표와 함께 괄호 안에 자주 표기됩니다. 예를 들어, <tt>(0, 0)</tt>은 원점을 나타내고, <tt>(x, y)</tt>는 원점으로부터 <tt>x</tt> 단위만큼 오른쪽으로 <tt>y</tt> 단위만큼 위로 떨어진 점을 나타냅니다.</p>
+
+<p>
+파이썬에서 자연스럽게 점을 표현하는 방법은 부동-소소점 값을 두 개 사용하는 것입니다. 그런데 문제는 이러한 값 두 개를 어떻게 하나의 복합적인 객체로 그룹짓는가 하는 것입니다.  
+
+
+무지막지한 해결책은 리스트나 터플을 사용하는 것입니다. 어떤 어플리케이션에 대해서는 이러한 해결책이 최상의 선택이 될 수도 있습니다.</p>
+
+
+
+<p>
+한 가지 대안은 사용자-정의 복합 유형을 하나 새로 정의하는 것입니다. 다른 말로는 <b>클래스(class)</b>라고 부르기도 합니다. 이러한 접근법은 약간 더 노력이 필요하지만 그 장점은 그 수고를 상쇄하고도 남습니다.</p>
+
+<p>
+클래스 정의는 다음과 같이 보입니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Point:
+<br>&nbsp; <span class=keyword>pass</span>
+<br></span></p>
+
+
+
+<p>
+클래스 정의는 프로그램의 어느곳이든 나타날 수 있습니다. 그러나 보통은 프로그램의 앞 부분에 존재합니다 ( <span class=code><span class=keyword>import</span></span> 서술문 뒤에 놓여지지요). 클래스 정의에 대한 구문 규칙은 다른 복합 서술문에 대한 규칙과 동일합니다 (<a href="chap04.htm#4" tppabs="http://www.ibiblio.org/obp/thinkCSpy/chap04.htm#4">섹션 4.4</a> 참조).</p>
+
+<p>
+위의 정의는 <span class=code>Point</span>라고 부르는 새로운 클래스를 만들어 냅니다. <b>pass</b> 서술문은 아무런 영향도 미치지 않습니다; 복합 서술문은 반드시 자신의 몸체에 무언가를 가져야 하기 때문에 어쩔 수 없이 필요할 뿐입니다.</p>
+
+<p>
+<span class=code>Point</span> 클래스를 만들어 냄으로써, <span class=code>Point</span>라고 부르는 새로운 유형을 하나 만들어 내었습니다. 이 유형의 구성원들을 <b>실체(instances)</b> 또는 <b>객체(objects)</b>라고 부릅니다. 새로이 실체를 하나 만들어 내는 것을 <b>실체화(instantiation)</b>라고 부릅니다. <span class=code>Point</span> 객체를 실체화하기 위해, (짐작하듯이) <span class=code>Point</span>라는 이름의 함수를 호출합니다:</p>
+
+
+
+
+<p><span class=code>blank = Point()
+<br></span></p>
+
+
+
+<p>
+변수 <span class=code>blank</span>에는 새로운 <span class=code>Point</span> 객체에 대한 참조점이 할당됩니다. <span class=code>Point</span>와 같이 새로운 객체를 만들어 내는 함수를 <b>구성자(constructor)</b>라고 부릅니다.</p>
+
+<a name=2></a><br>
+<h3>12.2 속성(Attributes)</h3>
+
+<p>
+점 표기법을 사용하면 실체에 데이타를 새로 추가할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; blank.x = 3.0
+<br>&gt;&gt;&gt; blank.y = 4.0
+<br></span></p>
+
+
+
+<p>
+이 구문은 <span class=code>math.pi</span> 또는 <span class=code>string.uppercase</span>와 같이 모듈에서 변수 하나를 선택할 때 사용하는 구문과 비슷합니다. 그렇지만 이 경우에는 실체로부터 데이타 항목을 선택하고 있습니다. 이렇게 이름이 붙은 항목을 <b>속성(attributes)</b>이라고 부릅니다.</p>
+
+<p>
+다음의 상태 다이어그램은 이러한 할당문들의 결과를 보여줍니다:</p>
+
+<p align="center"><img src="illustrations/point.png"></p>
+
+<p>
+변수 <span class=code>blank</span>는 Point 객체를 가리킵니다. Point 객체는 두개의 속성을 담고 있습니다. 각 속성은 부동-소수점 수를 가리킵니다.</p>
+
+<p>
+똑 같은 구문을 사용하면 속성이 가진 값을 읽을 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> blank.y
+<br>4.0
+<br>&gt;&gt;&gt; x = blank.x
+<br>&gt;&gt;&gt; <span class=keyword>print</span> x
+<br>3.0
+<br></span></p>
+
+
+
+<p>
+표현식 <span class=code>blank.x</span>의 의미는 "<span class=code>blank</span>가 가리키는 객체로 가서 <span class=code>x</span>의 값을 얻어라"라는 뜻입니다. 이 경우에는 그 값을 <span class=code>x</span>라는 이름의 변수에 할당합니다. 변수 <span class=code>x</span>와 속성 <span class=code>x</span> 사이에는 아무런 충돌도 없습니다. 점 표기법의 목적은 어느 변수를 가리키고 있는지 명확하게 구별하는 것입니다.</p>
+
+<p>
+점 표기법을 어느 표현식에도 한 부분으로 사용할 수 있습니다, 그래서 다음의 서술문들은 적법합니다:</p>
+
+
+<p><span class=code><span class=keyword>print</span> <span class=quote>'('</span> + str(blank.x) + <span class=quote>', '</span> + str(blank.y) + <span class=quote>')'</span>
+<br>distanceSquared = blank.x * blank.x + blank.y * blank.y
+<br></span></p>
+
+
+
+<p>
+첫 번째 줄은 <span class=code>(3.0, 4.0)</span>를 결과로 출력합니다; 두 번째 줄은 25.0이라는 값을 계산합니다.</p>
+
+<p>
+<span class=code>blank</span> 그 자체의 값을 인쇄하고 싶을 수도 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> blank
+<br>&lt;__main__.Point instance at 80f8e70&gt;
+<br></span></p>
+
+
+
+<p>
+결과는 <span class=code>blank</span>가 <span class=code>Point</span> 클래스의 한 실체이며 <span class=code>__main__</span>에 정의되어 있다는 것을 보여줍니다.  <span class=code>80f8e70</span>은 16진수로 씌여진 이 객체에 대한 유일한 식별자입니다. <span class=code>Point</span> 객체를 화면에 표시해서 정보를 얻기에 이 방법만이 가장 좋은 방법은 아닐수도 있습니다. 그것을 변경하는 방법을 잠시후에 알려 드리겠습니다.</p>
+
+
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, <span class=code>Point</span> 객체를 하나 만들고 인쇄해 보세요. 그리고 <span class=code>id</span>를 사용해서 그 객체의 유일한 식별자를 인쇄해 보세요. 그렇게 해서 나온 식별자를 16진수 형태에서 10진수 형태로 번역하여 그 둘이 서로 일치하는지 확인해 보세요.</i> </p>
+
+<a name=3></a><br>
+<h3>12.3 매개변수로서의 실체</h3>
+
+<p>
+평소대로 실체를 매개변수로 건네줄 수 있습니다. 예를 들어:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>printPoint</span>(p):
+<br>&nbsp; <span class=keyword>print</span> <span class=quote>'('</span> + str(p.x) + <span class=quote>', '</span> + str(p.y) + <span class=quote>')'</span>
+<br></span></p>
+
+
+
+<p>
+<span class=code>printPoint</span> 함수는 점 하나를 인자로 취해 그 점을 표준 형식으로 화면에 표시합니다.  <span class=code>printPoint(blank)</span>라고 호출하면 출력결과는 <span class=code>(3.0, 4.0)</span>입니다.</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, <a href="chap05.htm#2">섹션 5.2</a>에 있는 <span class=code>distance</span> 함수를 네 개의 숫자 대신에 <span class=code>Point</span> 두 개를 매개변수로 취하도록 다시 작성해 보세요.</i> </p>
+
+<a name=4></a><br>
+<h3>12.4 동일성(Sameness)</h3>
+
+<p>
+"같음(same)"이라는 단어의 의미는 처음에는 완벽하게 명료한 것 같이 보이지만 조금만 생각해 보면 생각했던 것보다 더 많은 뜻이 있다는 것을 깨닫습니다.</p>
+<p>
+예를 들어, "당신과 나는 자동차가 같아"라고 말한다면 그 의도는 그의 차와 여러분의 차가 같은 회사의 같은 모델이라는 것을 뜻합니다. 그러나 그 두 차는 서로 다른 두 개의 자동차입니다. 만약, "당신과 나는 어머니가 같아"라고 말한다면 그 의도는 그의 어머니와 여러분의 어머니가 같은 사람이라는 것을 뜻합니다 (* 주의 : 모든 언어에서 같은 문제가 있는 것은 아니다. 예를 들면, 독일사람들은 서로 다른 종류의 동일성에 대하여 서로 다른 단어를 사용한다. 이 문맥에서 보자면 "같은 차"는"gleiche Auto"가 될 것이고 "같은 어머니"는 "selbe Mutter"가 될 것이다.) 그래서 "동일성(sameness)"이라는 아이디어는 상황에 따라 다릅니다.</p>
+
+<p>
+객체에 관해서 이야기 할 때도 비슷한 모호성이 있습니다. 예를 들어, <span class=code>Point</span> 두 개가 서로 같다면 같은 데이타(좌표)를 담고 있다는 뜻인지 아니면 실제로 같은 객체라는 뜻인지 모호합니다.</p>
+
+<p>
+참조점 두 개가 같은 객체를 가리키고 있는 것인지 알아 내려면, <span class=code>==</span> 연산자를 사용하세요. 예를 들어:</p>
+
+
+<p><span class=code>&gt;&gt;&gt;&nbsp; &nbsp;p1 = Point()
+<br>&gt;&gt;&gt;&nbsp; &nbsp;p1.x = 3
+<br>&gt;&gt;&gt;&nbsp; &nbsp;p1.y = 4
+<br>&gt;&gt;&gt;&nbsp; &nbsp;p2 = Point()
+<br>&gt;&gt;&gt;&nbsp; &nbsp;p2.x = 3
+<br>&gt;&gt;&gt;&nbsp; &nbsp;p2.y = 4
+<br>&gt;&gt;&gt;&nbsp; &nbsp;p1 == p2
+<br>0
+<br></span></p>
+
+
+
+<p>
+<span class=code>p1</span>와 <span class=code>p2</span>가 같은 좌표를 담고 있음에도 불구하고 그 두 점은 같은 객체가 아닙니다. <span class=code>p1</span>을 <span class=code>p2</span>에 할당한다면 두 변수는 같은 객체를 가리키는 별명들입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt;&nbsp; &nbsp;p2 = p1
+<br>&gt;&gt;&gt;&nbsp; &nbsp;p1 == p2
+<br>1
+<br></span></p>
+
+
+
+<p>
+이러한 종류의 동등성을 그 객체의 내용이 아니라 단지 그 참조점만을 비교하기 때문에 <b>얕은 동등성(shallow equality)</b>이라고 부릅니다.</p>
+
+
+
+<p>
+객체의 내용을---<b>깊은 동등성(deep equality)---</b> 비교하기 위해서 <span class=code>samePoint</span>이라고 부르는 함수 하나를 작성할 수 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>samePoint</span>(p1, p2) :
+<br>&nbsp; <span class=keyword>return</span> (p1.x == p2.x) <span class=keyword>and</span> (p1.y == p2.y)
+<br></span></p>
+
+
+
+<p>
+이제 같은 데이타를 담고 있는 서로 다른 객체 두 개를 만든다면, <span class=code>samePoint</span> 함수를 사용해서 그 두 객체가 같은 점을 나타내고 있는지 알아낼 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; p1 = Point()
+<br>&gt;&gt;&gt; p1.x = 3
+<br>&gt;&gt;&gt; p1.y = 4
+<br>&gt;&gt;&gt; p2 = Point()
+<br>&gt;&gt;&gt; p2.x = 3
+<br>&gt;&gt;&gt; p2.y = 4
+<br>&gt;&gt;&gt; samePoint(p1, p2)
+<br>1
+<br></span></p>
+
+
+
+<p>
+물론, 그 두 변수가 같은 객체를 가리킨다면 <span class=code>samePoint</span> 함수는 참을 반환합니다.</p>
+
+<a name=5></a><br>
+<h3>12.5 사각형</h3>
+
+<p>
+사각형을 표현하는 클래스 하나를 원한다고 해 봅시다. 문제는 사각형을 지정하기 위해서 어떤 정보를 제공해야 하는가 하는 것입니다. 일을 간단히 하기 위해서, 사각형은 방향이 수직 또는 수평 방향이기만 하고 다른 각도는 이루지 않는다고 가정해 보세요.</p>
+
+<p>
+여러가지 가능성이 있습니다: 사각형의 중심(좌표 두개)과 그 크기(너비와 높이)를 지정할 수 있습니다; 또는 모퉁이중의 하나와 그 크기를 지정할 수 있습니다; 또는 대각선 위에 있는 모퉁이 두 개를 지정할 수 있습니다. 관례적인 선택은 좌-상 모퉁이와 그 크기를 지정하는 것입니다.</p>
+
+<p>
+다시 클래스 하나를 새로 정의하겠습니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Rectangle:
+<br>&nbsp; <span class=keyword>pass</span>
+<br></span></p>
+
+
+
+<p>그리고 그 클래스를 실체화합니다:</p>
+
+
+<p><span class=code>box = Rectangle()
+<br>box.width = 100.0
+<br>box.height = 200.0
+<br></span></p>
+
+
+
+<p>
+이 코드는 부동-소수점 속성 두 개를 가지는 <span class=code>Rectangle</span> 객체를 새로 만듭니다. 좌-상 모퉁이를 지정하려면, 객체 안에 객체를 또 하나 내장할 수 있습니다!</p>
+
+
+<p><span class=code>box.corner = Point()
+<br>box.corner.x = 0.0;
+<br>box.corner.y = 0.0;
+<br></span></p>
+
+
+
+<p>
+점 연산자로 구성되어 있습니다. 다음 표현식 <span class=code>box.corner.x</span>의 의미는 "<span class=code>box</span>가 가리키는 객체로 가서 <span class=code>corner</span>라는 이름의 속성을 선택하라; 그리고 그 객체로 가서 <span class=code>x</span>라는 이름의 속성을 선택하라"는 뜻입니다.</p>
+
+<p>
+다음 그림은 이 객체의 상태를 보여줍니다:</p>
+
+<p align="center"><img src="illustrations/rectangle.png" tppabs="http://www.ibiblio.org/obp/thinkCSpy/illustrations/rectangle.png"></p>
+
+<a name=6></a><br>
+<h3>12.6 반환 값으로서의 실체</h3>
+
+<p>
+함수는 실체를 반환할 수 있습니다. 예를 들어, <span class=code>findCenter</span> 함수는 <span class=code>Rectangle</span>을 인자로 취하고 <span class=code>Rectangle</span>의 중심 좌표를 담고 있는 <span class=code>Point</span>를 반환합니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>findCenter</span>(box):
+<br>&nbsp; p = Point()
+<br>&nbsp; p.x = box.corner.x + box.width/2.0
+<br>&nbsp; p.y = box.corner.y + box.height/2.0
+<br>&nbsp; <span class=keyword>return</span> p
+<br></span></p>
+
+
+
+<p>
+이 함수를 호출하려면 <span class=code>box</span>를 인자로 건네주고 그 결과를 변수에 할당하세요:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; center = findCenter(box)
+<br>&gt;&gt;&gt; printPoint(center)
+<br>(50.0, 100.0)
+<br></span></p>
+
+
+
+<a name=7></a><br>
+<h3>12.7 객체는 변경가능하다</h3>
+
+<p>
+객체의 상태를 그 속성중의 하나에 할당하면 변경할 수 있습니다. 예를 들어, 사각형의 위치를 변경하지 않고 그 크기를 변경하려면 <span class=code>width</span>와 <span class=code>height</span>를 수정하면 됩니다:</p>
+
+
+<p><span class=code>box.width = box.width + 50
+<br>box.height = box.height + 100
+<br></span></p>
+
+
+
+<p>
+이 코드를 메쏘드로 캡슐화해 넣고 일반화하면 얼마든지 사각형을 크게 만들 수 있습니다:</p>
+
+
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>growRect</span>(box, dwidth, dheight) :
+<br>&nbsp; box.width = box.width + dwidth
+<br>&nbsp; box.height = box.height + dheight
+<br></span></p>
+
+
+
+<p>
+<span class=code>dwidth</span>와 <span class=code>dheight</span>라는 변수는 각 방향으로 얼마만큼 그 사각형이 커질지를 지시합니다. 이 메쏘드를 요청하면 인자로 건네어진 <span class=code>Rectangle</span>을 변경한 효과가 있습니다.</p>
+
+<p>
+예를 들어, <span class=code>bob</span>이라는 이름의 <span class=code>Rectangle</span>을 새로 만들 수 있으며 그것을 <span class=code>growRect</span>에 건넬 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; bob = Rectangle()
+<br>&gt;&gt;&gt; bob.width = 100.0
+<br>&gt;&gt;&gt; bob.height = 200.0
+<br>&gt;&gt;&gt; bob.corner = Point()
+<br>&gt;&gt;&gt; bob.corner.x = 0.0;
+<br>&gt;&gt;&gt; bob.corner.y = 0.0;
+<br>&gt;&gt;&gt; growRect(bob, 50, 100)
+<br></span></p>
+
+
+
+<p>
+<span class=code>growRect</span>가 실행되고 있는 동안에 매개변수 <span class=code>box</span>는 <span class=code>bob</span>을 다르게 부르는 별명입니다. <span class=code>box</span>를 조금이라도 변경하면 <span class=code>bob</span>에도 영향을 미칩니다.</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, <span class=code>Rectangle</span>이라는 매개변수 하나와 <span class=code>dx</span>와 <span class=code>dy</span>라는 이름의 매개변수 두 개를 가지는 함수를 <span class=code>moveRect</span>라는 이름으로 작성하세요. 만들어진 함수는 <span class=code>corner</span>의 <span class=code>x</span>좌표에 <span class=code>dx</span>를 더하고 <span class=code>corner</span>의 <span class=code>y</span> 좌표에 <span class=code>dy</span> 더함으로써 사각형의 위치를 변경시켜야 합니다.</i> </p>
+
+<a name=8></a><br>
+<h3>12.8 복사</h3>
+
+<p>
+별명화(Aliasing) 때문에 프로그램을 읽기가 어려워질 수 있습니다. 왜냐하면 한 곳에서 변경이 이루어지면 또 다른 곳에 예기치 못한 영향을 미칠 수 있기 때문입니다. 주어진 객체를 가리키는 변수들을 모두 추적유지 하는 것은 어려운 일입니다.</p>
+
+<p>
+종종 별명화의 대안으로 객체를 복사하는 방법이 사용됩니다. <span class=code>copy</span> 모듈에 담겨 있는 <span class=code>copy</span>라고 부르는 함수는 어떤 객체라도 사본을 만들 수가 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>import</span> copy
+<br>&gt;&gt;&gt; p1 = Point()
+<br>&gt;&gt;&gt; p1.x = 3
+<br>&gt;&gt;&gt; p1.y = 4
+<br>&gt;&gt;&gt; p2 = copy.copy(p1)
+<br>&gt;&gt;&gt; p1 == p2
+<br>0
+<br>&gt;&gt;&gt; samePoint(p1, p2)
+<br>1
+<br></span></p>
+
+
+
+<p>
+<span class=code>copy</span> 모듈을 반입하고 나면 <span class=code>copy</span> 메쏘드를 사용하여 <span class=code>Point</span>를 새로이 만들 수 있습니다.  <span class=code>p1</span>와 <span class=code>p2</span>는 같은 점이 아닙니다. 그러나 그 두 점은 같은 데이타를 담고 있습니다.</p>
+
+<p>
+<span class=code>Point</span>와 같이 내장된 객체를 전혀 담고 있지 않은 단순한 객체를 복사하려면 <span class=code>copy</span>만으로도 충분합니다. 이런 것을 일컬어 <b>얕은 복사(shallow copying)</b>라고 부릅니다.</p>
+
+<p>
+<span class=code>Rectangle</span>과 같이 <span class=code>Point</span>에 대한 참조점을 가지고 있다면 <span class=code>copy</span>는 별로 올바르게 일을 하지 못합니다. <span class=code>copy</span>는 <span class=code>Point</span> 객체에 대한 참조점을 복사합니다. 그래서 예전 <span class=code>Rectangle</span>과 새로운 <span class=code>Rectangle</span> 모두 한 개의 <span class=code>Point</span>를 가리킵니다.</p>
+
+
+
+<p>
+여느 때처럼 <span class=code>b1</span>이라는 상자를 하나 만들고 <span class=code>copy</span>를 사용하여 <span class=code>b2</span>라는 복사본을 만들면, 결과로 나오는 상태 다이어그램은 다음과 같이 보입니다:</p>
+
+<p align="center"><img src="illustrations/rectangle2.png"></p>
+
+<p>
+결과는 거의 확실히 우리가 원한 바가 아닙니다. 이 경우에, <span class=code>Rectangles</span>중의 하나에 <span class=code>growRect</span>를 요청하면  다른 하나에 영향을 미치지 않겠지만, 둘 중의 어느 하나에라도 <span class=code>moveRect</span>를 요청하면 둘 모두에 영향을 미칠 것입니다! 이런 행위는 혼란스러우며 에러를 야기할 가능성이 높습니다.</p>
+
+<p>
+다행스럽게도, <span class=code>copy</span> 모듈에는 <span class=code>deepcopy</span>라는 이름의 메쏘드가 있어서 그 객체뿐만 아니라 내장된 모든 객체들도 복사해 줍니다. 이런 연산을 <b>깊은 복사(deep copy)</b>라고 부른다는 것을 배우게 되면 고개가 끄덕여질 것입니다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt; b2 = copy.deepcopy(b1)
+<br></span></p>
+
+
+
+<p>
+이제 <span class=code>b1</span>과 <span class=code>b2</span>는 완전히 별개의 객체입니다.</p>
+
+<p>
+<span class=code>deepcopy</span>를 사용하여 <span class=code>growRect</span>를 재작성하면 기존의 <span class=code>Rectangle</span>를 수정하는 대신에, 예전 <span class=code>Rectangle</span>과 같은 위치에 있지만 새로운 크기를 가지는 <span class=code>Rectangle</span>을 하나 새로 만들도록 할 수 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>growRect</span>(box, dwidth, dheight) :
+<br>&nbsp; <span class=keyword>import</span> copy
+<br>&nbsp; newBox = copy.deepcopy(box)
+<br>&nbsp; newBox.width = newBox.width + dwidth
+<br>&nbsp; newBox.height = newBox.height + dheight
+<br>&nbsp; <span class=keyword>return</span> newBox
+<br></span></p>
+
+
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, <span class=code>moveRect</span>를 재작성하여 예전 <span class=code>Rectangle</span>을 수정하는 대신에 <span class=code>Rectangle</span>을 새로 하나 만들어서 반환하도록 해보세요.</i> </p>
+
+<a name=9></a><br>
+<h3>12.9 용어 해설</h3>
+
+<dl>
+
+<dt>클래스(class)</dt>
+<dd>사용자-정의 복합 유형. 클래스는 객체들에 대한 임시원형(template)으로 생각할 수도 있다. 객체들은 클래스의 실체들이다.</dd>
+
+<dt>실체화하다(instantiate)</dt>
+<dd>한 클래스의 실체를 만드는 것.</dd>
+
+<dt>실체(instance)</dt>
+<dd>한 클래스에 속한 객체</dd>
+
+<dt>객체(object)</dt>
+<dd>실제 세계의 개념 또는 사건을 모델화하는데 종종 사용되는 복합 데이타 유형.</dd>
+
+<dt>구성자(constructor)</dt>
+<dd>객체를 새로 만드는데 사용되는 메쏘드.</dd>
+
+<dt>속성(attribute)</dt>
+<dd>실체를 구성하는 이름있는 데이타 항목들 중의 하나.</dd>
+
+<dt>얕은 동등성(shallow equality)</dt>
+<dd>참조점이 같음. 또는 두 참조점이 같은 객체를 가리키는 것.</dd>
+
+<dt>깊은 동등성(deep equality)</dt>
+<dd>값이 같음. 또는 두 참조점이 같은 값을 가지는 객체들을 가리키는 것.</dd>
+
+<dt>얕은 복사(shallow copy)</dt>
+<dd>내장된 객체를 가리키는 모든 참조점을 포함하여 객체의 내용을 복사하는 것; <span class=code>copy</span> 모듈에 있는 <span class=code>copy</span> 함수로 구현한다.</dd>
+
+<dt>깊은 복사(deep copy)</dt>
+<dd>객체의 내용뿐만 아니라 내장된 모든 객체, 그리고 그 내장된 객체안에 내장된 모든 객체, 등등을 복사하는 것; <span class=code>copy</span> 모듈안에 있는 <span class=code>deepcopy</span> 함수로 구현한다.</dd>
+
+
+
+</dl>
+<h2>연습문제</h2>
+<ol>
+<li><div class="exercise">
+<code>Point</code> 객체를 만들어 인쇄하라. 그다음 <code>id</code>를 사용하여 그 객체의 유일한 식별자를 인쇄하라.  십육진수 형태를 십진수 형태로 바꾸고 일치하는지 확인하라.
+</div></li>
+
+<li><div class="exercise">
+네 개의 숫자 대신에 두 개의 <code>Point</code>를 매개변수로 받도록 제 5 장의 <code>distance</code> 함수를 작성하라.
+</div></li>
+
+<li><div class="exercise">
+<code>Rectangle</code> 그리고 <code>dx</code>와 <code>dy</code> 두개의 매개변수를 취하는 <code>move_rect</code>라는 함수를 작성하라.  <code>dx</code>를 <code>x</code> 좌표에 <code>corner</code>의 더하고 <code>corner</code>의 <code>y</code>좌표에 <code>dy</code>를 더하면 사각형의 위치가 바뀌어야 한다.
+</div></li>
+
+<li><div class="exercise">
+<code>move_rect</code> 함수가 예전의 사각형을 수정하는 대신에 새로운 <code>Rectangle</code>을 만들어 돌려주도록 재작성하라.
+</div></li>
+</ol>
+<p>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap13.htm"><img border="0" alt="Next" src="images/next.png"></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png"></a></td>
+    <td width="20" class=head><a href="chap11.htm"><img border="0" alt="Previous" src="images/prev.png"></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png"></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="images/index.png"></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+</body>
+</html>

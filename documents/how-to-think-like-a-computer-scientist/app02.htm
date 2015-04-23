@@ -1,0 +1,331 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>부록 B: 새로운 데이타형을 만들기</title>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+
+<body>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="app03.htm"><img border="0" alt="다음으로" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="위로" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="app01.htm"><img border="0" alt="이전으로" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="안녕하세요" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="인덱스" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+  </tr>
+</table>
+<hr>
+
+
+<h2>부록 B</h2>
+
+<h1>새로운 데이타형을 만드는 법</h1>
+<p>
+객체-지향 프로그래밍 언어 덕분에 프로그래머는 새로운 데이타 유형을 정의하여 내장 데이타 유형과 아주 비슷하게 행동하도록 만들 수 있다. <span class=code>Fraction</span>이라는 클래스를 구축하여 내장 수치 형, 정수, 배정도 정수, 부동소수점수와 상당히 유사하게 작동시켜 보면서 이런 능력을 탐험해 보자.</p>
+<p>
+분수는 유리수로도 알려져 있는데, <tt>5/6</tt>처럼 정수의 비율로서 표현할 수 있다. 위의 숫자를 분자라고 하고 아래의 숫자를 분모라고 부른다.</p>
+<p>
+먼저 <span class=code>Fraction</span> 클래스를 정의해 보자. 이 클래스는 생성하고자 하는 분수에 대하여 정수 분모와 분자를 제공하는 구성자 메쏘드를 가진다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Fraction:
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__init__</span>(self, numerator, denominator=1):
+<br>&nbsp; &nbsp; self.numerator = numerator
+<br>&nbsp; &nbsp; self.denominator = denominator
+<br></span></p>
+
+<p>
+분모는 선택적인 변수이다. 분수가 (<tt>3</tt>과 같은) 단지 하나의 매개변수로 생성된다면 그 분수는 <tt>3/1</tt>과 동등한 분수가 된다.</p>
+<p>
+이제 분수 하나를 생성하고 그것을 변수에 할당하자. 그 <span class=code>Fraction</span> 클래스를 <span class=code>Fraction.py</span>라고 부르는 파일에 저장해 두었다고 가정하자. 그것을 테스트 하려면 파이썬 안으로 반입하면 된다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>from</span> Fraction <span class=keyword>import</span> *
+<br>&gt;&gt;&gt; spam = Fraction(5,6)
+<br></span></p>
+
+<p>
+다음 단계는 <span class=code>__str__</span> 메쏘드를 작성하여 의미있는 방식으로 분수를 표시하는 것이다. 여기에서는 "분자/분모"의 형태가 자연스럽다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Fraction:
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__str__</span>(self):
+<br>&nbsp; &nbsp; <span class=keyword>return</span> <span class=quote>"%d/%d"</span> % (self.numerator, self.denominator)
+<br></span></p>
+
+
+
+<p>분수를 인쇄하면 다음을 결과로 맞이한다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; spam = Fraction(5,6)
+<br>&gt;&gt;&gt; <span class=keyword>print</span> <span class=quote>"The fraction is"</span>, spam
+<br>The fraction <span class=keyword>is</span> 5/6
+<br></span></p>
+
+
+
+<br>
+<h3>분수 곱셈</h3>
+<p>
+분수에 대하여 정상적인 덧셈, 뺄셈, 곱셈, 그리고 나눗셈 연산을 적용할 수 있기를 원한다. 이렇게 하려면 <span class=code>Fraction</span> 객체의 연산자들을 덮어쓰면 된다.</p>
+<p>
+구현하기가 가장 쉽기 때문에 곱셈부터 시작해 보겠다. 먼저 두 분수를 곱하면 새로운 분수가 만들어지는데 이 분수의 분자는 원래 분자들을 곱한 것이고 분모는 원래 분모들을 곱한 것이다. <span class=code>__mul__</span>은 <span class=code>*</span> 연산자를 덮어쓰는 함수들을 위해 파이썬이 사용하는 이름이다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Fraction:
+<br>&nbsp; ...
+<br>&nbsp; &nbsp; <span class=keyword>def</span> <span class=function>__mul__</span>(self, object):
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>return</span> Fraction(self.numerator*object.numerator,
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; self.denominator*object.denominator)
+<br></span></p>
+
+
+
+<p>
+이제 두 분수의 곱을 계산해 보면 이것을 테스트해 볼 수 있다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> Fraction(5,6) * Fraction(3,4)
+<br>15/24
+<br>&gt;&gt;&gt;
+<br></span></p>
+
+<p>
+그러나 다른 것 두가지를 고려해 볼 수 있다. 첫째, 정수에 분수를 곱하기를 원할 수 있다. 이것을 처리하는 한 방법은 그 정수를 그에 동등한 분수로 변환하는 것이다. <span class=code>type</span> 함수를 사용하면 <span class=code>other</span>이 정수인지 테스트해 볼 수 있고 정수라면 그것을 분수로 변환할 수 있다.</p>
+
+
+<p><span class=code><span class=keyword>class</span> Fraction:
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__mul__</span>(self, other):
+<br>&nbsp; &nbsp; <span class=keyword>if</span> type(other) == type(5):
+<br>&nbsp; &nbsp; &nbsp; other = Fraction(other)
+<br>&nbsp; &nbsp; <span class=keyword>return</span> Fraction(self.numerator&nbsp; &nbsp;* other.numerator,
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; self.denominator * other.denominator)
+<br></span></p>
+
+<p>이제 분수와 정수를 곱하는 것이 작동한다. 그러나 오직 그 분수가 왼쪽에 있는 피연산자일 때만 작동한다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> Fraction(5,6) * 4
+<br>20/6
+<br>&gt;&gt;&gt; <span class=keyword>print</span> 4 * Fraction(5,6)
+<br>TypeError: __mul__ nor __rmul__ defined <span class=keyword>for</span> these operands
+<br></span></p>
+
+
+
+<p>
+곱셈과 같은 이항 연산자들을 평가하기 위해, 파이썬은 먼저 왼쪽의 피연산자를 점검하여 두 번째 연산자의 유형을 지원하는 <span class=code>__mul__</span>을 제공하는지 살펴본다. 이 경우, 내장 정수 연산자는 <span class=code>Fraction</span>를 지원하지 않는다.</p>
+<p>
+다음으로 파이썬은 오른쪽 피연산자를 점검하여 첫 번째 연산자의 형을 지원하는 <span class=code>__rmul__</span>을 제공하는지 살펴본다. 이 경우, <span class=code>__rmul__</span>이 제공되지 않지만 다음과 같이 제공하면 된다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Fraction:
+<br>&nbsp; ...
+<br>&nbsp; __rmul__ = __mul__
+<br></span></p>
+
+<p>
+이 할당은 <span class=code>__rmul__</span>이 <span class=code>__mul__</span>과 같다고 말해준다. 이제 <span class=code>4 * Fraction(5,6)</span>을 평가하면, 파이썬은 <span class=code>__rmul__</span>을 <span class=code>Fraction</span> 객체에 요청하고 4를 매개변수로 건넨다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> 4 * Fraction(5,6)
+<br>20/6
+<br></span></p>
+
+
+
+<br>
+<h3>분수 덧셈</h3>
+<p>
+덧셈은 곱셈보다 더 복잡하다. 그러나 그렇게 나쁜것은 아니다. <tt>a/b</tt>와 <tt>c/d</tt>의 합은 분수 <span class=code>(a*d+c*b)/b*d</span>이다.</p>
+<p>
+곱셈 코드를 모델로 삼아 <span class=code>__add__</span>와 <span class=code>__radd__</span>를 작성할 수 있다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Fraction:
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__add__</span>(self, object):
+<br>&nbsp; &nbsp; <span class=keyword>if</span> type(object) == type(5):
+<br>&nbsp; &nbsp; &nbsp; object = Fraction(object)
+<br>&nbsp; &nbsp; <span class=keyword>return</span> Fraction(self.numerator&nbsp; &nbsp;* object.denominator +
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; self.denominator * object.numerator,
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; self.denominator * object.denominator)
+<br>
+<br>&nbsp; __radd__ = __add__
+<br></span></p>
+
+<p>
+이러한 메쏘드들을 <span class=code>Fraction</span>과 정수로 테스트할 수 있다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> Fraction(5,6) + Fraction(5,6)
+<br>60/36
+<br>&gt;&gt;&gt; <span class=keyword>print</span> Fraction(5,6) + 3
+<br>23/6
+<br>&gt;&gt;&gt; <span class=keyword>print</span> 2 + Fraction(5,6)
+<br>17/6
+<br></span></p>
+
+<p>
+앞의 두 예제는 <span class=code>__add__</span>를 요청한다; 마지막 예제는 <span class=code>__radd__</span>를 요청한다.</p>
+
+<br>
+<h3>유클리드 알고리즘</h3>
+<p>
+이전의 예제에서 <tt>5/6 + 5/6</tt>의 합을 계산하고 <tt>60/36</tt>을 얻었다. 그 값은 옳다. 그러나 해답을 표현하는 가장 좋은 방법은 아니다. 분수를 가장 단순한 항으로 약분(<b>reduce</b>)하려면, 분모와 분자를 최대 공약수(<b>greatest common divisor (GCD)</b>)로 나눌 필요가 있는데, 여기에서 그것은 12이다. 그리하여 그 결과는 <tt>5/3</tt>이다.</p>
+<p>
+일반적으로 새로운 <span class=code>Fraction</span> 객체를 만들 때마다 그 객체의 분모와 분자를 GCD로 약분해야 한다. 분수가 이미 약분되어 있다면 GCD는 1이다.</p>
+<p>
+유클리드는 <tt>m</tt>과 <tt>n</tt> 두 정수에 대한 GCD를 찾는 메쏘드 또는 알고리즘을 제시하였다:</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"><tt>m</tt>이 <tt>n</tt>으로 나누어 떨어진다면 <tt>n</tt>이 그 GCD이다. 그렇지 않으면 그 GCD는 <tt>m</tt>을 <tt>n</tt>으로 나눈 나머지와 <tt>n</tt>과의 GCD이다.</p>
+
+<p>
+이러한 재귀적인 정의는 함수로 간결하게 표현할 수 있다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>gcd</span> (m, n):
+<br>&nbsp; <span class=keyword>if</span> m % n == 0:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> n
+<br>&nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> gcd(n, m%n)
+<br></span></p>
+
+
+
+<p>
+첫 번째 줄에서 나머지(modulus) 연산자를 사용하여 나눗셈이 가능한지 점검한다. 마지막 즐에서도 나머지(modulus) 연산자를 사용하여 나눗셈의 나머지를 계산한다.</p>
+<p>
+
+지금까지 연산은 모두 그 결과로 분수(<span class=code>Fraction</span>)를 새로 만들기 때문에 구성자를 수정하면 모든 결과를 약분할 수 있다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Fraction:
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__init__</span>(self, numerator, denominator=1):
+<br>&nbsp; &nbsp; g = gcd (numerator, denominator)
+<br>&nbsp; &nbsp; self.numerator&nbsp; &nbsp;=&nbsp; &nbsp;numerator / g
+<br>&nbsp; &nbsp; self.denominator = denominator / g
+<br></span></p>
+
+
+
+<p>
+이제 분수(<span class=code>Fraction</span>)를 만들 때마다 가장 단순한 형태로 약분된다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; Fraction(100,-36)
+<br>-25/9
+<br>&gt;&gt;&gt;
+<br></span></p>
+
+<p>
+<span class=code>gcd</span> 함수의 멋진 특징은 만약 분수가 음수라면 마이너스 표시가 항상 분자로 이동한다는 것이다.</p>
+
+<br>
+<h3>분수를 비교하기</h3>
+<p>
+<span class=code>Fraction</span> 객체인 <span class=code>a</span>와 <span class=code>b</span> 두 개가 있고 <span class=code>a == b</span>를 평가한다고 가정하자. 기본으로 구현된 <span class=code>==</span>는 얕은 동등성을 테스트한다, 그래서 <span class=code>a</span>와 <span class=code>b</span>가 같은 객체일 때만 참을 반환한다.</p>
+<p>
+더욱 가능성 있는 예를 들자면 <tt>a</tt>와 <tt>b</tt>가 같은 값을 가지면 참을 반환하기를 원한다---다시 말하면, 깊은 동등성 테스트를 원한다고 하자.</p>
+<p>
+비교를 하려면 분수에게 비교하는 법을 가르쳐 줄 필요가 있다. <span class=code>Card</span> 객체에서 보았듯이 <span class=code>__cmp__</span> 메쏘드를 제공하면 비교 연산자를 덮어쓸 수 있다.</p>
+<p>
+관례적으로 <span class=code>__cmp__</span> 메쏘드는 만약 <span class=code>self</span>가 <span class=code>other</span>보다 작다면 음의 정수를 반환해야 하고, 같다면 0을 돌려주어야 하고, <span class=code>self</span>가 <span class=code>other</span>보다 크다면 양의 정수를 반환해야 한다.</p>
+<p>
+가장 간단하게 분수를 비교하는 방법은 양쪽으로-곱하는 것이다. 만약 <tt>a/b &gt; c/d</tt>이라면, <tt>ad &gt; bc</tt>이다. 이점을 염두에 두고 다음과 같이 <span class=code>__cmp__</span>를 위한 코드를 살펴 보면:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Fraction:
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__cmp__</span>(self, other):
+<br>&nbsp; &nbsp; diff = (self.numerator&nbsp; * other.denominator -
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; other.numerator * self.denominator)
+<br>&nbsp; &nbsp; <span class=keyword>return</span> diff
+<br></span></p>
+
+
+
+<p>
+<span class=code>self</span>가 <span class=code>other</span>보다 크다면 <span class=code>diff</span>는 양의 정수가 될 것이다. <span class=code>other</span>가 더 크다면 <span class=code>diff</span>는 음의 정수가 될 것이다.  같다면 <span class=code>diff</span>는 0이다.</p>
+
+<br>
+<h3>더 다듬어야 할 것</h3>
+
+<p>
+물론 아직 끝난 것이 아니다. 아직도 <span class=code>__sub__</span>를 덮어 씀으로써 뺄셈을 구현하고 <span class=code>__div__</span>를 덮어씀으로써 나눗셈을 구현할 필요가 있다.</p>
+<p>
+그러한 연산들을 처리하기 위한 하나의 방법은 <span class=code>__neg__</span>를 덮어씀으로써 보수(negation)를 구현하고 <span class=code>__invert__</span>를 덮어씀으로써 역수(inversion)를 구현하는 것이다. 그러면 두 번째 피연산자를 보수로 만들고 더해서 뺄셈을 할 수 있고, 두 번째 피연산자를 역수로 만들고 곱해서 나눗셈을 할 수 있다.</p>
+<p>
+마지막으로 <span class=code>__rsub__</span>와 <span class=code>__rdiv__</span>를 제공해야 한다. 불행하게도 덧셈과 나눗셈에 사용한 것과 같은 꼼수를 사용할 수 없다. 왜냐하면 뺄셈과 나눗셈은 위치를 교환할 수 없기 때문이다. 피연산자의 순서는 차이를 만든다.</p>
+<p>
+사실 <span class=code>__neg__</span>가 필요한 이유는 파이썬이 단항 부인을 처리할 수 있도록 하기 위한 것이다. 그렇지만 <span class=code>__rsub__</span>와 <span class=code>__rdiv__</span>는 <span class=code>__sub__</span>와 <span class=code>__div__</span>처럼 똑같이 단순하게 설정될 수 없다. 이러한 연산에 있어서, 피연산자들의 순서는 차이를 만들어 낸다.</p>
+<p>
+<span class=code>__pow__</span>를 덮어쓰면 분수의 지수승을 계산할 수 있다. 그러나 그 구현은 약간 꼼수적이다. 지수가 정수가 아니라면 그 결과를 분수(<span class=code>Fraction</span>)로 보여주지 못할 수도 있다. 예를 들어, <span class=code>Fraction(2) ** Fraction(1,2)</span>는 2의 제곱근이다. 이것은 무리수이다 (다시 말해 분수로 표현될 수 없다). 그래서 지극히 일반적인 버전으로 <span class=code>__pow__</span>를 작성하기는 쉽지 않다.</p>
+<p>
+<span class=code>Fraction</span> 클래스에 대하여 또 다른 확장 하나를 생각해 볼 수도 있다. 지금까지는 분자와 분모가 정수라고 가정했다. 분자와 분모에 대하여 장정도 정수를 허용하고 싶을 수도 있다.</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, <span class=code>Fraction</span> 클래스를 완전히 구현하라. 그래서 뺄셈, 나눗셈, 지수, 그리고 장정도 정수를 분자와 분모로 처리할 수 있도록 하라.</i> </p>
+
+<br>
+<h3>용어 해설</h3>
+
+<dl>
+
+<dt>최대공약수 (GCD)</dt>
+<dd>한 분수의 분모와 분자 모두를 나머지 없이 나누는 가장 큰 양의 정수.</dd>
+
+<dt>약분(reduce)</dt>
+<dd>1을 최대공약수로 가지는 형태와 동등한 형태로 한 분수를 변경하는 것.</dd>
+
+
+
+</dl>
+
+<p>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="app03.htm"><img border="0" alt="다음으로" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="위로" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="app01.htm" ><img border="0" alt="이전으로" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="안녕하세요" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="인덱스" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+  </tr>
+</table>
+<hr>
+
+</body>
+</html>

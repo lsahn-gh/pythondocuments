@@ -1,0 +1,918 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>제 5 장 : 유익한 함수들(Fruitful functions)</title>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+
+<body>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap06.htm"><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm" ><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap04.htm" ><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm" ><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+
+<h2>제 5 장</h2>
+
+<h1>유익한 함수</h1>
+
+
+<a name=1></a><br>
+<h3>5.1 반환 값</h3>
+<p>
+math 함수와 같은 어떤 내장 함수들은 결과를 산출합니다. 함수를 호출하면 새로운 값을 만들어 냅니다. 이 값을 보통 변수에 할당하거나 또는 표현식의 일부로 사용합니다.</p>
+
+
+<p><span class=code>e = math.exp(1.0)
+<br>height = radius * math.sin(angle)
+<br></span></p>
+
+
+<p>
+그러나 지금까지 작성한 어떤 함수도 값을 반환하지 않았습니다.</p>
+
+<p>
+이 장에서는 값을 반환하는 함수를 작성하겠습니다. 딱히 더 좋은 이름이 없으므로, 이것을 유익한 함수들(<b>fruitful functions</b>)이라고 부르겠습니다. 첫 번째 예제는 <span class=code>area</span>입니다. 이 함수는 주어진 반지름으로 원의 면적을 반환합니다:</p>
+
+
+<p><span class=code><span class=keyword>import</span> math
+<br>
+<br><span class=keyword>def</span> <span class=function>area</span>(radius):
+<br>&nbsp; temp = math.pi * radius**2
+<br>&nbsp; <span class=keyword>return</span> temp
+<br></span></p>
+
+
+
+<p>
+이전에 <span class=code><span class=keyword>return</span></span> 서술문을 보았습니다. 그러나 유익한 함수에서 <span class=code><span class=keyword>return</span></span> 서술문은 반환 값(<b>return value</b>)이 있습니다. 이 서술문은 다음을 뜻합니다: "이 함수로부터 즉시 복귀하라 그리고 다음의 표현식을 반환 값으로 사용하라." 주어진 표현식은 얼마든지 복잡할 수 있습니다. 그렇지만 다음과 같이 이 함수를 더 간결하게 작성할 수 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>area</span>(radius):
+<br>&nbsp; <span class=keyword>return</span> math.pi * radius**2
+<br></span></p>
+
+
+
+<p>
+다른 한 편으로, <span class=code>temp</span>와 같은 임시 변수(<b>temporary variables</b>) 덕분에 종종 더 쉽게 디버깅할 수 있습니다.</p>
+<p>
+어떤 때는 반환 서술문을 조건문이 실행되는 분기점마다 하나씩 여러개 가지는 것이 유용할 때가 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>absoluteValue</span>(x):
+<br>&nbsp; <span class=keyword>if</span> x &lt; 0:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> -x
+<br>&nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> x
+<br></span></p>
+
+<p>
+이러한 <span class=code><span class=keyword>return</span></span> 서술문들은 대안적인 조건문 안에 있으므로, 오직 하나만 실행될 것입니다. 하나가 실행되자 마자, 그 함수는 뒤따르는 서술문들을 전혀 실행하지 않고 끝나 버립니다.</p>
+<p>
+<span class=code><span class=keyword>return</span></span> 서술문뒤에 보이는 코드 또는 실행의 흐름이 절대 다다르지 못하는 곳에 있는 코드를 죽은 코드(<b>dead code</b>)라고 부릅니다.</p>
+<p>
+유익한 함수에서는 프로그램 전체를 통하여 모든 경로가 <span class=code><span class=keyword>return</span></span> 서술문에 도달한다는 것을 확인하는 것이 좋습니다. 예를 들어:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>absoluteValue</span>(x):
+<br>&nbsp; <span class=keyword>if</span> x &lt; 0:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> -x
+<br>&nbsp; <span class=keyword>elif</span> x &gt; 0:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> x
+<br></span></p>
+
+
+
+<p>
+이 프로그램은 만약<span class=code>x</span>가 어쩌다가 0이 되면 어떤 조건도 참이 아니기 때문에 올바르지 않습니다. 함수는 <span class=code><span class=keyword>return</span></span> 서술문을 만나지 않고 끝납니다. 이 경우, 반환 값은 <span class=code>None</span>이라고 부르는 특별한 값입니다:</p>
+
+
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> absoluteValue(0)
+<br>None
+<br></span></p>
+
+
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, <span class=code>compare</span> 함수를 작성하여 만약 <span class=code>x &gt; y</span>이면 <span class=code>1</span>을 반환하고, 만약 <span class=code>x == y</span>이면 <span class=code>0</span>을, 그리고 만약 <span class=code>x &lt; y</span>이면 <span class=code>-1</span>을 반환하도록 해 보세요.</i> </p>
+
+<a name=2></a><br>
+<h3>5.2 프로그램 개발</h3>
+<p>
+이 시점이면 완전한 함수를 분석할 수 있어야 하고 그 함수가 무엇을 하는지 말할 수 있어야 합니다. 또, 연습문제를 잘 풀어 왔으므로, 작은 함수 몇 개를 작성해 보았습니다. 더 큰 함수들을 작성함에 따라서, 특히 실행시간 에러와 의미구조 에러에 대해서 더 많은 곤란에 봉착하게 될 것입니다.</p>
+<p>
+점점 더 복잡해지는 프로그램을 다루기 위해, 점증적 개발(<b>incremental development</b>)이라고 부르는 테크닉을 제시하겠습니다. 점증적 개발의 목표는 한번에 아주 작은 양의 코드를 추가하고 테스트함으로써 장기간에 걸친 디버깅을 회피하는 것입니다.</p>
+
+
+
+<p>
+예를 들어, 두 점 사이의 거리를 찾기를 원한다고 가정해 보세요. 좌표로 <tt>(x<sub>1</sub>, y<sub>1</sub>)</tt> 그리고 <tt>(x<sub>2</sub>, y<sub>2</sub>)</tt>가 주어집니다. 피타고라스 정리를 이용하면, 그 거리는 다음과 같습니다:</p>
+
+
+
+<table align=center><tr><td><tt>
+distance = <table style="display: inline; vertical-align: middle;"><tr><td rowspan=2 valign=bottom><font size=5>&radic;</font></td><td><hr noshade color=black></td></tr><tr><td>(x<sub>2</sub> - x<sub>1</sub>)<sup>2</sup> + (y<sub>2</sub> - y<sub>1</sub>)<sup>2</sup></tr></table>
+</tt></td></tr></table>
+
+<p>
+첫 번째 단계는 파이썬에서 <span class=code>distance</span> 함수가 어떻게 보일지를 생각하는 것입니다. 다른 말로 하면, 무엇이 입력(매개변수)인가 그리고 무엇이 출력(반환 값)인가?</p>
+<p>
+이 경우, 점 두 개는 입력입니다, 이것을 매개변수 네 개를 사용하여 표현할 수 있습니다. 반환 값은 거리입니다. 이것은 부동소수-점 값입니다.</p>
+
+<p>이미 그 함수의 겉 모습을 작성할 수 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>distance</span>(x1, y1, x2, y2):
+<br>&nbsp; <span class=keyword>return</span> 0.0
+<br></span></p>
+
+
+
+<p>
+분명히, 이 함수 버전은 거리를 계산하지 않습니다; 항상 0을 반환합니다. 그러나 구문적으로는 올바릅니다. 그리고 실행될 것입니다. 이것은 곧 이 함수를 더 복잡하게 만들기 전에 테스트할 수 있다는 것을 뜻합니다.</p>
+
+<p>
+새로운 함수를 테스트하기 위해, 표본 값으로 그것을 호출합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; distance(1, 2, 4, 6)
+<br>0.0
+<br></span></p>
+
+
+
+<p>
+이러한 값들을 선택한 것은 수평 거리가 3과 같고 수직 거리가 4가 되도록 하기 위해서입니다; 그렇게 하여, 그 결과는 5입니다 (3-4-5 삼각형의 빗변이지요). 함수를 테스트할 때, 정답을 알고 있는 것이 유용합니다.</p>
+<p>
+이 시점에서 함수가 구문적으로 올바르다는 것을 확신합니다. 그러면 코드 줄을 추가하기 시작할 수 있습니다. 조금씩 조금씩 고쳐가면서, 함수를 다시 테스트합니다. 만약 에러가 어느 지점에서 발생하면, 그 에러가 위치한 곳을 알 수 있습니다---에러는 가장 마지막으로 추가한 줄에 있습니다.</p>
+<p>
+계산을 할 때 논리적인 첫 번째 단계는 <tt>x<sub>2</sub> - x<sub>1</sub></tt>와 <tt>y<sub>2</sub> - y<sub>1</sub></tt>의 차를 찾는 것입니다. 그 값들을 <span class=code>dx</span>와 <span class=code>dy</span>라는 이름의 임시 변수에 저장하고 그것들을 인쇄하겠습니다.</p>
+
+<p><span class=code><span class=keyword>def</span> <span class=function>distance</span>(x1, y1, x2, y2):
+<br>&nbsp; dx = x2 - x1
+<br>&nbsp; dy = y2 - y1
+<br>&nbsp; <span class=keyword>print</span> <span class=quote>"dx is"</span>, dx
+<br>&nbsp; <span class=keyword>print</span> <span class=quote>"dy is"</span>, dy
+<br>&nbsp; <span class=keyword>return</span> 0.0
+<br></span></p>
+
+
+
+<p>
+함수가 작동하면, 출력결과는 3과 4가 되어야 합니다. 그렇다면, 함수가 매개변수를 정확하게 받아들이고 첫 번째 계산을 올바르게 수행할 것이라는 것을 압니다. 그렇지 않다면, 단지 몇 줄만 점검하면 됩니다.</p>
+<p>
+다음으로 우리는 <span class=code>dx</span>의 제곱과 <span class=code>dy</span>의 제곱의 합을 계산합니다.:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>distance</span>(x1, y1, x2, y2):
+<br>&nbsp; dx = x2 - x1
+<br>&nbsp; dy = y2 - y1
+<br>&nbsp; dsquared = dx**2 + dy**2
+<br>&nbsp; <span class=keyword>print</span> <span class=quote>"dsquared is: "</span>, dsquared
+<br>&nbsp; <span class=keyword>return</span> 0.0
+<br></span></p>
+
+
+
+<p>
+주목할 것은 이전 단계에서 작성했던 <span class=code><span class=keyword>print</span></span> 서술문을 제거했다는 것입니다. 이와 같은 코드를 임시기둥(<b>scaffolding</b>)이라고 부릅니다. 왜냐하면 프로그램을 구축할 때는 도움이 되지만 최종 생산품에 포함되지는 않기 때문입니다.</p>
+
+<p>
+또 다시, 이 단계에서 프로그램을 실행시키고 출력결과를 점검하겠습니다 (출력결과는 25가 되어야 합니다).</p>
+
+<p>
+마지막으로, 만약 math 모듈을 반입했다면, <span class=code>sqrt</span> 함수를 사용하여 그 결과를 계산하여 반환할 수 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>distance</span>(x1, y1, x2, y2):
+<br>&nbsp; dx = x2 - x1
+<br>&nbsp; dy = y2 - y1
+<br>&nbsp; dsquared = dx**2 + dy**2
+<br>&nbsp; result = math.sqrt(dsquared)
+<br>&nbsp; <span class=keyword>return</span> result
+<br></span></p>
+
+
+
+<p>
+이제 이것이 올바르게 작동하면, 완성된 것입니다. 그렇지 않으면, <span class=code>result</span>의 값을 return 서술문 앞에서 출력해보고 싶을 것입니다.</p>
+<p>
+처음 시작할 때는 한번에 한 두 줄만 코드를 추가해야 합니다. 점점 더 많은 경험이 쌓아감에 따라, 더 많은 코드를 작성하고 디버깅하고 있는 자신을 발견할 것입니다. 어느 방식이든, 점증적 개발 과정으로 디버깅 시간을 많이 줄일 수 있습니다.</p>
+
+<p>이런 처리과정의 주요한 면모는 다음과 같습니다:</p>
+
+<ol>
+
+<li>작동하는 프로그램으로 시작하고 조금씩 작은 변화를 주어라. 어느 곳에서든, 에러가 있다면 정확하게 에러가 어디에 있는지 알 수 있을것이다.</li>
+
+<li>임시 변수들을 사용해 간접적으로 값을 유지하라. 그렇게 하면 그것들을 출력할 수 있으며 점검할 수 있다.</li>
+
+<li>프로그램이 작동하기만 하면, 어떤 임시기둥들은 제거하기를 원할 수도 있으며 여러 서술문들을 복합 표현식으로 병합하기를 원할 수도 있다. 그러나 그 때문에 프로그램을 읽기 어렵지 않을 경우에만 그렇게 하라.</li>
+
+</ol>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, 점증적 개발법을 사용하여 <span class=code>hypotenuse</span>이라고 부르는 함수를 하나 작성해보세요. 이 함수는 두 변의 길이가 매개변수로 주어진 직각삼각형에서 빗변의 길이를 반환합니다. 여러분이 진행한 점증적 개발 과정의 각 단계를 기록해 보세요.</i> </p>
+
+<a name=3></a><br>
+<h3>5.3 작성(Composition)</h3>
+<p>
+이제는 예상할 수 있듯이, 한 함수 안에서 또 다른 함수를 호출할 수 있습니다. 이 능력을 작성(<b>composition</b>)이라고 부릅니다.</p>
+<p>
+예를 들어, 두 개의 점과 원의 중심과 경계선 위에 있는 한점을 취해서, 그 원의 면적을 계산하는 함수 하나를 작성해 볼까요?</p>
+
+<p>
+중심점은 <span class=code>xc</span> 변수와 <span class=code>yc</span>에 저장되어 있고, 경계점은 <span class=code>xp</span>와 <span class=code>yp</span>에 저장되어 있다고 가정해 보세요. 첫 번째 단계는 원의 반지름을 찾는 것입니다, 반지름은 두 점 사이의 거리입니다. 다행스럽게도, 그 일을 해주는 함수인 <span class=code>distance</span>가 있습니다:</p>
+
+
+<p><span class=code>radius = distance(xc, yc, xp, yp)
+<br></span></p>
+
+
+
+<p>두 번째 단계는 반지름을 가지고 원의 면적을 찾고 그것을 반환하는 것입니다:</p>
+
+
+<p><span class=code>result = area(radius)
+<br><span class=keyword>return</span> result
+<br></span></p>
+
+
+
+<p>이것을 함수에 싸 넣으면, 다음과 같은 것을 얻습니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>area2</span>(xc, yc, xp, yp):
+<br>&nbsp; radius = distance(xc, yc, xp, yp)
+<br>&nbsp; result = area(radius)
+<br>&nbsp; <span class=keyword>return</span> result
+<br></span></p>
+
+
+
+<p>
+이 함수를 <span class=code>area2</span>라고 불렀습니다. 이전에 정의한 <span class=code>area</span> 함수와 구별하기 위해서입니다. 주어진 모듈 안에 주어진 이름으로는 오직 하나의 함수만 있을 수 있습니다.</p>
+<p>
+임시 변수인 <span class=code>radius</span>와 <span class=code>area</span>는 개발과 디버깅에 유용하게 쓰입니다. 그러나 프로그램이 작동하면, 함수 호출을 작성함으로써 프로그램을 더욱 간결하게 만들 수 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>area2</span>(xc, yc, xp, yp):
+<br>&nbsp; <span class=keyword>return</span> area(distance(xc, yc, xp, yp))
+<br></span></p>
+
+
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, <span class=code>slope(x1, y1, x2, y2)</span> 함수를 작성해 보세요. 이 함수는 (x1, y1) 점과 (x2, y2)점을 잇는 라인의 기울기를 반환합니다. 그리고나서 이 함수를 <span class=code>intercept(x1, y1, x2, y2)</span>라고 부르는 함수 안에서 사용해 보세요. 이 함수는 <span class=code>(x1, y1)</span> 점과 <span class=code>(x2, y2)</span> 점을 잇는 라인의 y-절편을 반환합니다.</i> </p>
+
+<a name=4></a><br>
+<h3>5.4 불리언 함수</h3>
+<p>
+함수는 불리언 값을 반환할 수 있습니다. 이것은 함수 안에서 복잡한 테스트를 감추는데 유용하게 쓰입니다. 예를 들어:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>isDivisible</span>(x, y):
+<br>&nbsp; <span class=keyword>if</span> x % y == 0:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> 1&nbsp; &nbsp; &nbsp; &nbsp;<span class=comment># it's true
+</span><br>&nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> 0&nbsp; &nbsp; &nbsp; &nbsp;<span class=comment># it's false
+</span><br></span></p>
+
+
+
+<p>
+이 함수의 이름은 <span class=code>isDivisible</span>입니다. 보통, 불리언 함수의 이름은 예/아니오 질문과 같이 들리도록 부여합니다. <span class=code>isDivisible</span>은 <span class=code>1</span> 또는 <span class=code>0</span>을 반환하여 매개변수가 한 자리수인지 아닌지를 나타냅니다.</p>
+<p>
+함수를 더 간결하게 만들 수 있습니다. <span class=code><span class=keyword>if</span></span> 서술문의 조건이 그 자체로 불리언 표현식이라는 사실을 이용해서 말입니다. 그것을 직접적으로 반환할 수 있습니다. <span class=code><span class=keyword>if</span></span> 서술문을 전혀 사용하지 않고 말입니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>isDivisible</span>(x, y):
+<br>&nbsp; <span class=keyword>return</span> x % y == 0
+<br></span></p>
+
+
+
+<p>
+다음은 그 새로운 함수가 작동하는 것을 보여줍니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt;&nbsp; &nbsp;isDivisible(6, 4)
+<br>0
+<br>&gt;&gt;&gt;&nbsp; &nbsp;isDivisible(6, 3)
+<br>1
+<br></span></p>
+
+
+
+<p>
+불리언 함수는 자주 조건적 서술문에서 사용됩니다:</p>
+
+
+<p><span class=code><span class=keyword>if</span> isDivisible(x, y):
+<br>&nbsp; <span class=keyword>print</span> <span class=quote>"x is divisible by y"</span>
+<br><span class=keyword>else</span>:
+<br>&nbsp; <span class=keyword>print</span> <span class=quote>"x is not divisible by y"</span>
+<br></span></p>
+
+
+
+<p>
+혹시 다음과 같은 어떤것을 작성하고 싶은 유혹에 빠질수도 있는데:</p>
+
+
+<p><span class=code><span class=keyword>if</span> isDivisible(x, y) == 1:
+<br>&nbsp; ...
+<br></span></p>
+
+
+
+<p>그러나 더 이상의 비교는 불필요합니다.</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, <span class=code>isBetween(x, y, z)</span> 함수를 작성해서 만약 <tt>y le x le z</tt>이면 <span class=code>1</span>을 반환하고 그렇지 않으면 <span class=code>0</span>을 반환하도록 해보세요.</i> </p>
+
+<a name=5></a><br>
+<h3>5.5 재귀 심화연구</h3>
+<p>
+지금까지 파이썬의 작은 부분집합만을 배웠을 따름입니다. 그러나 이 부분집합이 <i>완전한(complete)</i> 프로그래밍 언어라는 것을 알게 되면 흥미로울 것입니다. 이것은 곧 계산할 수 있는 모든 것은 이 언어로 표현할 수 있다는 것을 의미합니다. 작성된 모든 프로그램은 지금까지 배워 온 이 언어의 사양만을 사용해서 다시 작성될 수 있습니다 (실제로, 여러분은 키보드와 마우스 그리고 디스크 등등을 제어하는 여러 명령어들이 필요할 것입니다. 그러나 그것이 다입니다).</p>
+
+<p>
+그 주장을 증명하는 과정은 상당히 어려운 훈련과정으로서 알란 튜링(Alan Turing)에 의하여 처음으로 증명되었습니다. 그는 1세대 컴퓨터과학자중의 한사람입니다 (어떤 사람들은 그가 수학자였다고 주장합니다. 그러나 초기의 컴퓨터과학자들중 대다수는 수학자로 시작하였습니다). 따라서, 그것은 튜링 논제(Turing Thesis)라고 알려져 있습니다. 계산 이론에 대한 강의를 듣게 되면, 여러분은 그 증명을 볼 기회가 있을 것입니다.</p>
+
+<p>
+지금까지 배워온 도구들로 무엇을 할 수 있는지 알려 주기 위해, 재귀적으로 정의되는 수학적 함수들을 평가해 보겠습니다. 재귀적 정의는 순환 정의와 비슷합니다. 그 정의에 정의되는 대상에 대한 참조가 있다는 의미에서 말입니다. 순수한 순환 정의는 별로 유용하지 않습니다:</p>
+
+<dl>
+
+<dt>frabjuous(프레뷰어스)</dt>
+<dd>An adjective used to describe something that is frabjuous.<BR>(프레뷰어스한 어떤 것을 기술하는데 사용되는 형용사)</dd>
+
+</dl>
+
+
+<p>
+그 정의를 사전에서 찾아 보면 짜증이 날 것입니다. 다른 한편으로, 수학적 함수 팩토리얼의 정의를 찾아 보면, 다음과 같은 것을 볼 것입니다:</p>
+
+
+
+<table align=center><tr><td><tt>
+0! = 1<br>
+n! = n &middot; (n-1)!
+</tt></td></tr></table>
+
+<p>
+이 정의는 0의 팩토리얼은 1이고, 다른 모든 값, 즉 <tt>n</tt>의 팩토리얼은 <tt>n</tt> 곱하기 <tt>n-1</tt> 팩토리얼이라고 말하고 있습니다. 그래서 <tt>3!</tt>은 3 곱하기 <tt>2!</tt>이며, 이것은 2 곱하기 <tt>1!</tt>이고, 이것은 1 곱하기 <tt>0!</tt>입니다. 모두 조합해 보면, <tt>3!</tt>은 3 곱하기 2 곱하기 1 곱하기 1이며, 이것은 6입니다.</p>
+<p>
+만약 무엇인가를 재귀적으로 정의할 수 있다면, 보통 파이썬 프로그램을 작성하여 그것을 평가할 수 있습니다. 첫 번째 단계는 이 함수에 대하여 매개변수들이 무엇인지를 결정하는 것입니다.  별 노력을 기울이지 않아도, <span class=code>factorial</span>이 매개변수를 하나 취한다는 결론을 내릴 수 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>factorial</span>(n):
+<br></span></p>
+
+
+
+<p>만약 인자가 어쩌다가 0이 되면, 1을 반환해야 합니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>factorial</span>(n):
+<br>&nbsp; <span class=keyword>if</span> n == 0:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> 1
+<br></span></p>
+
+
+
+<p>
+그렇지 않으면, 이것이 흥미로운 부분입니다만, 재귀 호출을 만들어 <tt>n-1</tt>의 팩토리얼을 찾고 그것을 <tt>n</tt> 만큼 곱해야 합니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>factorial</span>(n):
+<br>&nbsp; <span class=keyword>if</span> n == 0:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> 1
+<br>&nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; recurse = factorial(n-1)
+<br>&nbsp; &nbsp; result = n * recurse
+<br>&nbsp; &nbsp; <span class=keyword>return</span> result
+<br></span></p>
+
+
+
+<p>
+이 프로그램에 대한 실행의 흐름은 <a href="chap04.htm#9">섹션 4.9</a>에 있는<span class=code>countdown</span>의 흐름과 비슷합니다. 만약 값 3으로 <span class=code>factorial</span>을 호출한다면:</p>
+<p>
+3은 0이 아니므로, 두 번째 분기를 취하고 <span class=code>n-1</span>의 팩토리얼을 계산한다...</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> 2는 0이 아니므로, 두 번째 분기를 취하고 <span class=code>n-1</span>의 팩토리얼을 계산한다...
+
+<p style="margin-left: 30px; margin-right: 30px;"> 1은 0아 아니므로, 두 번째 분기를 취하고 <span class=code>n-1</span>의 팩토리얼을 계산한다...
+
+<p style="margin-left: 30px; margin-right: 30px;"> 0은 0<i>이므로</i>, 첫 번째 분기를 취하고 더 이상의 재귀호출을 하지 않고 1을 반환한다. </p>
+
+반환 값(1)은 <tt>n</tt>만큼 곱해지고, n은 1이다. 그리고 그 결과가 반환된다. </p>
+
+반환 값(1)은 <tt>n</tt>만큼 곱해지고, n은 2이다. 그리고 그 결과가 반환된다. </p>
+
+<p>
+반환 값(2)은 <tt>n</tt>만큼 곱해지고, n은 3이다. 그리고 그 결과인 6은 이 전과정을 기동시킨 함수 호출의 반환값이 된다.</p>
+
+<p>
+다음은 이 일련의 함수 호출에 대하여 스택 다이그램이 어떻게 보이는지 상태를 보여주고 있습니다:</p>
+
+<p align="center"><img src="illustrations/stack3.png"></p>
+
+<p>
+반환 값들이 스택의 위로 되넘겨지고 있는 것을 볼 수 있습니다. 각 틀(frame)에서, 반환 값은 <span class=code>result</span>의 값입니다, 이것은 <span class=code>n</span>과 <span class=code>recurse</span>의 곱입니다.</p>
+
+<p>
+가장 마지막 틀(frame)에서 주목할 것은 지역 변수들 <span class=code>recurse</span>와 <span class=code>result</span>가 없다는 것인데, 그 변수들을 생성한 분기점이 실행되지 않았기 때문입니다.</p>
+
+<a name=6></a><br>
+<h3>5.6 신념에 찬 도약</h3>
+<p>
+실행의 흐름을 따르는 것은 프로그램을 읽는 방법중 하나이지만 즉각 미로에 빠져 버릴 수 있습니다. 하나의 대안은 "신념에 찬 도약(leap of faith)"이라고 부르는 것입니다. 함수 호출을 맞이하면, 실행의 흐름을 따르는 대신에 그 함수가 올바르게 작동하고 적절한 값을 반환한다고 <i>가정합니다</i>.</p>
+<p>
+사실, 이미 내장 함수들을 사용할 때 이 신념에 찬 도약을 가정하고 있었습니다. <span class=code>math.cos</span> 또는 <span class=code>math.exp</span>를 호출할 때, 그러한 함수들의 구현을 조사하지 않았습니다. 단지 내장함수들을 작성한 사람들이 훌륭한 프로그래머들이기 때문에 그 함수들이 잘 작동하리라고 가정할 따름입니다.</p>
+<p>
+여러분이 손수 만든 함수를 호출할 때에도 마찬가지입니다. 예를 들어, <a href="chap05.htm#4">섹션 5.4</a>에서 <span class=code>isDivisible</span>이라고 부르는 함수를 하나 작성해서 하나의 숫자가 다른 숫자로 나누어질 수 있는지를 결정하였습니다. 이 함수가---코드를 테스트하고 조사함으로써---올바르다고 확신하기만 하면 코드를 다시 살펴 보지 않고서도 그 함수를 사용할 수 있습니다.</p>
+<p>
+재귀 함수도 마찬가지입니다. 재귀 함수와 마주 한다면, 실행의 흐름을 따르는 대신에 그 재귀 호출이 잘 작동한다고 (올바른 결과를 산출한다고) 가정해야만 합니다. 그리고 자신에게 물어 보아야 합니다. "만약 내가 <tt>n-1</tt>의 팩토리얼을 찾을 수 있다고 가정한다면, 내가 <tt>n</tt>의 팩토리얼을 계산할 수 있을까?"  이 경우 분명히 여러분은 할 수 있습니다. <tt>n</tt>만큼 곱함으로써 말입니다.</p>
+<p>
+물론, 아직 함수를 작성하지 않았음에도 불구하고 그 함수가 올바르게 작동하리라고 가정하는 것이 약간 이상하기는 합니다. 그러나 그 때문에 바로 신념에 찬 도약이라고 부르는 것입니다!</p>
+
+<a name=7></a><br>
+<h3>5.7 예제를 하나 더</h3>
+<p>
+이전의 예제에서 임시 변수들을 사용해서 각 단계를 전부 기술했으며 코드를 더 쉽게 디버그할 수 있도록 만들었지만, 몇 줄을 더 절약할 수도 있었습니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>factorial</span>(n):
+<br>&nbsp; <span class=keyword>if</span> n == 0:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> 1
+<br>&nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> n * factorial(n-1)
+<br></span></p>
+
+<p>
+지금부터는 더욱 간결한 형태를 사용하게 될 것입니다. 그러나 코드를 개발할 때는 더 명료한 버전을 사용하기를 권고합니다. 코드가 잘 작동할 때, 영감이 흘러 넘치면 그 코드를 날씬하게 만들 수 있습니다.</p>
+
+
+
+<p>
+팩토리얼(<span class=code>factorial</span>) 다음으로, 재귀적으로 정의되는 수학적 함수의 가장 흔한 예는 피보나치(<span class=code>fibonacci</span>) 수열이 있습니다. 이 수열은 다음과 같이 정의됩니다:</p>
+
+
+
+<table align=center><tr><td><tt>
+fibonacci(0) = 1<br>
+fibonacci(1) = 1<br>
+fibonacci(n) = fibonacci(n-1) + fibonacci(n-2);
+</tt></td></tr></table>
+
+<p>
+파이썬으로 번역하면, 다음과 같이 보입니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>fibonacci</span> (n):
+<br>&nbsp; <span class=keyword>if</span> n == 0 <span class=keyword>or</span> n == 1:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> 1
+<br>&nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> fibonacci(n-1) + fibonacci(n-2)
+<br></span></p>
+
+
+
+<p>
+실행의 흐름을 따르려고 시도한다면, 심지어는 상당히 작은 <tt>n</tt> 값에 대해서 조차도, 머리가 폭발 지경에 이릅니다. 그러나 신념에 찬 도약을 하여, 그 두 재귀 호출이 올바르게 작동한다고 가정하면, 그들을 더하여 정확한 값을 얻을 수 있습니다.</p>
+
+<a name=8></a><br>
+<h3>5.8 유형을 점검하기</h3>
+<p>
+팩토리얼(<span class=code>factorial</span>)을 호출하고 1.5를 인자로 주면 무슨 일이 일어날까요?</p>
+
+
+<p><span class=code>&gt;&gt;&gt; factorial (1.5)
+<br>RuntimeError: Maximum recursion depth exceeded
+<br></span></p>
+
+
+
+<p>
+마치 무한 재귀처럼 보입니다. 그러나 어떻게 그렇게 될 수 있는가? 기저 케이스가 있습니다--- <span class=code>n == 0</span>일 때 말입니다. 문제는 <span class=code>n</span>의 값이 기저 케이스를 <i>놓친다는</i> 것입니다.</p>
+<p>
+첫 번째 재귀 호출에서, <span class=code>n</span>의 값은 0.5입니다. 다음에는, -0.5입니다. 거기에서부터, 그 값은 점점 더 작아집니다, 그러나 절대로 0이 되지 않을 것입니다.</p>
+
+<p>
+두 가지 선택이 있습니다. <span class=code>factorial</span> 함수를 일반화하여 부동-소수점수와 작동하도록 시도해 볼 수 있습니다, 또는 <span class=code>factorial</span> 함수가 넘어오는 매개변수의 형을 점검하도록 만들 수 있습니다.  첫 번째 선택을 감마(gamma) 함수라고 부릅니다. 그것은 이 책의 범위를 약간 넘어 섭니다. 그래서 두 번째 선택을 다루어 보겠습니다.</p>
+
+
+
+<p>
+<span class=code>type</span>을 사용하여 매개변수의 유형과 (1과 같이 )알려진 정수 값의 유형을 비교할 수 있습니다. 그렇게 하는 동안 그 매개변수가 양의 정수라는 것도 확인합니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>factorial</span> (n):
+<br>&nbsp; <span class=keyword>if</span> type(n) != type(1):
+<br>&nbsp; &nbsp; <span class=keyword>print</span> <span class=quote>"Factorial is only defined for integers."</span>
+<br>&nbsp; &nbsp; <span class=keyword>return</span> -1
+<br>&nbsp; <span class=keyword>elif</span> n &lt; 0:
+<br>&nbsp; &nbsp; <span class=keyword>print</span> <span class=quote>"Factorial is only defined for positive integers."</span>
+<br>&nbsp; &nbsp; <span class=keyword>return</span> -1
+<br>&nbsp; <span class=keyword>elif</span> n == 0:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> 1
+<br>&nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> n * factorial(n-1)
+<br></span></p>
+
+
+
+<p>
+이제 기저 케이스가 세 개 있습니다. 첫 번째 케이스는 비-정수를 나포합니다. 두 번째 케이스는 음의 정수를 나포합니다. 두 경우 모두 프로그램은 에러 메시지를 인쇄하고 특별한 값인 -1을 반환하여 무엇인가 잘못되었다는 것을 표시합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; factorial (<span class=quote>"fred"</span>)
+<br>Factorial <span class=keyword>is</span> only defined <span class=keyword>for</span> integers.
+<br>-1
+<br>&gt;&gt;&gt; factorial (-2)
+<br>Factorial <span class=keyword>is</span> only defined <span class=keyword>for</span> positive integers.
+<br>-1
+<br></span></p>
+
+
+
+<p>
+검사점 둘 모두를 통과하면 <tt>n</tt>이 양의 정수임을 알 수 있습니다. 그리고 그 재귀 함수가 끝난다는 것을 증명할 수 있습니다.</p>
+<p>
+이 프로그램은 한가지 패턴을 보여 주는데 보통 보호자(<b>guardian</b>)라고 부릅니다. 첫 번째 두 조건문들은 마치 보호자처럼 행동하여, 에러를 야기할지도 모르는 값들로부터 뒤따르는 코드를 보호합니다. 보호자 패턴 덕분에 코드의 올바름을 증명할 수 있습니다.</p>
+
+
+
+
+<h3>5.* 문서화문자열 테스트(<code>doctest</code>)</h3>
+
+<p>오늘날 소프트웨어개발에서 아주 좋은 관행은 자동으로 소스 코드에 <b>유닛 테스팅</b>을 포함시키는 것입니다. 유닛 테스팅은 함수 같은 개별 코드가 제대로 작동하는지 자동으로 확증하는 방법입니다. 이렇게 하면 함수의 구현을 나중에 쉽게 바꿀 수 있고 여전히 의도대로 작동하는지 신속하게 검증할 수 있습니다.</p>
+
+<p>파이썬에는 내장 <code>doctest</code> 모듈이 있어서 쉽게 유닛 테스팅에 사용할 수 있습니다. Doctest는 함수나 스크립트 몸체의 첫 줄에 삼중 따옴표 문자열 안에 넣으면 됩니다. Doctest는 샘플 인터프리터 세션으로 구성됩니다. 먼저 파이썬 프롬프트에 넣을 일련의 입력이 오고 다음에 파이썬 인터프리터의 예상 출력이 따릅니다.</p>
+
+<p> <code>doctest</code> 모듈은 <code>&gt;&gt;&gt; </code>로 시작되면  어떤 서술문도 자동으로 실행하여 다음 줄을 인터프리터의 출력과 비교합니다.</p>
+
+<p>이것이 어떻게 작동하는지 보려면, 다음을 <code>myfunctions.py</code>라는 스크립트에 넣어보세요:</p>
+
+<pre class='python'>
+def is_divisible_by_2_or_5(n):
+    """
+      &gt;&gt;&gt; is_divisible_by_2_or_5(8)
+      True
+    """
+
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
+</pre>
+
+<p>마지막 세줄에서 <code>doctest</code>가 실행됩니다. 이 세 줄을 doctest가 포함된 파일의 제일 아래에 두세요.  제 10장 모듈을 연구할 때 이것이 작동하는 방식을 설명하겠습니다.</p>
+
+<p>스크립트를 실행하면 다음과 같이 출력됩니다:</p>
+
+<pre class='shell'>
+$ python myfunctions.py 
+**********************************************************************
+File "myfunctions.py", line 3, in __main__.is_divisible_by_2_or_5
+Failed example:
+    is_divisible_by_2_or_5(8)
+Expected:
+    True
+Got nothing
+**********************************************************************
+1 items had failures:
+   1 of   1 in __main__.is_divisible_by_2_or_5
+***Test Failed*** 1 failures.
+$
+</pre>
+
+<p>
+이는 <em>실패하는 테스트의 예</em>입니다.  테스트에 의하면:  <code>is_divisible_by_2_or_5(8)</code>를 호출하면 그 결과가 <code>True</code>이어야 합니다.  작성된대로 하면 <code>is_divisible_by_2_or_5</code>가 아무것도 돌려주지 않기 때문에, 테스트는 실패하고, doctest는 <code>True</code>를 예상했지만 아무것도 받지 못했다고 알려줍니다.</p>
+
+<p><code>True</code>를 돌려주면 이 테스트를 통과시킬 수 있습니다:</p>
+
+<pre class='python'>
+def is_divisible_by_2_or_5(n):
+    """
+      &gt;&gt;&gt; is_divisible_by_2_or_5(8)
+      True
+    """
+    return True
+
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
+</pre>
+
+<p>이제 실행하면 아무것도 출력되지 않습니다. 이는 테스트가 통과했다는 뜻입니다. doctest 문자열은 반드시 함수 정의 헤더 바로 다음에 위치해야 실행시킬 수 있음을 주의하세요.</p>
+
+<p>좀 더 자세한 출력을 보려면 스크립트에 <code>-v</code> 명령어 줄 옵션을 주어서 실행하세요:</p>
+
+<pre class='shell'>
+$ python myfunctions.py -v
+Trying:
+    is_divisible_by_2_or_5(8)
+Expecting:
+    True
+ok
+1 items had no tests:
+    __main__
+1 items passed all tests:
+   1 tests in __main__.is_divisible_by_2_or_5
+1 tests in 2 items.
+1 passed and 0 failed.
+Test passed.
+$
+</pre>
+
+<p>테스트는 통과했지만 테스트 모듬은 확실히 부적절합니다. 왜냐하면 어떤 인자를 건네더라도 <code>is_divisible_by_2_or_5</code>는 이제 무조건 <code>True</code>를 돌려주기 때문입니다. 다음은 테스트가 통과하도록 테스트 모듬과 코드를 보완해서 완성된 버전입니다:</p>
+
+<pre class='python'>
+def is_divisible_by_2_or_5(n):
+    """
+      &gt;&gt;&gt; is_divisible_by_2_or_5(8)
+      True
+      &gt;&gt;&gt; is_divisible_by_2_or_5(7)
+      False
+      &gt;&gt;&gt; is_divisible_by_2_or_5(5)
+      True
+      &gt;&gt;&gt; is_divisible_by_2_or_5(9)
+      False
+    """
+    return n % 2 == 0 or n % 5 == 0 
+
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
+</pre>
+
+<p><code>-v</code> 명령어 줄 옵션을 가지고 이 스크립트를 실행하세요. 그리고 결과를 확인해 보세요.</p>
+
+
+
+
+
+
+
+
+<a name=9></a><br>
+<h3>5.9 용어 해설</h3>
+
+<dl>
+
+<dt>유익한 함수(fruitful function)</dt>
+<dd>반환 값을 산출하는 함수.</dd>
+
+<dt>반환 값(return value)</dt>
+<dd>함수호출의 결과로 주어지는 값.</dd>
+
+<dt>임시 변수(temporary variable)</dt>
+<dd>복잡한 계산에서 값을 간접적으로 저장하는데 사용되는 변수.</dd>
+
+<dt>죽은 코드(dead code)</dt>
+<dd>절대로 실행될 수 없는 프로그램의 일부. 보통 그 코드가 <span class=code><span class=keyword>return</span></span> 서술문 뒤에 나타나기 때문이다.</dd>
+
+<dt><span class=code>None</span></dt>
+<dd>파이썬의 특별한 값으로 return 서술문이 없는 함수가 반환하거나, 인자가 없는 return 서술문을 가지는 함수가 반환한다.</dd>
+
+<dt>점증적 개발(incremental development)</dt>
+<dd>한 번에 작은 양의 코드만을 추가하고 테스트함으로써 디버깅을 회피하기 위한 프로그램 개발 계획.</dd>
+
+<dt>임시기둥(scaffolding)</dt>
+<dd>프로그램 개발중에 사용되는 코드로서 최종 버전의 부분은 아닌 코드.</dd>
+
+<dt>보호자(guardian)</dt>
+<dd>에러를 야기할 수 있는 환경을 점검하고 처리하는 조건.</dd>
+
+<dt>유닛 테스팅(unit testing):</dt>
+<dd>개별 코드 단위가 제대로 작동하는지 자동으로 평가하는 과정.  파이썬은 이런 목적으로 <code>doctest</code>가 내장되어 있다.</dd>
+
+</dl>
+<h2>연습문제</h2>
+<p>
+아래의 모든 예제는 <code>ch05.py</code>라는 파일에 추가된다. 아래에 다음과 같은 내용이 포함되어 있다:
+</p>
+<pre class='python'>
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
+</pre>
+<p>
+차례로 각 연습문제를 마친 후, 프로그램을 실행하여 새로운 함수에 대하여 doctest가 통과하는지 확인하자.
+</p>
+
+<ol>
+<li><div class="exercise">
+<code>compare</code> 함수를 작성하라. 이 함수는 <code>a &gt; b</code>이면 <code>1</code>을 돌려주고 <code>a == b</code>이면 <code>0</code>을,<code>a &lt; b</code>이면 <code>-1</code>을 돌려준다.
+<pre class='python'>
+def compare(a, b):
+    """
+      &gt;&gt;&gt; compare(5, 4)
+      1
+      &gt;&gt;&gt; compare(7, 7)
+      0
+      &gt;&gt;&gt; compare(2, 3)
+      -1
+      &gt;&gt;&gt; compare(42, 1)
+      1
+    """
+    #  함수 몸체는 여기에서부터 시작한다.
+</pre>
+doctests가 통과하도록 함수의 몸체를 채워라.
+</div></li>
+
+<li><div class="exercise">
+<code>hypotenuse</code> 함수를 점진적으로 개발하라. 이 함수는 두 변의 길이가 매개변수로 주어지면 직각 삼각형의 빗변(hypotenuse)의 길이를 돌려준다. 점진적으로 개발하면서 각 단계를 기록하라.
+<pre class='python'>
+def hypotenuse(a, b):
+    """
+      &gt;&gt;&gt; hypotenuse(3, 4)
+      5.0
+      &gt;&gt;&gt; hypotenuse(12, 5)
+      13.0
+      &gt;&gt;&gt; hypotenuse(7, 24)
+      25.0
+      &gt;&gt;&gt; hypotenuse(9, 12)
+      15.0
+    """
+</pre>
+완료되면 doctest로 완성된 함수를 <code>ch05.py</code>에 추가하라. 그리고 doctest가 통과하는지 확인하라.
+</div></li>
+
+<li><div class="exercise">
+<code>slope(x1, y1, x2, y2)</code> 함수를 작성하라. (x1, y1)점과 (x2, y2) 점 사이의 직선의 기울기를 돌려준다.  <code>slope</code>의 구현은 다음의 doctest를 통과할 수 있다:
+<pre class='python'>
+def slope(x1, y1, x2, y2):
+    """
+      &gt;&gt;&gt; slope(5, 3, 4, 2)
+      1.0
+      &gt;&gt;&gt; slope(1, 2, 3, 2)
+      0.0
+      &gt;&gt;&gt; slope(1, 2, 3, 3)
+      0.5
+      &gt;&gt;&gt; slope(2, 4, 1, 2)
+      2.0
+    """
+</pre>
+다음 <code>slope</code>를 호출한다. 이름이 <code>intercept(x1, y1, x2, y2)</code>인 새로운 함수를 
+
+이 함수는 <code>(x1, y1)</code> 점과 <code>(x2, y2)</code> 점 사이의 직선에서 y-절편을 돌려준다.
+<pre class='python'>
+def intercept(x1, y1, x2, y2):
+    """
+      &gt;&gt;&gt; intercept(1, 6, 3, 12)
+      3.0
+      &gt;&gt;&gt; intercept(6, 1, 1, 6)
+      7.0
+      &gt;&gt;&gt; intercept(4, 6, 12, 8)
+      5.0
+    """
+</pre>
+<code>intercept</code>는 위의 doctest를 통과할 것이다. 
+</div></li>
+
+<li><div class="exercise">
+<code>is_even(n)</code>이라는 함수를 작성하라. 이 함수는 인자로 정수를 하나 취해 인자가 <b>짝수</b>이면 <code>True</code>를 돌려주고 <b>홀수</b>이면 <code>False</code>를 돌려준다.  이 함수에 스스로 doctest를 추가하라.
+</div></li>
+
+<li><div class="exercise">
+이제 <code>is_odd(n)</code>라는 함수를 작성하라. <code>n</code>이 홀수이면 <code>True</code>를 돌려주고 그렇지 않으면 <code>False</code>를 돌려준다. 작성해 가면서 이 함수에 doctest를 포함시켜라. 마지막으로, 그 함수가 <code>is_even</code>을 호출하여 인자가 홀수인 정수인지 결정하도록 수정하라.</div></li>
+
+<li><div class="exercise">
+<pre class='python'>
+def is_factor(f, n):
+    """
+      &gt;&gt;&gt; is_factor(3, 12)
+      True
+      &gt;&gt;&gt; is_factor(5, 12)
+      False
+      &gt;&gt;&gt; is_factor(7, 14)
+      True
+      &gt;&gt;&gt; is_factor(2, 14)
+      True
+      &gt;&gt;&gt; is_factor(7, 15)
+      False
+    """
+</pre>
+<code>is_factor</code>에 몸체를 추가하여 doctest를 통과시켜라.
+</div></li>
+
+<li><div class="exercise">
+<pre class='python'>
+def is_multiple(m, n):
+    """
+      &gt;&gt;&gt; is_multiple(12, 3)
+      True
+      &gt;&gt;&gt; is_multiple(12, 4)
+      True
+      &gt;&gt;&gt; is_multiple(12, 5)
+      False
+      &gt;&gt;&gt; is_multiple(12, 6)
+      True
+      &gt;&gt;&gt; is_multiple(12, 7)
+      False
+    """
+</pre>
+<code>is_multiple</code>에 몸체를 추가하여 doctest를 통과시켜라. <code>is_multiple</code>의 정의에 <code>is_factor</code>를 사용하는 방법을 찾을 수 있는가?
+</div></li>
+
+<li><div class="exercise">
+<pre class='python'>
+def f2c(t):
+    """
+      &gt;&gt;&gt; f2c(212)
+      100
+      &gt;&gt;&gt; f2c(32)
+      0
+      &gt;&gt;&gt; f2c(-40)
+      -40
+      &gt;&gt;&gt; f2c(36)
+      2
+      &gt;&gt;&gt; f2c(37)
+      3
+      &gt;&gt;&gt; f2c(38)
+      3
+      &gt;&gt;&gt; f2c(39)
+      4
+    """
+</pre>
+<code>f2c</code>의 함수 정의에 몸체를 작성하라. 화씨로 주어진 온도에 가장 가까운 섭씨로 정수 값을 돌려주도록 디자인하라. (<em>힌트:</em> 내장 함수 <code>round</code>를 사용하고 싶을 것이다.  파이썬 쉘에서 <code>round.__doc__</code>을 인쇄해 보고 작동 방식에 익숙해질 때까지 round를 실험해 보라.)
+</div></li>
+
+<li><div class="exercise">
+<pre class='python'>
+def c2f(t):
+    """
+      &gt;&gt;&gt; c2f(0)
+      32
+      &gt;&gt;&gt; c2f(100)
+      212
+      &gt;&gt;&gt; c2f(-40)
+      -40
+      &gt;&gt;&gt; c2f(12)
+      54
+      &gt;&gt;&gt; c2f(18)
+      64
+      &gt;&gt;&gt; c2f(-48)
+      -54
+    """
+</pre>
+<code>c2f</code>에 함수 몸체를 추가하여 섭씨를 화씨로 변환하라.
+</div></li>
+</ol>
+
+<p>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap06.htm"><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm" ><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap04.htm" ><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm" ><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+</body>
+</html>

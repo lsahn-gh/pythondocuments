@@ -1,0 +1,683 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>제 11 장 : 파일과 예외(Files and exceptions)</title>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+
+<body>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap12.htm"><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap10.htm" ><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm" ><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+  </tr>
+</table>
+<hr>
+
+
+<h2>제 11 장</h2>
+
+<h1>파일과 예외</h1>
+
+
+<p>
+프로그램이 실행중일 때 그 프로그램의 데이타는 메모리에 있습니다. 프로그램이 종료하거나 컴퓨터가 꺼지면 메모리에 존재하던 데이타는 사라집니다. 데이타를 영원히 저장하려면 그 데이타를 <b>파일(file)</b>에 저장해 두어야 합니다. 파일은 보통 하드 드라이브나 플로피 드라이브 또는 시디-롬에 저장됩니다.</p>
+
+<p>
+엄청나게 파일이 많이 있다면, 종종 그 파일들은 <b>디렉토리(directories)</b> 안으로 조직되어 들어갑니다 (다른말로는 "폴더(folders)"라고도 부릅니다). 각 파일은 유일한 이름으로 구별되거나 또는 파일 이름과 디렉토리 이름의 조합으로 구별됩니다.</p>
+
+<p>
+파일을 읽고 쓰면서 프로그램은 정보를 다른 프로그램과 교환할 수 있으며 PDF와 같이 인쇄가능한 포맷을 만들어 낼 수 있습니다.</p>
+
+<p>
+파일 작업은 책을 읽는 것과 대단히 비슷합니다. 책을 사용하려면 책을 열어야 합니다. 다 읽고 나면 책을 닫아야 합니다. 책이 열려 있을 때는 책에 쓰거나 읽을 수 있습니다. 어느 경우이든 어디를 읽고 있는지 알고 있습니다. 대부분은 순서대로 책을 읽겠지만 가끔은 뛰어 넘을 수도 있습니다.</p>
+
+<p>
+이 모든 것들이 파일에도 그대로 적용됩니다. 파일을 열기 위해 그 이름을 지정하고 읽고자 하는 것인지 쓰고자 하는 것인지 지시합니다.</p>
+
+<p>
+파일을 열면 파일 객체가 만들어 집니다. 다음 예제에서는 변수 <span class=code>f</span>가 새로 만들어진 파일 객체를 가리킵니다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt; f = open(<span class=quote>"test.dat"</span>,<span class=quote>"w"</span>)
+<br>&gt;&gt;&gt; <span class=keyword>print</span> f
+<br>&lt;open file <span class=quote>'test.dat'</span>, mode <span class=quote>'w'</span> at fe820&gt;
+<br></span></p>
+
+
+
+<p>
+open 함수는 인자를 두 개 취합니다. 첫 번째 인자는 그 파일의 이름이고 두 번째 인자는 모드(Mode)입니다. 모드 <span class=code><span class=quote>"w"</span></span>의 의미는 파일을 읽기용으로 열라는 뜻입니다.</p>
+
+<p>
+<span class=code>test.dat</span>이라는 이름의 파일이 없으면 그 이름으로 파일이 만들어집니다. 이미 있다면 쓰고자 하는 파일로 교체됩니다.</p>
+
+<p>
+파일 객체를 인쇄하면 파일의 이름과 모드 그리고 그 객체의 위치를 볼 수 있습니다.</p>
+
+<p>
+파일에 데이타를 넣으려면 그 파일 객체에 <span class=code>write</span> 메쏘드를 요청합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; f.write(<span class=quote>"Now is the time"</span>)
+<br>&gt;&gt;&gt; f.write(<span class=quote>"to close the file"</span>)
+<br></span></p>
+
+
+
+<p>
+파일을 닫으면 시스템은 쓰기 작업이 끝났다는 것을 인지하며, 파일은 다시 읽기용으로 사용될 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; f.close()
+<br></span></p>
+
+
+
+<p>
+이 번에는 읽기용으로 파일을 다시 열 수 있습니다. 그리고 내용을 문자열로 읽어 들일 수 있습니다. 이 번에는 모드 인자가 읽기용인 <span class=code><span class=quote>"r"</span></span>입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; f = open(<span class=quote>"test.dat"</span>,<span class=quote>"r"</span>)
+<br></span></p>
+
+
+
+<p>
+존재하지 않는 파일을 열려고 시도하면 에러를 맞이합니다:</p>
+
+
+
+
+<p><span class=code>&gt;&gt;&gt; f = open(<span class=quote>"test.cat"</span>,<span class=quote>"r"</span>)
+<br>IOError: [Errno 2] No such file <span class=keyword>or</span> directory: <span class=quote>'test.cat'</span>
+<br></span></p>
+
+
+
+<p>
+예상대로, <span class=code>read</span> 메쏘드는 파일에서 데이타를 읽습니다. 아무 인자도 없으면 <span class=code>read</span> 메쏘드는 파일의 내용을 모조리 읽습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; text = f.read()
+<br>&gt;&gt;&gt; <span class=keyword>print</span> text
+<br>Now <span class=keyword>is</span> the timeto close the file
+<br></span></p>
+
+
+
+<p>
+"time"과 "to"사이에 공백이 없는 이유는 문자열 사이에 공백을 쓰지 않았기 때문입니다.</p>
+
+<p>
+<span class=code>read</span> 메쏘드는 문자를 얼마나 읽을지 지시하는 인자 하나를 취할 수도 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; f = open(<span class=quote>"test.dat"</span>,<span class=quote>"r"</span>)
+<br>&gt;&gt;&gt; <span class=keyword>print</span> f.read(5)
+<br>Now i
+<br></span></p>
+
+
+
+<p>
+파일에 문자가 충분하게 없다면, <span class=code>read</span> 메쏘드는 나머지 문자를 반환합니다. 파일의 끝에 도달하면 <span class=code>read</span> 메쏘드는 빈 문자열을 반환합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> f.read(1000006)
+<br>s the timeto close the file
+<br>&gt;&gt;&gt; <span class=keyword>print</span> f.read()
+<br>
+<br>&gt;&gt;&gt;
+<br></span></p>
+
+
+
+<p>
+다음 함수는 한 번에 50개의 문자를 읽고 쓰면서 파일 하나를 복사합니다. 첫 번째 인자는 원본 파일의 이름입니다; 두 번째 인자는 새로 만들어진 파일의 이름입니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>copyFile</span>(oldFile, newFile):
+<br>&nbsp; f1 = open(oldFile, <span class=quote>"r"</span>)
+<br>&nbsp; f2 = open(newFile, <span class=quote>"w"</span>)
+<br>&nbsp; <span class=keyword>while</span> 1:
+<br>&nbsp; &nbsp; text = f1.read(50)
+<br>&nbsp; &nbsp; <span class=keyword>if</span> text == <span class=quote>""</span>:
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>break</span>
+<br>&nbsp; &nbsp; f2.write(text)
+<br>&nbsp; f1.close()
+<br>&nbsp; f2.close()
+<br>&nbsp; <span class=keyword>return</span>
+<br></span></p>
+
+
+
+<p>
+<span class=code><span class=keyword>break</span></span> 서술문은 처음 보는 것입니다. <span class=code><span class=keyword>break</span></span> 서술문을 실행하면 회돌이로부터 빠져 나옵니다; 실행의 흐름은 다음 회돌이의 처음으로 옮겨 갑니다.</p>
+
+
+
+<p>
+이 예제에서, <span class=code><span class=keyword>while</span></span> 회돌이는 값 <span class=code>1</span>이 항상 참이기 때문에 무한히 돕니다. 회돌이를 빠져 나오기 위한 <i>유일한</i> 방법은 <span class=code><span class=keyword>break</span></span> 서술문을 실행하는 것인데, <span class=code>text</span>가 빈 문자열이면 실행됩니다.</p>
+
+<a name=1></a><br>
+<h3>11.1 텍스트 파일</h3>
+
+<p>
+<b>텍스트 파일(text file)</b>은 인쇄가능한 문자들과 공백들을 담고 있는 파일로서 새줄(newline) 문자로 분리된 줄들로 조직되어 있습니다. 파이썬은 특수하게 디자인되어 텍스트 파일을 처리하므로 작업을 쉽게 해주는 메쏘드들을 제공합니다.</p>
+
+<p>
+예를 보여주기 위해 새줄(newlines) 문자로 분리된 세 줄 짜리 텍스트 파일 하나를 만들어 보겠습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; f = open(<span class=quote>"test.dat"</span>,<span class=quote>"w"</span>)
+<br>&gt;&gt;&gt; f.write(<span class=quote>"line one\nline two\nline three\n"</span>)
+<br>&gt;&gt;&gt; f.close()
+<br></span></p>
+
+
+
+<p>
+<span class=code>readline</span> 메쏘드는 다음 새줄(newline) 문자까지 문자를 모두 읽습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; f = open(<span class=quote>"test.dat"</span>,<span class=quote>"r"</span>)
+<br>&gt;&gt;&gt; <span class=keyword>print</span> f.readline()
+<br>line one
+<br>
+<br>&gt;&gt;&gt;
+<br></span></p>
+
+
+
+<p>
+<span class=code>readlines</span> 메쏘드는 나머지 줄을 모두 리스트에 담아 반환합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> f.readlines()
+<br>[<span class=quote>'line two\012'</span>, <span class=quote>'line three\012'</span>]
+<br></span></p>
+
+
+
+<p>
+이 경우에 출력결과는 리스트 형식입니다. 이는 문자열은 인용부호와 함께 나타나며 새줄(newline) 문자는 피신 연속열 <span class=code>&lt;br&gt;012</span>으로 나타난다는 것을 의미합니다.</p>
+
+<p>
+화일의 끝에 다다르면 <span class=code>readline</span> 메쏘드는 빈 문자열을 반환하고 <span class=code>readlines</span>는 빈 리스트를 반환합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> f.readline()
+<br>
+<br>&gt;&gt;&gt; <span class=keyword>print</span> f.readlines()
+<br>[]
+<br></span></p>
+
+
+
+<p>
+다음은 줄-처리 프로그램의 한 예입니다. <span class=code>filterFile</span> 함수는 <span class=code><span class=comment>#</span></span>로 시작하는 모든 줄을 제거하고 <span class=code>oldFile</span>의 복사본을 만듭니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>filterFile</span>(oldFile, newFile):
+<br>&nbsp; f1 = open(oldFile, <span class=quote>"r"</span>)
+<br>&nbsp; f2 = open(newFile, <span class=quote>"w"</span>)
+<br>&nbsp; <span class=keyword>while</span> 1:
+<br>&nbsp; &nbsp; text = f1.readline()
+<br>&nbsp; &nbsp; <span class=keyword>if</span> text == <span class=quote>""</span>:
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>break
+<br>&nbsp; &nbsp; if</span> text[0] == <span class=quote>'#'</span>:
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>continue</span>
+<br>&nbsp; &nbsp; f2.write(text)
+<br>&nbsp; f1.close()
+<br>&nbsp; f2.close()
+<br>&nbsp; <span class=keyword>return</span>
+<br></span></p>
+
+
+
+<p>
+<span class=code><span class=keyword>continue</span></span> 서술문은 회돌이의 현재 반복을 중지하합니다. 그러나 계속해서 회돌이를 합니다. 실행의 흐름은 회돌의 제일 위로 이동하여 조건을 점검하고 그에 맞게 처리를 계속합니다.</p>
+
+
+
+<p>
+그리하여, <span class=code>text</span>가 빈 문자열이라면 회돌이는 종료합니다. <span class=code>text</span>의 첫 번째 문자가 해쉬 마크(#)라면 실행의 흐름은 회돌이의 최상위로 옮겨갑니다. 오직 두 조건 모두가 실패할 때만 <span class=code>text</span>를 새로운 파일에 복사합니다.</p>
+
+<a name=2></a><br>
+<h3>11.2 변수를 쓰기</h3>
+
+<p>
+<span class=code>write</span> 메쏘드의 인자는 반드시 문자열이어야 합니다. 그래서 다른 형태의 값을 파일에 쓰고자 한다면, 먼저 그것을 문자열로 변환해야 합니다. 가장 쉽게 해결하는 방법은 <span class=code>str</span> 함수를 사용하는 것입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; x = 52
+<br>&gt;&gt;&gt; f.write (str(x))
+<br></span></p>
+
+
+
+<p>
+또 하나의 대안은 <b>형식화 연산자(format operator)</b>인 <span class=code>%</span>를 사용하는 것입니다. 정수에 적용되면 <span class=code>%</span>는 나머지(modulus) 연산자입니다. 그러나 첫 번째 피연산자가 문자열이라면, <span class=code>%</span>는 형식화(format) 연산자입니다.</p>
+
+<p>
+첫 번째 피연산자는 <b>형식화 문자열(format string)</b>이고, 두 번째 피연산자는 표현식을 담은 터플입니다. 그 결과는 표현식들의 값들을 담은 문자열입니다. 표현식은 형식화 문자열에 맞추어 적절하게 형식화됩니다.</p>
+
+<p>
+간단히 예를 들면, 다음 <b>형식화 연속열(format sequence)</b> <span class=code><span class=quote>"%d"</span></span>가 뜻하는 것은 터플에 있는 첫 번째 표현식이 반드시 정수로 형식화되어야 한다는 것을 뜻합니다. 여기에서 <i>d</i>라는 문자는 "십진수(decimal)"를 뜻합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; cars = 52
+<br>&gt;&gt;&gt; <span class=quote>"%d"</span> % cars
+<br><span class=quote>'52'</span>
+<br></span></p>
+
+
+
+<p>
+결과는 <span class=code><span class=quote>'52'</span></span>라는 문자열인데, 이 문자열은 정수 값인 <span class=code>52</span>와 혼동되지 않습니다.</p>
+
+<p>
+형식화 연속열은 형식화 문자열의 어느곳이든 나타날 수 있습니다. 그래서 한 문장 안에 값을 끼워 넣을 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; cars = 52
+<br>&gt;&gt;&gt; <span class=quote>"In July we sold %d cars."</span> % cars
+<br><span class=quote>'In July we sold 52 cars.'</span>
+<br></span></p>
+
+
+
+<p>
+형식화 연속열 <span class=code><span class=quote>"%f"</span></span>는 터플에 있는 다음 항목을 부동-소수점 수로 형식화합니다. 그리고 <span class=code><span class=quote>"%s"</span></span>는 다음 항목을 문자열로 형식화 합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=quote>"In %d days we made %f million %s."</span> % (34,6.1,<span class=quote>'dollars'</span>)
+<br><span class=quote>'In 34 days we made 6.100000 million dollars.'</span>
+<br></span></p>
+
+
+
+<p>
+부동-소수점 형식은 기본값으로 십진수 여섯 자리를 인쇄합니다.</p>
+
+<p>
+터플 안에 있는 표현식의 개수는 문자열에 있는 형식화 연속열의 개수와 일치해야 합니다. 또한, 표현식의 유형이 형식화 연속열과 일치해야 합니다:</p>
+
+
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=quote>"%d %d %d"</span> % (1,2)
+<br>TypeError: <span class=keyword>not</span> enough arguments <span class=keyword>for</span> format string
+<br>&gt;&gt;&gt; <span class=quote>"%d"</span> % <span class=quote>'dollars'</span>
+<br>TypeError: illegal argument type <span class=keyword>for</span> built-<span class=keyword>in</span> operation
+<br></span></p>
+
+
+
+<p>
+첫 번째 예제에서는 표현식의 개수가 모자랍니다; 두 번째 예제에서는 표현식의 유형이 다릅니다.</p>
+
+<p>
+숫자의 형식을 좀더 제어하려면 그 숫자의 자리수를 형식화 문자열의 일부로 지정하면 됩니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=quote>"%6d"</span> % 62
+<br><span class=quote>'&nbsp; &nbsp; 62'</span>
+<br>&gt;&gt;&gt; <span class=quote>"%12f"</span> % 6.1
+<br><span class=quote>'&nbsp; &nbsp; 6.100000'</span>
+<br></span></p>
+
+
+
+<p>
+백분율 기호 뒤에 있는 숫자는 그 숫자가 차지하게 될 최소한의 공간의 개반입니다. 주어진 값이 더 작은 자리수의 숫자라면, 앞쪽에 공간이 추가됩니다. 공간의 개수가 음수라면, 뒤쪽에 공간이 추가됩니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=quote>"%-6d"</span> % 62
+<br><span class=quote>'62&nbsp; &nbsp; '</span>
+<br></span></p>
+
+
+
+<p>
+부동-소수점수에 대하여, 소수점 뒤에 자리수를 지정할 수도 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=quote>"%12.2f"</span> % 6.1
+<br><span class=quote>'&nbsp; &nbsp; &nbsp; &nbsp; 6.10'</span>
+<br></span></p>
+
+
+
+<p>
+이 예제에서 그 결과는 12개의 공간을 차지하고 소수점 뒤에 두 자리를 포함합니다. 이 포맷을 사용하면 소수점을 가진 달러를 가지런히 인쇄할 수 있습니다.</p>
+
+
+
+<p>
+예를 들어, 학생 이름을 키로 하고 시간당 급료를 값으로 하는 사전을 하나 가지고 있다고 생각해 보세요. 다음 함수는 사전의 내용을 형식화된 보고서로 인쇄합니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>report</span> (wages) :
+<br>&nbsp; students = wages.keys()
+<br>&nbsp; students.sort()
+<br>&nbsp; <span class=keyword>for</span> student <span class=keyword>in</span> students :
+<br>&nbsp; &nbsp; <span class=keyword>print</span> <span class=quote>"%-20s %12.02f"</span> % (student, wages[student])
+<br></span></p>
+
+
+
+<p>
+이 함수를 테스트해 보기 위해 작은 사전을 하나 만들어 그 내용을 인쇄하겠습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; wages = {<span class=quote>'mary'</span>: 6.23, <span class=quote>'joe'</span>: 5.45, <span class=quote>'joshua'</span>: 4.25}
+<br>&gt;&gt;&gt; report (wages)
+<br>joe&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.45
+<br>joshua&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.25
+<br>mary&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;6.23
+<br></span></p>
+
+
+
+<p>
+각 값의 너비를 통제하면 컬럼이 가지런히 정렬될 것이라고 보장할 수 있습니다. 이름이 스물-한 개의 문자 미만이고 시간당 급료가 백만 달러 이하인 한 말입니다.</p>
+
+<a name=3></a><br>
+<h3>11.3 디렉토리</h3>
+
+<p>
+새로운 파일을 하나 열어서 쓰기를 하면 새롭게 생성된 그 파일은 (그 프로그램을 실행할 때 어느 곳에 있든지 현재 디렉토리에 놓여집니다).  비슷하게 파일을 읽기용으로 열면 파이썬은 그 파일을 현재 디렉토리에서 찾습니다.</p>
+
+<p>
+다른 어느 곳엔가 있는 파일을 열고자 한다면 그 파일에 대하여 <b>경로(path)</b>를 지정해야 합니다. 경로는 그 파일이 위치한 디렉토리(또는 폴더)의 이름입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt;&nbsp; &nbsp;f = open(<span class=quote>"/usr/share/dict/words"</span>,<span class=quote>"r"</span>)
+<br>&gt;&gt;&gt;&nbsp; &nbsp;<span class=keyword>print</span> f.readline()
+<br>Aarhus
+<br></span></p>
+
+
+
+<p>
+이 예제는 <span class=code>words</span>라는 이름의 파일을 엽니다. 이 파일은 <span class=code>dict</span>라는 이름의 디렉토리에 존재하고, <span class=code>dict</span>는 <span class=code>share</span>라는 디렉토리에 존재하며, <span class=code>share</span>는 <span class=code>usr</span>이라는 디렉토리에 있습니다. <span class=code>usr</span>이라는 디렉토리는 <span class=code>/</span>라고 부르는, 시스템에서 최상위-수준의 디렉토리에 존재합니다.</p>
+
+
+
+<p>
+파일이름 안에 <span class=code>/</span>를 사용하면 안됩니다; <span class=code>/</span>는 디렉토리와 파일이름 사이의 구분자로 예약되어 있기 때문입니다.</p>
+
+<p>
+<span class=code>/usr/share/dict/words</span> 파일은 알파벳 순서로 단어들의 리스트를 담고 있습니다. 그 중에서 첫 번째 원소는 덴마크에 있는 한 대학의 이름입니다.</p>
+
+<a name=4></a><br>
+<h3>11.4 절이기(Pickling)</h3>
+
+<p>
+값을 파일에 집어 넣으려면, 먼저 값을 문자열로 변환해야 합니다. <span class=code>str</span> 함수로 그렇게 한다는 것을 이미 살펴 보았습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; f.write (str(12.3))
+<br>&gt;&gt;&gt; f.write (str([1,2,3]))
+<br></span></p>
+
+
+
+<p>
+문제는 그 값을 다시 읽으면 문자열을 얻는다는 것입니다. 원래의 유형 정보는 사라지고 없습니다. 사실 알고보면 한 값이 어디에서 끝나고 다음 값은 어디에서 시작하는지 알 수 없습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt;&nbsp; &nbsp;f.readline()
+<br><span class=quote>'12.3[1, 2, 3]'</span>
+<br></span></p>
+
+
+
+<p>
+해결책은 <b>절이기(pickling)</b>입니다. 데이타 구조를 "그대로 유지하기" 때문에 그렇게 부릅니다. <span class=code>pickle</span> 모듈은 필요한 명령어들을 담고 있습니다. <b>절이기(pickling)</b>를 사용하려면, <span class=code>pickle</span>을 반입하고 나서 파일을 평소 방식대로 엽니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>import</span> pickle
+<br>&gt;&gt;&gt; f = open(<span class=quote>"test.pck"</span>,<span class=quote>"w"</span>)
+<br></span></p>
+
+
+
+<p>
+데이타 구조를 저장하려면, <span class=code>dump</span> 메쏘드를 사용하고 나서 파일을 평소 방식대로 닫습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; pickle.dump(12.3, f)
+<br>&gt;&gt;&gt; pickle.dump([1,2,3], f)
+<br>&gt;&gt;&gt; f.close()
+<br></span></p>
+
+
+
+<p>
+그러면 파일을 읽기용으로 열 수 있으며 쏟아놓은(dump) 데이타 구조를 적재(load)할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; f = open(<span class=quote>"test.pck"</span>,<span class=quote>"r"</span>)
+<br>&gt;&gt;&gt; x = pickle.load(f)
+<br>&gt;&gt;&gt; x
+<br>12.3
+<br>&gt;&gt;&gt; type(x)
+<br>&lt;type <span class=quote>'float'</span>&gt;
+<br>&gt;&gt;&gt; y = pickle.load(f)
+<br>&gt;&gt;&gt; y
+<br>[1, 2, 3]
+<br>&gt;&gt;&gt; type(y)
+<br>&lt;type <span class=quote>'list'</span>&gt;
+<br></span></p>
+
+
+
+<p>
+<span class=code>load</span> 메쏘드를 요청할 때마다, 파일에서 값 한개를 원래의 유형을 완전히 유지한 채로 얻습니다.</p>
+
+<a name=5></a><br>
+<h3>11.5 예외(Exceptions)</h3>
+
+<p>
+실행시간 에러가 발생할 때마다, <b>예외(exception)</b>를 만들어 냅니다. 보통, 프로그램은 멈추고 파이썬은 에러 메시지를 인쇄합니다.</p>
+<p>
+예를 들어, 0으로 나누면 예외가 만들어 집니다:</p>
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> 55/0
+<br>ZeroDivisionError: integer division <span class=keyword>or</span> modulo
+<br></span></p>
+
+
+
+<p>
+존재하지 않는 리스트 항목에 접근할 때도 그렇습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; a = []
+<br>&gt;&gt;&gt; <span class=keyword>print</span> a[5]
+<br>IndexError: list index out of range
+<br></span></p>
+
+<p>
+또는 사전에 존재하지 않는 키에 접근할 때도 예외가 일어납니다:</p>
+
+<p><span class=code>&gt;&gt;&gt; b = {}
+<br>&gt;&gt;&gt; <span class=keyword>print</span> b[<span class=quote>'what'</span>]
+<br>KeyError: what
+<br></span></p>
+
+
+
+<p>
+각각의 경우를 살펴 보면 에러 메시지가 두 부분으로 구성되어 있습니다: 쌍점 앞에 에러의 종류가 있고 쌍점 뒤에 그 에러에 관해 설명하고 있습니다. 정상적인 경우라면 파이썬은 그 프로그램이 있었던 곳에 관한 역호출(traceback)도 인쇄하지만, 예제에서는 생략했습니다.</p>
+
+
+
+<p>
+에러를 야기할 가능성이 있는 연산을 수행하고자 하지만, 프로그램이 멈추기를 원하지는 않는 경우가 있습니다. 이 때는 <span class=code><span class=keyword>try</span></span> 서술문과 <span class=code><span class=keyword>except</span></span> 서술문을 사용하면 일어난 예외를 <b>다룰 수</b> 있습니다.</p>
+
+<p>
+예를 들어, 사용자에게 파일의 이름을 재촉하고 그 파일을 열려고 시도할 수 있습니다. 그 파일이 존재하지 않는다고 할지라도, 프로그램이 충돌하기를 원하지 않습니다; 그 예외를 다루오 보겠습니다:</p>
+
+
+<p><span class=code>filename = raw_input(<span class=quote>'Enter a file name: '</span>)
+<br><span class=keyword>try</span>:
+<br>&nbsp; f = open (filename, <span class=quote>"r"</span>)
+<br><span class=keyword>except</span>:
+<br>&nbsp; <span class=keyword>print</span> <span class=quote>'There is no file named'</span>, filename
+<br></span></p>
+
+
+
+<p>
+<span class=code><span class=keyword>try</span></span> 서술문은 첫 번째 블록에 있는 서술문들을 실행합니다. 아무 예외도 발생하지 않으면 <span class=code><span class=keyword>except</span></span> 서술문은 무시됩니다. 예외가 발생하면 <span class=code><span class=keyword>except</span></span> 분기에 있는 서술문들이 실행됩니다. 그리고 프로그램은 계속 진행됩니다.</p>
+
+<p>
+이 능력을 함수에 캡슐화해 넣을 수 있습니다: <span class=code>exists</span> 함수는 파일이름 하나를 취하고 그 파일이 존재하면 참을 반환하고, 존재하지 않으면 거짓을 반환합니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>exists</span>(filename):
+<br>&nbsp; <span class=keyword>try</span>:
+<br>&nbsp; &nbsp; f = open(filename)
+<br>&nbsp; &nbsp; f.close()
+<br>&nbsp; &nbsp; <span class=keyword>return</span> 1
+<br>&nbsp; <span class=keyword>except</span>:
+<br>&nbsp; &nbsp; <span class=keyword>return</span> 0
+<br></span></p>
+
+
+
+<p>
+<span class=code><span class=keyword>except</span></span> 블록을 여러 개 사용하여 여러 종류의 예외를 다룰 수 있습니다. <i>파이썬 참조 매뉴얼</i>에 자세한 내용이 있습니다.</p>
+
+<p>
+에러 조건을 탐지하면 프로그램에서 예외가 <b>일어나도록</b> 만들 수 있습니다. 다음 예제는 사용자에게서 입력을 받아서 그 값이 17인지 점검합니다. 어떤 이유로 17이 유효하지 않은 입력이라고 간주하고서, 예외를 일으켜 보겠습니다.</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>inputNumber</span> () :
+<br>&nbsp; x = input (<span class=quote>'Pick a number: '</span>)
+<br>&nbsp; <span class=keyword>if</span> x == 17 :
+<br>&nbsp; &nbsp; <span class=keyword>raise</span> <span class=quote>'BadNumberError'</span>, <span class=quote>'17 is a bad number'</span>
+<br>&nbsp; <span class=keyword>return</span> x
+<br></span></p>
+
+
+
+<p>
+<span class=code><span class=keyword>raise</span></span> 서술문은 인자를 두 개 취합니다: 예외의 종류와 그 에러에 대한 자세한 정보가 그것입니다. <span class=code>BadNumberError</span>는 이 어플리케이션용으로 고안한 새로운 종류의 예외입니다.</p>
+
+<p>
+<span class=code>inputNumber</span>라고 부르는 함수가 에러를 처리하게 되면 프로그램은 계속 진행될 수 있습니다; 그렇지 않으면 파이썬은 그 에러 메시지를 인쇄하고 종료합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; inputNumber ()
+<br>Pick a number: 17
+<br>BadNumberError: 17 <span class=keyword>is</span> a bad number
+<br></span></p>
+
+
+
+<p>
+위의 에러 메시지에는 일어난 예외의 유형과 여러분이 제공한 추가적인 정보가 들어 있습니다.</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, <span class=code>inputNumber</span>를 사용하여 키보드로부터 숫자 하나를 입력받아 <span class=code>BadNumberError</span> 예외를 처리하는 함수를 하나 작성하세요.</i> </p>
+
+<a name=6></a><br>
+<h3>11.6 용어해설</h3>
+
+
+
+<dl>
+
+<dt>파일(file)</dt>
+<dd>문자들의 흐름을 담고 있는 이름지어진 개체. 보통 하드 디스크나 플로피 디스크, 또는 CD-ROM에 저장되어 있다.</dd>
+
+<dt>디렉토리(directory)</dt>
+<dd>이름지어진 파일 모둠, "폴더"라고도 부른다</dd>
+
+<dt>경로(path)</dt>
+<dd>파일의 정확한 위치를 지정하는 연속적인 디렉토리 이름.</dd>
+
+<dt>텍스트 파일(text file)</dt>
+<dd>인쇄가능한 문자들을 담고 있는 파일. 새줄(newline) 문자로 분리된 줄로 조직되어 있다.</dd>
+
+<dt>break 서술문</dt>
+<dd>실행의 흐름이 회돌이를 빠져 나오도록 해 주는 서술문.</dd>
+
+<dt>continue 서술문</dt>
+<dd>회돌이의 현재 반복이 끝나도록 해주는 서술문. 실행의 흐름은 그 회돌이의 제일 위로 옮겨가서 조건을 평가하고 그리고 그에 따라 적절히 진행된다.</dd>
+
+<dt>형식화 연산자(format operator)</dt>
+<dd><span class=code>%</span> 연산자는 형식화 문자열 하나와 표현식들을 담은 터플 하나를 취해서 그 표현식들을 포함하는 문자열 하나를 산출한다. 표현식은 형식화 문자열에 맞추어 형식화된다.</dd>
+
+<dt>형식화 문자열(format string)</dt>
+<dd>인쇄가능한 문자들과 형식화 연속열을 담고 있는 문자열로서 값들을 형식화하는 법을 지시한다.</dd>
+
+<dt>형식화 연속열(format sequence)</dt>
+<dd><span class=code>%</span>로 시작하는 연속적인 문자들로 값을 형식화하는 법을 지시한다.</dd>
+
+<dt>절이기(pickle)</dt>
+<dd>데이타 값을 나중에 다시 재구성될수 있도록 그의 유형 정보와 함께 파일에 쓰는 것.</dd>
+
+<dt>예외(exception)</dt>
+<dd>실행시간에 일어나는 에러.</dd>
+
+<dt>처리하다(handle)</dt>
+<dd>예외가 프로그램을 종료시키는 것을 <span class=code><span class=keyword>try</span></span>와 <span class=code><span class=keyword>except</span></span> 서술문을 사용하여 방지하는 것.</dd>
+
+<dt>일으키다(raise)</dt>
+<dd><span class=code><span class=keyword>raise</span></span>서술문을 사용하여 예외가 일어났음을 알리는 것.</dd>
+
+</dl>
+
+<p>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap12.htm" ><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm" ><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap10.htm" ><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm" ><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+  </tr>
+</table>
+<hr>
+
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>제 19 장 : 큐(queue)</title>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+
+<body>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap20.htm" ><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm" ><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap18.htm" ><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm" ><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+
+<h2>제 19 장</h2>
+
+<h1>큐(Queues)</h1>
+<p>
+이 장에서는 두 개의 ADT를 표현해 보고자 합니다: 큐(Queue)와 우선순위 큐(Priority Queue)가 그것입니다. 실제 세계에서 큐(<b>queue</b>)는 서비스를 기다리는 고객들의 줄과 같습니다. 대부분의 경우, 줄에 있는 첫 번째 고객이 서비스해 줄 다음 고객입니다. 그렇지만, 예외가 있습니다. 공항에서 비행기가 바로 출발하는 고객들은 가끔 그 줄의 중간에서 탑승 수속을 받습니다. 슈퍼마켓에서 정중한 고객은 몇 개 안되는 물건을 가진 고객에게 자리를 양보합니다.</p>
+<p>
+누가 먼저 가야하는지를 결정하는 그 규칙을 줄서기 규칙(<b>queueing discipline</b>)이라고 부릅니다. 가장 간단한 줄서기 규칙은 <b>FIFO</b>라고 부르는데, "선-입-선-출(first-in-first-out)"을 뜻합니다. 가장 일반적인 줄서기 규칙은 우선순위 줄서기(<b>priority queueing</b>)입니다. 이 규칙에서 각 고객은 우선권을 할당받고, 도착 순서에 상관없이 최고순위의 우선권을 가진 고객이 먼저 서비스됩니다. 이것이 가장 일반적인 규칙이라고 말하는 이유는 우선순위가 어떤 것에라도 기초할 수 있기 때문입니다: 몇 시에 비행기가 이륙하는가; 얼마나 많은 채소를 고객이 가지고 있는가; 또는 그 고객이 얼마나 중요한가. 물론, 모든 줄서기 규칙이 "공정"한 것은 아닙니다. 그러나 공정함이란 보는 사람의 눈에 따라 다릅니다.</p>
+<p>
+큐 ADT와 우선순위 큐 ADT는 연산 모둠이 같으며 접근방식도 같습니다. 차이는 연산의 의미구조에 있습니다: 큐는 FIFO 정책을 사용합니다; (그 이름이 암시하는 바와 같이) 우선순위 큐는 우선순위 줄서기 정책을 사용합니다.</p>
+<p>
+대부분의 ADT에서와 마찬가지로 수 많은 방법으로 큐를 구현합니다. 큐는 항목들의 집단이므로 집단을 저장하는 모든 기본적인 메카니즘을 사용할 수 있습니다: 배열(arrays)이나 리스트(lists) 또는 벡터(vectors)가 그것입니다. 어떤 것을 선택할지는 부분적으로 수행속도에, 즉 원하는 연산을 수행하는데에 얼마나 걸리는가에 기초할 것입니다. 또 부분적으로 구현의 용이성에, 즉 얼마나 쉽게 구현할 수 있는가에 기초할 것입니다.</p>
+
+
+
+<a name=1></a><br>
+<h3>19.1 큐 ADT</h3>
+
+<p>큐 ADT는 다음의 연산으로 정의합니다:</p>
+
+<dl>
+
+<dt><span class=code>__init__</span></dt>
+<dd>빈 큐를 새롭게 초기화한다.</dd>
+
+<dt><span class=code>insert</span></dt>
+<dd>큐에 항목을 새롭게 추가한다.</dd>
+
+<dt><span class=code>remove</span></dt>
+<dd>큐로부터 항목을 제거하고 돌려준다. 반환되는 항목은 제일 먼저 추가된 항목이다.</dd>
+
+<dt><span class=code>isEmpty</span></dt>
+<dd>큐가 비어 있는지 점검한다.</dd>
+
+</dl>
+
+<a name=2></a><br>
+<h3>19.2 연결 큐(Linked Queue)</h3>
+<p>
+처음으로 보게될 큐 ADT는 연결 큐(<b>linked queue</b>)라고 부릅니다. 왜냐하면 이 큐는 연결된 <span class=code>Node</span> 객체들로 구성되기 때문입니다. 다음과 같이 클래스를 정의합니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Queue:
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__init__</span>(self):
+<br>&nbsp; &nbsp; self.length = 0
+<br>&nbsp; &nbsp; self.head = None
+<br>
+<br>&nbsp; <span class=keyword>def</span> <span class=function>isEmpty</span>(self):
+<br>&nbsp; &nbsp; <span class=keyword>return</span> (self.length == 0)
+<br>
+<br>&nbsp; <span class=keyword>def</span> <span class=function>insert</span>(self, cargo):
+<br>&nbsp; &nbsp; node = Node(cargo)
+<br>&nbsp; &nbsp; node.next = None
+<br>&nbsp; &nbsp; <span class=keyword>if</span> self.head == None:
+<br>&nbsp; &nbsp; &nbsp; <span class=comment># 리스트가 비어 있으면 새로운 노드가 처음으로 간다.
+</span><br>&nbsp; &nbsp; &nbsp; self.head = node
+<br>&nbsp; &nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; &nbsp; <span class=comment># 리스트에서 마지막 노드를 찾는다.
+</span><br>&nbsp; &nbsp; &nbsp; last = self.head
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>while</span> last.next: last = last.next
+<br>&nbsp; &nbsp; &nbsp; <span class=comment># 새로운 노드를 추가한다.
+</span><br>&nbsp; &nbsp; &nbsp; last.next = node
+<br>&nbsp; &nbsp; self.length = self.length + 1
+<br>
+<br>&nbsp; <span class=keyword>def</span> <span class=function>remove</span>(self):
+<br>&nbsp; &nbsp; cargo = self.head.cargo
+<br>&nbsp; &nbsp; self.head = self.head.next
+<br>&nbsp; &nbsp; self.length = self.length - 1
+<br>&nbsp; &nbsp; <span class=keyword>return</span> cargo
+<br></span></p>
+<p>
+<span class=code>isEmpty</span> 메쏘드와 <span class=code>remove</span> 메쏘드는  <span class=code>LinkedList</span>의 <span class=code>isEmpty</span> 메쏘드와 <span class=code>removeFirst</span> 메쏘드와 동일합니다. <span class=code>insert</span> 메쏘드는 새로운 것이고 약간 더 복잡합니다.</p>
+<p>
+새로운 항목을 리스트의 끝에 삽입하고 싶습니다. 큐가 비어 있으면 그냥 <span class=code>head</span>가 그 새로운 노드를 가리키도록 설정하기만 하면 됩니다.</p>
+<p>
+그렇지 않으면, 리스트를 마지막 노드까지 순회하여 그 새로운 노드를 마지막에 붙입니다. 마지막 노드를 식별할 수 있습니다. 왜냐하면 그의 <span class=code>next</span> 속성이 <span class=code>None</span>이기 때문입니다.</p>
+<p>
+적절하게 만들어진 <span class=code>Queue</span> 객체에는 불변량이 두 개 있습니다. <span class=code>length</span>의 값은 큐에 있는 노드의 개수가 되어야 합니다. 그리고 마지막 노드의 <span class=code>next</span>는 <span class=code>None</span>과 동등하여야 합니다. 이 메쏘드가 이 두개의 불변량을 유지하는지 직접 확인해 보세요.</p>
+
+<a name=3></a><br>
+<h3>19.3 수행속도의 특징</h3>
+<p>
+메쏘드를 호출할 때 보통 구현의 세부사항에 대해서는 신경쓰지 않습니다. 그러나 꼭 알고 싶은 "세부사항" 하나가 있습니다---그 메쏘드가 가지는 수행속도의 특징이 그것입니다. 얼마나 오래 걸리는가 그리고 집단에서 항목의 개수가 증가함에 따라 실행시간은 어떻게 변하는가?</p>
+<p>
+먼저 <span class=code>remove</span>를 살펴 봅시다. 여기에는 회돌이나 함수가 없습니다. 그래서 언제나 이 메쏘드의 실행시간은 동일하다는 것을 알 수 있습니다. 이러한 메쏘드를 상수-시간(<b>constant-time</b>) 연산이라고 부릅니다. 실제로, 이 메쏘드는 리스트가 비어 있을 때 조건 판단을 하는 몸체를 건너 뛰므로 약간 더 빠를 수도 있습니다. 그러나 그 차이는 큰 의미가 없습니다.</p>
+<p>
+<span class=code>insert</span>의 수행은 대단히 다릅니다. 일반적인 경우에는 리스트를 순회하여 마지막 요소를 찾아야 합니다.</p>
+<p>
+이 순회는 리스트의 길이에 비례하여 시간이 걸립니다. 실행시간은 길이에 대하여 선형적인 함수이므로 이러한 메쏘드를 선형 시간(<b>linear time</b>)이라고 부릅니다. 상수 시간에 비교하면 성능이 아주 나쁩니다.</p>
+
+
+
+<a name=4></a><br>
+<h3>19.4 개량된 연결 큐</h3>
+<p>
+모든 연산이 상수시간에 실행될 수 있도록 큐 ADT를 구현하고자 합니다. 그렇게 하는 한 가지 방법은 큐 클래스를 수정하여 첫 번째 노드와 마지막 노드에 대한 참조점을 유지하도록 하는 것입니다. 다음 그림에서 보여지는 바와 같이 말입니다:</p>
+
+<p align="center"><img src="illustrations/queue1.png" ></p>
+
+<p><span class=code>ImprovedQueue</span> 구현은 다음과 같이 보입니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> ImprovedQueue:
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__init__</span>(self):
+<br>&nbsp; &nbsp; self.length = 0
+<br>&nbsp; &nbsp; self.head&nbsp; &nbsp;= None
+<br>&nbsp; &nbsp; self.last&nbsp; &nbsp;= None
+<br>
+<br>&nbsp; <span class=keyword>def</span> <span class=function>isEmpty</span>(self):
+<br>&nbsp; &nbsp; <span class=keyword>return</span> (self.length == 0)
+<br></span></p>
+
+<p>
+지금까지 유일하게 변경된 것은 <span class=code>last</span> 속성뿐입니다. 이 속성은 <span class=code>insert</span>와 <span class=code>remove</span> 메쏘드에 사용됩니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> ImprovedQueue:
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>insert</span>(self, cargo):
+<br>&nbsp; &nbsp; node = Node(cargo)
+<br>&nbsp; &nbsp; node.next = None
+<br>&nbsp; &nbsp; <span class=keyword>if</span> self.length == 0:
+<br>&nbsp; &nbsp; &nbsp; <span class=comment># 리스트가 비어 있다면, 새 노드는 head와 last에 할당된다.
+</span><br>&nbsp; &nbsp; &nbsp; self.head = self.last = node
+<br>&nbsp; &nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; &nbsp; <span class=comment># 마지막 노드를 찾는다
+</span><br>&nbsp; &nbsp; &nbsp; last = self.last
+<br>&nbsp; &nbsp; &nbsp; <span class=comment># 새 노드를 추가한다
+</span><br>&nbsp; &nbsp; &nbsp; last.next = node
+<br>&nbsp; &nbsp; &nbsp; self.last = node
+<br>&nbsp; &nbsp; self.length = self.length + 1
+<br></span></p>
+
+<p>
+<span class=code>last</span>는 마지막 노드를 추적 유지하므로 마지막 노드를 탐색할 필요가 없습니다. 결과적으로 이 메쏘드는 상수시간입니다.</p>
+<p>
+속도의 증가에는 치루어야 할 대가가 따릅니다. <span class=code>remove</span>에 특별한 케이스를 추가하여 마지막 노드가 제거되면 <span class=code>last</span>를 <span class=code>None</span>으로 설정하도록 해야 합니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> ImprovedQueue:
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>remove</span>(self):
+<br>&nbsp; &nbsp; cargo&nbsp; &nbsp; &nbsp;= self.head.cargo
+<br>&nbsp; &nbsp; self.head = self.head.next
+<br>&nbsp; &nbsp; self.length = self.length - 1
+<br>&nbsp; &nbsp; <span class=keyword>if</span> self.length == 0:
+<br>&nbsp; &nbsp; &nbsp; self.last = None
+<br>&nbsp; &nbsp; <span class=keyword>return</span> cargo
+<br></span></p>
+
+<p>
+이 구현은 연결 큐(Linked Queue) 구현보다 더 복잡합니다. 그리고 그것이 옳다는 것을 보여주기는 더욱 어렵습니다. 장점이라면 목적을 달성했다는 것입니다---<span class=code>insert</span>와 <span class=code>remove</span>모두 상수-시간 연산입니다.</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, 파이썬의 리스트를 사용하여 연결 큐 ADT의 구현을 작성해 보세요. 이 구현의 수행속도를 일정 길이의 큐에 대하여 <span class=code>ImprovedQueue</span>와 비교해 보세요.</i> </p>
+
+<a name=5></a><br>
+<h3>19.5 우선순위 큐(Priority queue)</h3>
+<p>
+우선순위 큐 ADT는 큐 ADT와 접근방식이 같습니다. 그러나 의미구조가 다릅니다. 다시, 그 접근방식을 다음에 보여드립니다:</p>
+
+<dl>
+
+<dt><span class=code>__init__</span></dt>
+<dd>빈 큐를 새로이 초기화한다.</dd>
+
+<dt><span class=code>insert</span></dt>
+<dd>항목 하나를 큐에 새롭게 추가한다.</dd>
+
+<dt><span class=code>remove</span></dt>
+<dd>큐로부터 항목을 제거하고 반환한다. 반환되는 항목은 최고 우선순위를 가진 항목이다.</dd>
+
+<dt><span class=code>isEmpty</span></dt>
+<dd>큐가 비었는지 점검한다.</dd>
+
+</dl>
+
+<p>
+의미구조의 차이는 큐로부터 제거되는 그 항목이 반드시 제일 처음에 추가되었던 항목이어야 할 필요는 없다는 것입니다. 오히려 그것은 큐에서 최고 우선순위를 가지는 항목입니다. 우선순위 큐 구현은 우선순위가 무엇인지 그리고 각각의 항목을 어떻게 비교할지를 지정하지 않습니다. 그것은 큐에 있는 항목들에 달려 있습니다.</p>
+<p>
+예를 들어, 만약 큐에 있는 항목들이 이름을 가진다면, 항목들을 알파벳 순서로 선택할 수 있습니다. 만약 볼링 점수라면, 고득점에서 저득점 순서로 선택할 수 있습니다, 그러나 만약 골프 점수라면, 저득점에서 고득점 순서로 선택할 것입니다. 큐에 있는 항목들을 비교할 수 있는 한, 최고 우선순위를 가진 항목을 찾아서 제거할 수 있습니다.</p>
+<p>
+다음 우선순위 큐(Priority Queue) 구현은 항목들을 큐에 담고 있는 파이썬 리스트를 속성으로 가집니다.</p>
+
+
+<p><span class=code><span class=keyword>class</span> PriorityQueue:
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__init__</span>(self):
+<br>&nbsp; &nbsp; self.items = []
+<br>
+<br>&nbsp; <span class=keyword>def</span> <span class=function>isEmpty</span>(self):
+<br>&nbsp; &nbsp; <span class=keyword>return</span> self.items == []
+<br>
+<br>&nbsp; <span class=keyword>def</span> <span class=function>insert</span>(self, item):
+<br>&nbsp; &nbsp; self.items.append(item)
+<br></span></p>
+
+
+
+<p>
+초기화 메쏘드인 <span class=code>isEmpty</span>와 <span class=code>insert</span>는 모두 리스트 연산에 대한 겉껍질(veneers)입니다. 진짜 흥미로운 메쏘드는 <span class=code>remove</span>입니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> PriorityQueue:
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>remove</span>(self):
+<br>&nbsp; &nbsp; maxi = 0
+<br>&nbsp; &nbsp; <span class=keyword>for</span> i <span class=keyword>in</span> range(1,len(self.items)):
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>if</span> self.items[i] &gt; self.items[maxi]:
+<br>&nbsp; &nbsp; &nbsp; &nbsp; maxi = i
+<br>&nbsp; &nbsp; item = self.items[maxi]
+<br>&nbsp; &nbsp; self.items[maxi:maxi+1] = []
+<br>&nbsp; &nbsp; <span class=keyword>return</span> item
+<br></span></p>
+
+<p>
+각 반복의 시작부분에 있는 <span class=code>maxi</span>는 <i>지금까지</i> 본 것중 가장 큰 항목(최고 우선순위)의 지표를 보유합니다. 회돌이를 돌 때마다, 프로그램은 <tt>i</tt>번 째 항목을 우승후보와 비교합니다. 새 항목이 더 크면 <span class=code>maxi</span>를 <span class=code>i</span>로 교체합니다.</p>
+
+<p>
+<span class=code><span class=keyword>for</span></span> 서술문이 완료되면, <span class=code>maxi</span>는 가장 큰 항목의 지표가 됩니다. 이 항목은 리스트로부터 제거되고 반환됩니다.</p>
+
+<p>구현을 시험하여 봅시다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; q = PriorityQueue()
+<br>&gt;&gt;&gt; q.insert(11)
+<br>&gt;&gt;&gt; q.insert(12)
+<br>&gt;&gt;&gt; q.insert(14)
+<br>&gt;&gt;&gt; q.insert(13)
+<br>&gt;&gt;&gt; <span class=keyword>while not</span> q.isEmpty(): <span class=keyword>print</span> q.remove()
+<br>14
+<br>13
+<br>12
+<br>11
+<br></span></p>
+
+<p>
+큐가 단순한 숫자 혹은 문자열을 가지고 있다면, 항목들은 수치 순서 혹은 알파벳 순서로 위로부터 아래로 제거됩니다. 파이썬은 내장 비교 연산자를 사용하여 비교할 수 있으므로 가장 큰 정수 또는 문자열을 찾을 수 있습니다.</p>
+<p>
+큐가 객체 유형이라면 <span class=code>__cmp__</span> 메쏘드를 제공해야 합니다.  <span class=code>&gt;</span> 연산자를 사용하여 항목들을 비교할 때, <span class=code>remove</span>는 <span class=code>__cmp__</span>를 항목들 중의 하나에 대하여 요청하고 다른 항목을 매개변수로 건넵니다. <span class=code>__cmp__</span> 메쏘드가 올바르게 작동하는 한, 우선순위 큐(Priority Queue)는 작동할 것입니다.</p>
+
+<a name=6></a><br>
+<h3>19.6 <span class=code>Golfer</span> 클래스</h3>
+<p>
+우선순위를 특이하게 정의하는 객체의 한 예로서, <span class=code>Golfer</span>라고 부르는 클래스 하나를 구현해 봅시다. 이 클래스는 골퍼의 이름과 점수를 추적 유지합니다. 보통때와 같이, <span class=code>__init__</span>과 <span class=code>__str__</span>을 정의함으로써 시작합니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Golfer:
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__init__</span>(self, name, score):
+<br>&nbsp; &nbsp; self.name = name
+<br>&nbsp; &nbsp; self.score= score
+<br>
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__str__</span>(self):
+<br>&nbsp; &nbsp; <span class=keyword>return</span> <span class=quote>"%-16s: %d"</span> % (self.name, self.score)
+<br></span></p>
+
+
+
+<p>
+<span class=code>__str__</span>은 형식화 연산자를 사용하여 이름과 점수를 산뜻하게 열에 맞춰 배치합니다.</p>
+<p>
+다음으로 최하위 점수가 최고 우선순위를 가지는 <span class=code>__cmp__</span> 버전을 정의합니다. 언제나 그렇듯이, <span class=code>__cmp__</span>는 <span class=code>self</span>가 <span class=code>other</span>" 보다 더 크면" 1을 반환하고, <span class=code>self</span>가 <span class=code>other</span> "보다 더 작으면" -1을, 그리고 같으면 0을 반환합니다.</p>
+
+
+<p><span class=code><span class=keyword>class</span> Golfer:
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__cmp__</span>(self, other):
+<br>&nbsp; &nbsp; <span class=keyword>if</span> self.score &lt; other.score: <span class=keyword>return</span>&nbsp; 1&nbsp; &nbsp;<span class=comment># less is more
+</span><br>&nbsp; &nbsp; <span class=keyword>if</span> self.score &gt; other.score: <span class=keyword>return</span> -1
+<br>&nbsp; &nbsp; <span class=keyword>return</span> 0
+<br></span></p>
+
+<p>
+이제 <span class=code>Golfer</span> 클래스로 우선순위 큐를 시험할 준비가 되었습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; tiger = Golfer(<span class=quote>"Tiger Woods"</span>,&nbsp; &nbsp; 61)
+<br>&gt;&gt;&gt; phil&nbsp; = Golfer(<span class=quote>"Phil Mickelson"</span>, 72)
+<br>&gt;&gt;&gt; hal&nbsp; &nbsp;= Golfer(<span class=quote>"Hal Sutton"</span>,&nbsp; &nbsp; &nbsp;69)
+<br>&gt;&gt;&gt;
+<br>&gt;&gt;&gt; pq = PriorityQueue()
+<br>&gt;&gt;&gt; pq.insert(tiger)
+<br>&gt;&gt;&gt; pq.insert(phil)
+<br>&gt;&gt;&gt; pq.insert(hal)
+<br>&gt;&gt;&gt; <span class=keyword>while not</span> pq.isEmpty(): <span class=keyword>print</span> pq.remove()
+<br>Tiger Woods&nbsp; &nbsp; : 61
+<br>Hal Sutton&nbsp; &nbsp; &nbsp;: 69
+<br>Phil Mickelson : 72
+<br></span></p>
+
+
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, 연결 리스트를 사용하여 우선순위 큐(Priority Queu e) ADT의 구현을 작성해 보세요. 제거가 상수 시간 연산이 되도록 리스트를 정렬하여 유지하여야 합니다. 이 구현의 수행속도를 파이썬의 리스트 구현과 비교해 보세요.</i> </p>
+
+<a name=7></a><br>
+<h3>19.7 용어 해설</h3>
+
+<dl>
+
+<dt>큐(queue)</dt>
+<dd>서비스를 받으려고 기다리고 있는 순서 있는 객체 모둠.</dd>
+
+<dt>큐(Queue)</dt>
+<dd>줄서기(queue)로 연산을 수행하도록 정의하는 ADT.</dd>
+
+<dt>줄서기 규칙(queueing discipline)</dt>
+<dd>큐에서 어느 구성원을 다음으로 제거할 지 결정하는 규칙들.</dd>
+
+<dt>FIFO</dt>
+<dd>"선입선출(First In, First Out)" 제일 먼저 도착한 구성원을 제일 먼저 제거하는 줄서기 규칙.</dd>
+
+<dt>우선순위 줄서기(priority queue)</dt>
+<dd>각 구성원의 우선순위가 외부적인 요인에 의해서 결정되는 줄서기 규칙. 최고 우선순위를 가지는 구성원이 제일 먼저 제거된다.</dd>
+
+<dt>우선순위 큐(Priority Queue)</dt>
+<dd>우선순위 줄서기(priority queue)로 수행할 수 있도록 연산을 정의하는 ADT.</dd>
+
+<dt>연결 큐(linked queue)</dt>
+<dd>연결 리스트를 사용한 큐의 구현.</dd>
+
+<dt>상수 시간(constant time)</dt>
+<dd>실행시간이 데이타 구조의 크기에 영향을 받지 않는 연산.</dd>
+
+<dt>선형 시간(linear time)</dt>
+<dd>실행시간이 데이타 구조의 크기에 대하여 선형 함수인 연산.</dd>
+
+</dl>
+<h2>연습문제</h2>
+<ol>
+<li><div class="exercise">
+파이썬 리스트를 사용하여 Queue ADT를 구현하라. 큐 길이의 범위에 대하여 이 구현의 수행성능을 <code>ImprovedQueue</code>과 비교하라.
+</div></li>
+
+<li><div class="exercise">
+연결 리스트를 사용하여 선점 큐 ADT를 구현하라. 리스트를 정렬 상태로 유지해야 제거가 상수 시간에 이루어진다. 이 구현의 수행성능을 파이썬 리스트 구현과 비교하라.
+</div></li>
+
+<li><div class="exercise">
+ &nbsp;
+</div></li>
+</ol>
+
+<p>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap20.htm" ><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm" ><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap18.htm" ><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm" ><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+  </tr>
+</table>
+<hr>
+
+</body>
+</html>

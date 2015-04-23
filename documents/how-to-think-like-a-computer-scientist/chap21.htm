@@ -1,0 +1,770 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>제 21 장 : 트리</title>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+
+<body>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="app01.htm"><img border="0" alt="Next" src="images/next.png"></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png"></a></td>
+    <td width="20" class=head><a href="chap20.htm"><img border="0" alt="Previous" src="images/prev.png"></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png"></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="images/index.png"></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+
+<h2>제 21 장</h2>
+
+<h1>ADT 트리</h1>
+
+
+<p>
+이 장은 트리라고 부르는 새로운 데이타 구조를 보여줍니다. 사용하는 방법과 구현하는 방법을 보여줍니다.</p>
+<p>
+ADT 그 자체와 ADT 구현의 차이를 혼동할 가능성이 있습니다. ADT는 프로바이더와 클라이언트 사이에 인터페이스를 지정하고 프로바이더마다 다양한 구현을 제공합니다.</p>
+
+
+
+<p>
+이해를 돕기 위하여, 다이어그램을 그려 ADT와 그의 가능한 구현들 사이의 관계를 보여주겠습니다. 다음 그림은 트리를 두 가지로 구현한 예를 보여줍니다:</p>
+
+<p align="center"><img src="illustrations/treeadt.png"></p>
+
+<p>
+그림에서 수직선은 ADT와 그의 구현들 사이의 추상화 장벽을 나타냅니다.</p>
+
+<p>
+이제 스택과 큐로 한 개의 ADT를 여러 다양한 방법으로 구현할 수 있습니다. 이 장에서는 약간 다른 ADT로 두 가지를 구현해 보겠습니다. 클라이언트 코드는 여기에 적응해야 합니다. 이렇게 하는 이유는 앞으로 알려 드리겠습니다.</p>
+
+<a name=1></a><br>
+<h3>21.1 트리 노드</h3>
+
+<p>
+리스트처럼 트리는 노드로 구성됩니다. 일반적인 트리는 이진트리(<b>binary tree</b>)입니다. 이진트리에서 각 노드는 다른 두 노드의 참조점을 포함하고 있습니다(null 값 가능함). 이 참조점들은 왼쪽과 오른쪽의 하부트리를 가리킵니다. 리스트 노드처럼, 트리 노드도 데이터 값 또는 객체인 카르고(cargo)가 있습니다. 트리를 그래픽으로 표시하는 표준 방식이 있습니다.</p>
+
+<p align="center"><img src="illustrations/tree1.png"></p>
+
+<p>
+트리의 뿌리(<span class=code>tree</span>가 참조하는 노드)는 루트(<b>root</b>)라고 부릅니다.  계속 트리의 비유를 들어서 말하면, 다른 노드들은 가지(branches)라고 부릅니다.  그리고 참조점이 null인 맨끝의 노드는 잎(<b>leaves</b>)이라고 부릅니다.  꼭대기에 뿌리를 그리고 아래쪽에 잎을 그리는 것이 이상하게 보일지도 모르겠습니다. 그러나 그렇게 이상한 것은 아닙니다.</p>
+
+
+
+<p>
+설상가상으로, 컴퓨터 과학자들은 가족 가계도라는 또다른 비유를 섞어 쓰기도 합니다.  최상위 노드는 종종 부모(<b>parent</b>)라고 불리우며 거기에서 가리키는 노드들은 그의 자손(<b>children</b>)이라고 부릅니다. 부모가 같은 노드들을 형제(<b>siblings</b>)라고 부릅니다. 등등.</p>
+
+<p>
+마지막으로, 지리학적인 어휘를 취하여 트리에 관하여 언급하기도 합니다.  이미 왼쪽 오른쪽을 언급했지만, "위" (부모/루트 쪽으로)와 아래(자손/잎 쪽으로)도 있습니다.  또한, 루트에서 같은 거리에 있는 모든 노드들은 트리의 수준(<b>level</b>)을 이룹니다.</p>
+
+<p>트리에 관하여 언급하려고 왜 세가지나 되는 비유를 드는지 모르겠습니다. 그러나 그런 비유가 있다는 사실은 알아 두어야겠습니다.</p>
+
+<a name=2></a><br>
+<h3>21.2 이진 트리를 위한 ADT</h3>
+
+<p>
+다음은 클라이언트와 프로바이더의 의무를 나누기 위해 필요한 단계입니다:</p>
+
+<ol>
+
+<li>클래스에서 제공될 메쏘드들을 지정하는 ADT를 정의합니다.</li>
+
+<li>ADT를 다양하게 구현한 프로바이더 코드를 작성합니다.</li>
+
+<li>그 ADT를 사용할 클라이언트 코드를 작성합니다.</li>
+
+</ol>
+
+<p>그래서 트리 연산이란 무엇인가?  다른 말로해서, 어떻게 트리 ADT를 정의할까? 다음은 지금까지 보아 온 이진 연결 트리의 ADT입니다.</p>
+
+<dl>
+
+<dt>구성자</dt>
+<dd>트리를 구축합니다. 카르고를 가진 트리나 잎을 구축합니다. 왼쪽 오른쪽 하부트리와 함께 말입니다.</dd>
+
+<dt><span class=code>left</span></dt>
+<dd>이 노드의 왼쪽 자손인 하부트리를 돌려줍니다. 아무것도 없으면 빈 트리를 돌려줍니다.</dd>
+
+<dt><span class=code>cargo</span></dt>
+<dd>상위 노드의 카르고를 돌려줍니다.</dd>
+
+<dt><span class=code>right</span></dt>
+<dd>이 노드의 오른쪽 자손인 하부트리를 돌려줍니다.  아무것도 없으면 빈 트리를 돌려줍니다.</dd>
+
+</dl>
+
+<a name=3></a><br>
+<h3>21.3 트리 ADT를 연결 리스트로 구현 </h3>
+
+<p>
+트리 노드를 조립하는 과정은 리스트를 조립하는 과정과 비슷합니다. 트리 노드의 구성자는 그냥 실체 변수를 초기화하면 됩니다. 트리노드가 잎이라면 left와 right 매개변수는 빼먹어도 됩니다. 그렇지 않으면 이 매개변수들은 트리 자체입니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>class</span> Tree :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>def</span> <span class=function>__init__</span> (self, cargo, left=None, right=None) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;self.cargo = cargo
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;self.left&nbsp; = left
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;self.right = right
+<br></span><p>
+위의 트리를 구축하기 위해 먼저 자손 노드를 할당하겠습니다. 트리는 아래에서부터 위로 구축됩니다.</p>
+
+
+<span class=code>&nbsp; &nbsp; &nbsp; &nbsp;left = Tree (2)
+<br>&nbsp; &nbsp; &nbsp; &nbsp;right= Tree (3)
+<br></span><p>
+이제 부모 노드를 만들 수 있고 동시에 그것을 자손에 연결할 수 있습니다:</p>
+
+
+<span class=code>&nbsp; &nbsp; &nbsp; &nbsp;tree = Tree (1, left, right);
+<br></span><p>
+이 코드는 앞 그림에서 보여준 상태를 생산합니다.</p>
+
+<a name=4></a><br>
+<h3>21.4 트리를 순회하기</h3>
+
+<p>
+지금까지, 새로운 데이터 구조를 볼 때마다, 제일 먼저 하는 질문은 "어떻게 순회하지?"일 것입니다. 제일 자연스러운 방법은 트리를 재귀적으로 순회하는 것입니다. 예를 들어, 카르고가 정수인 트리라면 다음 함수로 합계를 낼 수 있습니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>def</span> <span class=function>total</span> (tree) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> tree == None : <span class=keyword>return</span> 0
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>return</span> total(tree.left) + total (tree.right) + tree.cargo
+<br></span><p>
+
+매개변수는 실제 트리이거나 빈 트리를 나타내는 <span class=code>None</span>일 수 있습니다. 빈 트리는 재귀의 기저 케이스가 되고 여기에 마주하면 함수는 <span class=code>0</span>을 돌려줍니다. 그렇지 않으면 두 번 재귀 호출을 하여 두 자손 노드의 합계를 찾습니다. 마지막으로, 자신의 카르고를 더해서 총계를 돌려줍니다.</p>
+
+
+
+<p>
+이 함수는 작동은 하지만, 객체-지향 디자인에 맞추려면 어려운 점이 있습니다. 함수가 Tree 클래스 안의 메쏘드이면 좋겠지만 그러면 카르고가 수치 값이어야 합니다. 트리 클래스에 그런 가정을 하면 총괄 데이터 구조라는 장점을 잃어 버립니다. 한가지 가능성은 트리를 NumberTree라고 부르는 클래스로 하부클래스화하여, 거기에 메쏘드를 두는 것입니다.</p>
+
+<p>
+둘째, 이 코드는 트리 노드의 실체 변수에 접근합니다. 그래서 트리의 구현에 관하여 "필요이상으로 많이 압니다". 나중에 구현을 바꾸면 이 코드는 망가질 것입니다.</p>
+
+<p>
+이 장의 후반에 이 문제를 해결할 방법을 강구해 보겠습니다. 트리가 어떤 종류의 객체를 가지든지 클라이언트 코드와 그 구현 사이에 있는 추상 장벽을 깨지 않고서 클라이언트가 순회할 수 있도록 말입니다. 그 문제를 다루기 전에, 트리의 적용 방법을 살펴보겠습니다.</p>
+
+<a name=5></a><br>
+<h3>21.5 표현식 트리</h3>
+
+<p>
+트리는 표현식의 구조를 자연스럽게 표현하는 방법입니다. 다른 표기법과는 다르게, 계산을 명확하게 표현할 수 있습니다. 예를 들어, 중위 표현식 <span class=code>1 + 2 * 3</span>은 덧셈보다 곱셈이 먼저라는 사실을 알지 못하는 한 애매모호합니다.</p>
+
+<p>다음 그림은 같은 계산을 표현합니다:</p>
+
+<p align="center"><img src="illustrations/tree2.png"></p>
+
+<p>
+노드는 <span class=code>1</span>과 <span class=code>2</span> 같은 피연산자이거나 <span class=code>+</span>와 <span class=code>*</span> 같은 연산자가 될 수 있습니다.  피연산자는 잎 노드입니다; 연산자 노드에는 피 연산자에 대한 참조점이 담깁니다 (이 연산자들은 모두 이진(<b>binary</b>) 연산자인데, 정확하게 피연산자를 두 개 가진다는 뜻입니다).</p>
+
+<p>
+다음 그림을 보면, 의심의 여지 없이 연산의 순서가 어떻게 되는지 알 수 있습니다: 곱셈이 먼저 일어난 다음 덧셈의 첫 피연산자를 계산합니다.</p>
+
+<p>
+이와 같은 표현식 트리는 사용 사례가 많습니다. 앞으로 살펴볼 예제는 트리를 후위와 전위 그리고 중위 형태로 번역하는 것입니다. 표현식 트리는 컴파일러 안에서 프로그램을 해석하고 최적화하며 그리고 번역하는데 사용됩니다.</p>
+
+<a name=6></a><br>
+<h3>21.6 순회</h3>
+
+<p>
+재귀는 자연스럽게 트리를 순회하는 방법이라고 이미 지적하였습니다. 표현식 트리의 내용을 다음과 같이 인쇄할 수 있습니다:</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>def</span> <span class=function>printTree</span> (tree) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> tree == None : <span class=keyword>return
+<br>&nbsp; &nbsp; &nbsp; &nbsp;print</span> tree.cargo,
+<br>&nbsp; &nbsp; &nbsp; &nbsp;printTree(tree.left)
+<br>&nbsp; &nbsp; &nbsp; &nbsp;printTree(tree.right)
+<br></span>
+<p>
+다른 말로 해서, 트리를 인쇄하려면, 먼저 루트의 내용을 인쇄하고나서, 왼족 서브트리 전체를 인쇄한다음, 오른쪽 하부트리 전체를 인쇄하면 됩니다. 이런 식으로 트리를 순회하는 방법을 전위순회(<b>preorder</b>)라고 부르는데, 루트의 내용이 자손의 내용보다 먼저 나타나기 때문입니다.</p>
+
+<p>
+위의 예제 표현식에 대한 출력결과는 <span class=code>+ 1 * 2 3</span>입니다. 이것은 후위식(postfix) 그리고 중위식(infix)과 다릅니다; 새로운 표기법으로서 전위식(<b>prefix</b>)이라고 불리우며, 여기에서는 연산자가 피연산자보다 먼저 나타납니다.</p>
+
+<p>
+트리를 다른 순서로 순회한다면 다른 표기법으로 표현식을 얻지 않을까 궁금하실 것입니다. 예를 들어, 하부트리를 먼저 인쇄하고, 다음 루트를 인쇄한다면:</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>def</span> <span class=function>printTreePostorder</span> (tree) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> tree == None : <span class=keyword>return</span>
+<br>&nbsp; &nbsp; &nbsp; &nbsp;printTreePostorder (tree.left)
+<br>&nbsp; &nbsp; &nbsp; &nbsp;printTreePostorder (tree.right)
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>print</span> tree.cargo,
+<br></span><p>
+후위식(postfix)으로 표현을 얻습니다 (<span class=code>1 2 3 * +</span>)! 이런 순서로 순회하는 방법을 후위순회(<b>postorder</b>)라고 부릅니다. 마지막으로, 트리를 중위순회(<b>inorder</b>) 하려면, 왼쪽 트리를 인쇄한다음, 오른쪽 트리를 인쇄합니다:</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>def</span> <span class=function>printTreeInorder</span> (tree) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> tree == None : <span class=keyword>return</span>
+<br>&nbsp; &nbsp; &nbsp; &nbsp;printTreeInorder (tree.left)
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>print</span> tree.cargo,
+<br>&nbsp; &nbsp; &nbsp; &nbsp;printTreeInorder (tree.right)
+<br></span><p>
+그 결과는 <span class=code>1 + 2 * 3</span>이며, 중위식(infix)입니다.</p>
+
+<p>
+공정하게 하기 위해, 중요한 상세를 생략했다는 것을 지적해야 하겠습니다.  가끔 중위 표현식을 작성할 때 반드시 괄호를 사용하여 연산의 순서를 보존해야 할 경우가 있습니다. 그래서 중위 순회는 중위식을 만들어 내기에 충분하지 못합니다.</p>
+
+<p>
+그럼에도 불구하고, 약간만 개선하면 표현식 트리와 트리 재귀 순회는 표현식을 한 형태에서 다른 형태로 변환하는 일반적인 방법입니다.</p>
+
+<p>
+마지막으로, printTreeInorder와 비슷하게 유용한 함수로 <span class=code>printTreeIndented</span>라는 함수가 있습니다. 이 구현으로 한 카르고를 줄마다 인쇄하고 각 수준당 고정된 양만큼 들여쓰기 할 수 있습니다. 이렇게 하면 출력이 옆으로 인쇄된 트리처럼 보입니다. 페이지를 (또는 모니터를) 시계방향으로 90도 돌렸다고 생각하면 됩니다. 이 함수를 최상위에서 호출할 때는 그냥 <span class=code>level</span> 인자를 생략해도 기본값으로 0이 됩니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>def</span> <span class=function>printTreeIndented</span> (tree, level=0) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> tree == None : <span class=keyword>return</span>
+<br>&nbsp; &nbsp; &nbsp; &nbsp;printTreeIndented (tree.right,level+1)
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>print</span> <span class=quote>'&nbsp; '</span>*level + str(tree.cargo)
+<br>&nbsp; &nbsp; &nbsp; &nbsp;printTreeIndented (tree.left,level+1)
+<br>
+<br>&nbsp; &nbsp;&gt;&gt;&gt; t = Tree(<span class=quote>'+'</span>,Tree(<span class=quote>'*'</span>,Tree(2),Tree(3)), Tree(4))
+<br>&nbsp; &nbsp;&gt;&gt;&gt; printTreeIndented (t)
+<br>&nbsp; &nbsp; &nbsp;4
+<br>&nbsp; &nbsp;+
+<br>&nbsp; &nbsp; &nbsp; &nbsp;3
+<br>&nbsp; &nbsp; &nbsp;*
+<br>&nbsp; &nbsp; &nbsp; &nbsp;2
+<br>
+<br></span><a name=7></a><br>
+<h3>21.7 캡슐화</h3>
+
+<p>
+앞서 언급하였듯이, 지금까지 트리를 순회해 온 방법에는 문제가 있습니다: 클라이언트 코드(트리를 사용하는 어플리케이션)와 프로바이더 코드(트리 구현) 사이에 놓인 경계를 허물어 버립니다. 클라이언트 코드는 트리가 왼쪽 오른쪽 포인터를 가진 노드 객체를 사용하여 구현되어 있다는 사실을 신경쓸 필요도 없으며 알아도 안 됩니다. 프로바이더는 트리에 있는 데이터가 특정형태라고 간주하면 안됩니다. 예를 들어 합계를 낼 수 있는 숫자라고 말입니다.</p>
+
+<p>
+트리 구현 코드는 범용이어야 합니다. 트리를 구축하고 트리를 순회하며 데이터에 접근하는 편의기능을 제공해야 합니다. 데이터를 통역하는 것은 클라이언트의 함수가 해야 합니다. 순서대로 표현식을 만들어내고 순회하는 클라이언트 코드는 트리의 구현에 관하여 알면 안됩니다. 이런 디자인 원칙을 <a href="chap06.htm#6">섹션 6.6</a>에서 보았던  메쏘드 캡슐화(<b>method encapsulation</b>)와 구별하기 위하여 객체 캡슐화(<b>object encapsulation</b>)라고 부릅니다.</p>
+
+<p>
+이렇게 관심사항을 구별하는 이점을 활용하는 한가지 방법은 바람직한 ADT를 제공하기 위하여 트리 클래스에 <b>접근자 메쏘드(accessor methods)</b>를 제공하는 것입니다. 접근자 메쏘드는 데이터 구조에 접근할(원소에 접근하고 설정할) 수 있습니다. 클라이언트에 구현 상세를 보여주지 않고서 말입니다.</p>
+
+<p>
+현재 구현에서 빈 트리는 특별한 값 <span class=code>None</span>으로 표현됩니다.  <span class=code>left</span>와 <span class=code>right</span>는 그 노드의 실체 변수에 접근함으로써 수행됩니다.</p>
+
+<p>
+Tree 클래스의 정의를 바꾸어 ADT를 구현해 보겠습니다. 똑 같이 연결된 노드로 그러나 클라이언트가 내부 속성에 직접 접근하도록 하는 대신에 말입니다. 같은 이름으로 접근자 함수를 제공하겠습니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>class</span> Tree :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>def</span> <span class=function>__init__</span> (self, theCargo, leftLink=None, rightLink=None) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;self.theCargo = theCargo
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;self.leftLink = leftLink
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;self.rightLink= rightLink
+<br>
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>def</span> <span class=function>cargo</span>(self) : <span class=keyword>return</span> self.theCargo
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>def</span> <span class=function>left</span> (self) : <span class=keyword>return</span> self.leftLink
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>def</span> <span class=function>right</span>(self) : <span class=keyword>return</span> self.rightLink
+<br></span>
+<p>
+그리고 다음은 printTreePostorder를 수정한 버전입니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>def</span> <span class=function>printTreePostorder</span> (tree) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> tree == None : <span class=keyword>return</span>
+<br>&nbsp; &nbsp; &nbsp; &nbsp;printTree(tree.left())
+<br>&nbsp; &nbsp; &nbsp; &nbsp;printTree(tree.right())
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>print</span> tree.cargo(),
+<br></span><a name=8></a><br>
+<h3>21.8 표현식 트리 구축하기</h3>
+
+<p>
+앞서 보았듯이 이 ADT 트리를 잎에서부터 루트 순서로 구축했습니다. 지금까지 표현식을 사용해 왔지만 이미 구축되어 있다고 간주해 왔습니다. 이 섹션에서는 4 함수를 조합하여 "(3+7)*42"와 같은 중위 표현식을 다음과 같은 트리로 변환하겠습니다:</p>
+
+
+<span class=code>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; *
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;/ \\
+<br>&nbsp; &nbsp; &nbsp; &nbsp; +&nbsp; &nbsp;42
+<br>&nbsp; &nbsp; &nbsp; &nbsp;/ \\
+<br>&nbsp; &nbsp; &nbsp; 3&nbsp; &nbsp;7
+<br></span>
+<p>
+일을 단순하게 하기 위하여 입력 문자열이 이미 파이썬 리스트로 토큰화되어 있다고 간주하겠습니다. 위의 예제는 토큰 리스트 <span class=code>[<span class=quote>'('</span>, 3, <span class=quote>'+'</span>, 7, <span class=quote>')'</span>, <span class=quote>'*'</span>, 42]</span>로 표기되는데 이는 문자열과 숫자로 구성된 리스트입니다. 기본적으로 트리 구축기는 덧셈과 뺄셈 연산자 그리고 괄호와 숫자를 처리할 것입니다.</p>
+
+<p>
+첫 함수는 토큰 리스트에서 첫 항목이 예상한 문자인지 아닌지 알려줍니다. 그렇다면 참을 돌려주고 토큰 리스트에서 그 문자를 제거합니다. 다음은 그 함수의 정의입니다</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>def</span> <span class=function>getToken</span> (tokenList, expected) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> tokenList[0] == expected :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;tokenList[0:1] = []&nbsp; &nbsp;<span class=comment># 토큰을 제거한다
+</span><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>return</span> 1
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>else</span> : <span class=keyword>return</span> None
+<br></span>
+<p>
+조각썰기 연산을 사용하여 첫 토큰을 <span class=code>tokenList</span>로부터 제거하고 있습니다. <span class=code>tokenList</span>는 변경가능 객체를 가리키므로 여기에 가한 수정사항은 영원하며 함수가 돌아올 때 사라지지 않습니다.</p>
+
+<p>
+두번째 함수는 토큰 리스트에서 숫자를 처리하는데 사용됩니다. 다음 토큰이 숫자라면 제거되고 숫자를 가진 트리 잎이 반환됩니다. 달랑 그 숫자 하나만 원하는 것이 아님에 주의하세요. 아래에서 위로 트리를 구축하고 있고 적절한 부분이 필요합니다. <span class=code>getNumber</span> 가 숫자를 발견하지 못하면 그냥 <span class=code>None</span>을 돌려주고 <span class=code>tokenList</span>는 그대로 둡니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>def</span> <span class=function>getNumber</span> (tokenList) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;x = tokenList[0]
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> type(x) != type(0) : <span class=keyword>return</span> None
+<br>&nbsp; &nbsp; &nbsp; &nbsp;tokenList[0:1] = []&nbsp; &nbsp;<span class=comment># 토큰을 제거한다
+</span><br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>return</span> Tree (x, None, None)&nbsp; &nbsp; &nbsp;<span class=comment># 숫자를 가진 잎을 돌려준다
+</span><br></span>
+<p>
+<span class=code>getNumber</span>를 테스트해 봅시다. 두 개의 숫자가 담긴 리스트를 하나 제공하고 그 첫 숫자를 트리 잎으로 추출한 다음 그 잎을 인쇄하고, 마지막으로 토큰 리스트에 있는 나머지를 인쇄하겠습니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;&gt;&gt;&gt; tokenList = [42,43]
+<br>&nbsp; &nbsp;&gt;&gt;&gt; x = getNumber(tokenList)
+<br>&nbsp; &nbsp;&gt;&gt;&gt; printTreePostorder (x)
+<br>&nbsp; &nbsp;42
+<br>&nbsp; &nbsp;&gt;&gt;&gt; <span class=keyword>print</span> tokenList
+<br>&nbsp; &nbsp;[43]
+<br></span>
+<p>
+지금 당장은 괄호를 고려하지 않아도, 오직 덧셈과 곱셈만 있는 중위 표현식은 실제로 곱을 더하면 될 뿐입니다. 그 때문에 곱셈이 덧셈보다 먼저 수행됩니다. 곱은 "*"로 분리된 숫자들 또는 그냥 숫자 그 자체입니다. 합은 "+"로 분리된 곱들 또는 그냥 곱 그 자체입니다.</p>
+
+<p>
+ '*'로 분리된 두 개의 숫자부터 시작합시다. 다음과 같이 트리를 돌려주는 함수를 만들고 싶습니다</p>
+
+
+<span class=code>&nbsp; &nbsp; &nbsp; &nbsp; *
+<br>&nbsp; &nbsp; &nbsp; &nbsp;/ \\
+<br>&nbsp; &nbsp; &nbsp; 3&nbsp; &nbsp;7
+<br></span>
+<p>
+여기에 첫작품 <span class=code>getProduct</span>를 소개합니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>def</span> <span class=function>getProduct</span> (tokenList) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;a = getNumber(tokenList)
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> getToken (tokenList, <span class=quote>'*'</span>) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;b = getNumber (tokenList)
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>return</span> Tree (<span class=quote>'*'</span>, a, b)
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>else</span> : <span class=keyword>return</span> a
+<br></span>
+<p>
+곱은 숫자 하나라도 됩니다. 그러나 다음에 "*"가 따른다면 그 다음의 숫자를 얻어서 트리를 구축할 필요가 있습니다. 그렇지 않으면, 그냥 그 숫자를 잎으로 돌려주면 됩니다. 이제 이 함수를 테스트해 봅시다. 여러 단계를 거치고 호출한 후에 토큰 리스트를 조사하는데 신경쓰지 않아도 됩니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;&gt;&gt;&gt; printTreePostorder (getProduct([42, <span class=quote>'*'</span>, 43]))
+<br>&nbsp; &nbsp;42 43 *
+<br>&nbsp; &nbsp;&gt;&gt;&gt; printTreePostorder (getProduct([42, <span class=quote>'+'</span>, 43]))
+<br>&nbsp; &nbsp;42
+<br></span>
+<p>
+그러나 "3*6*82"와 같은 표현식이 있다면 어떻게 할까? 이것은 곱의 곱으로 생각할 수 있습니다. 즉 3*(6*82)과 같이 말입니다. 그래서 <span class=code>getProduct</span> 함수가 숫자를 얻고 다음에 (가능하다면) 두번째 <i>곱</i>을 얻도록 수정하면 이런 사례는 쉽게 처리할 수 있습니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>def</span> <span class=function>getProduct</span> (tokenList) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;a = getNumber(tokenList)
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> getToken (tokenList, <span class=quote>'*'</span>) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;b = getProduct (tokenList)&nbsp; &nbsp;<span class=comment># 이 줄이 바뀌었음에 주목
+</span><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>return</span> Tree (<span class=quote>'*'</span>, a, b)
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>else</span> : <span class=keyword>return</span> a
+<br></span>
+<p>
+숫자 세 개의 곱을 가진 이 새 버전을 테스트해 봅시다. </p>
+
+
+<span class=code>&nbsp; &nbsp;&gt;&gt;&gt; printTreePostorder (getProduct([42, <span class=quote>'*'</span>, 43, <span class=quote>'*'</span>, 6, <span class=quote>"END"</span>]))
+<br>&nbsp; &nbsp;42 43 6 * *
+<br></span>
+<p>
+추가로 토큰을 추가해서 "표현식의 끝"을 나타냈음에 주목하세요. 이것은 코드가 리스트의 끝을 넘어서 찾으려고 시도하지 않도록 하는데 편리합니다.</p>
+
+<p>
+다음으로 곱의 합을 연구해 보겠습니다. <span class=code>getSum</span> 함수는 거의 <span class=code>getProduct</span>와 흡사하며 단 <span class=code>getNumber</span> 대신에 <span class=code>getProduct</span>를 호출합니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>def</span> <span class=function>getSum</span> (tokenList) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;a = getProduct (tokenList)
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> getToken (tokenList, <span class=quote>'+'</span>) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;b = getSum (tokenList)
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>return</span> Tree (<span class=quote>'+'</span>, a, b)
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>else</span> : <span class=keyword>return</span> a
+<br></span>
+<p>
+표현식 "42*43+6*7"로 이 함수를 시험해 봅시다.</p>
+
+
+<span class=code>&nbsp; &nbsp;&gt;&gt;&gt; printTreePostorder (getSum([42, <span class=quote>'*'</span>, 43, <span class=quote>'+'</span>, 6, <span class=quote>'*'</span>, 7, <span class=quote>"END"</span>]))
+<br>&nbsp; &nbsp;42 43 * 6 7 * +
+<br></span>
+<p>
+거의 끝났지만 이제 제일 중요한 것이 남았습니다. 괄호를 허용한다면 숫자가 있는 곳이면 어디든지 괄호로 둘러싸서 전체 합을 가질 수 있습니다. <span class=code>getNumber</span>를 수정하면 이 상황을 처리할 수 있습니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>def</span> <span class=function>getNumber</span> (tokenList) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> getToken (tokenList, <span class=quote>'('</span>) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;x = getSum (tokenList)&nbsp; &nbsp; &nbsp; &nbsp;<span class=comment># 하부표현식을 얻는다
+</span><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;getToken (tokenList, <span class=quote>')'</span>)&nbsp; &nbsp; <span class=comment># 닫는 괄호를 빼먹었다
+</span><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>return</span> x
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>else</span> :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;x = tokenList[0]
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> type(x) != type(0) : <span class=keyword>return</span> None
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;tokenList[0:1] = []&nbsp; &nbsp;<span class=comment># 토큰을 제거한다
+</span><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>return</span> Tree (x, None, None)&nbsp; &nbsp; &nbsp;<span class=comment># 숫자를 가진 잎을 돌려준다
+</span><br></span>
+<p>
+그래서 이제 서로 재귀적인 함수 집합을 갖추었습니다. 이들의 재귀적 성질은 자신이 파싱하는 표현식의 재귀성을 닮았습니다. </p>
+
+<p>
+최종 코드를 표현식 "42*(43+6)*7"로 테스트해 봅시다. 43과 6을 더하면 두 개의 곱셈을 처리함에 주목하세요.</p>
+
+
+<span class=code>&nbsp; &nbsp;&gt;&gt;&gt; printTreePostorder (getSum([42, <span class=quote>'*'</span>, <span class=quote>'('</span>, 43, <span class=quote>'+'</span>, 6, <span class=quote>')'</span>, <span class=quote>'*'</span>, 7, <span class=quote>"END"</span>]))
+<br>&nbsp; &nbsp;42 43 6 + 7 * *
+<br></span>
+<p>
+이 시점에서 <span class=code>getNumber</span> 함수는 아마도 새로운 기능을 좀 더 잘 기술하는 것으로 이름을 바꾸어야 할 것 같습니다.</p>
+
+<a name=9></a><br>
+<h3>21.9 에러 잡기</h3>
+
+<p>
+위의 <span class=code>getNumber</span> 함수에 한 줄을 살펴 봅시다.</p>
+
+
+<span class=code>&nbsp; &nbsp; getToken (tokenList, <span class=quote>')'</span>)&nbsp; &nbsp; <span class=comment># 닫는 괄호를 빼먹었다
+</span><br></span>
+<p>
+여기에서는 단순히 닫기 괄호가 있다고 간주하고 있습니다. 그러나 없다면 어떻게 될까요. 에러를 발생시키고 싶습니다. 파이썬의 <span class=code><span class=keyword>raise</span></span> 서술문이 이런 곳에 이상적입니다. 함수 호출이 여러 수준으로 내포되어 있을 지라도, 에러를 일으키면 바로 눈 앞으로 튀어 오릅니다. 다음은 개선된 서술문입니다.</p>
+
+
+<span class=code>&nbsp; &nbsp; <span class=keyword>if not</span> getToken (tokenList, <span class=quote>')'</span>) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; <span class=keyword>raise</span> <span class=quote>"Syntax error in expression"</span>
+<br></span>
+<p>
+연습삼아 위의 함수 중의 다른 곳에서 에러가 있을 만한 곳을 찾아 추가해 보세요. 그리고 모양이 부적절한 표현식에 테스트해 보세요.</p>
+
+<a name=10></a><br>
+<h3>21.10 트리를 배열로 구현하기</h3>
+
+<p>
+또다른 트리 구현이 있습니다. 연결 노드 대신에 배열을(또는 파이썬 리스트) 사용합니다. 앞으로 보시겠지만 이렇게 구현하려면 ADT를 약간 바꿀 필요가 있습니다.</p>
+
+<p>
+다음 그림은 지금까지 보아온 것과 같은 트리를 보여줍니다. 물론, 루트는 왼쪽 노드에 잎들은 오른쪽 노드에, 옆으로 쭉 펼쳐진 트리였지만 말입니다. 바닥에 트리의 객체를 가리키는 참조 배열이 있습니다.</p>
+
+<p align="center"><img src="illustrations/tree3.png"></p>
+
+<p>
+이 트리에서 각 노드의 카르고는 그 노드의 배열 인덱스와 같지만, 물론 그것은 일반적으로 진실이 아닙니다. 배열의 각 원소는 어떤 종류의 카르고도 가리킬 수 있습니다. 배열 인덱스 <span class=code>1</span>은 루트를 가리키고 배열 인덱스 <span class=code>0</span>은 비어있다는 사실을 눈치채셨을 것입니다. 그 이유는 잠시 후에 알려 드리겠습니다.</p>
+
+<p>
+그래서 이제 각 노드가 배열의 요소인 트리가 있습니다. 게다가, 다음과 같은 결과를 얻기 위하여 의도된 패턴에 맞게 인덱스를 노드에 할당하였습니다:</p>
+
+<ol>
+
+<li>인덱스가 <tt>i</tt>인 노드의 왼쪽 자손은 인덱스가 <tt>2i</tt>입니다.</li>
+
+<li>인덱스가 <tt>i</tt>인 노드의 오른쪽 자손은 인덱스가 <tt>2i + 1</tt>입니다.</li>
+
+<li>인덱스가 <tt>i</tt>인 노드의 부모는 인덱스가 <tt>i/2</tt>입니다 (버림).</li>
+
+</ol>
+
+<p>
+이 공식을 사용하여 그냥 산술연산을 하면, <span class=code>left</span>와 <span class=code>right</span> 그리고 <span class=code>parent</span> 접근자 함수를 구현할 수 있습니다; 왼쪽 오른쪽 링크가 전혀 필요없습니다!</p>
+
+<p>
+이 구현이 지원하는 ADT는 위의 것과 약간 다릅니다. 큰 이유는 불가능한 것은 아니지만, 새로운 루트 노드를 가진 서브트리를 조합하여 트리를 구축하기가 어렵다는 것입니다. 물론 이것이 정확하게 표현식 트리를 중위식으로 구축한 방법입니다. 배열 트리는 루트에서 시작하여 위에서 아래로 구축하는 것이 제일 좋습니다.</p>
+
+<p>
+연습삼아서 실제 트리가 어떻게 구축되었는지 연구해 보세요.</p>
+
+<p>
+연결 리스트 구현에서는 클라이언트가 전체 트리가 아니라 서브트리에 작용하여 트리에서 현재 자신이 어디에 위치하고 있는지 표시합니다. 이 ADT에서 클라이언트는 언제나 전체 트리에 대해서 연산을 하고 인덱스를 현재 노드에 건넵니다.</p>
+
+<p>
+다음은 배열 구현으로 수정한 ADT입니다.</p>
+
+<dl>
+
+<dt>구성자</dt>
+<dd>빈 트리를 구축합니다.</dd>
+
+<dt><span class=code>empty</span></dt>
+<dd>빈 트리입니다</dd>
+
+<dt><span class=code>left</span></dt>
+<dd>건네진 노드의 왼쪽 자손의 인덱스를 돌려줍니다</dd>
+
+<dt><span class=code>right</span></dt>
+<dd>건네진 노드의 오른쪽 자손의 인덱스를 돌려줍니다</dd>
+
+<dt><span class=code>parent</span></dt>
+<dd>건네진 노드의 부모의 인덱스를 돌려주거나 건네진 노드가 루트라면 None을 돌려줍니다.</dd>
+
+<dt><span class=code>getCargo</span></dt>
+<dd>건네진 노드의 카르고를 돌려줍니다.</dd>
+
+<dt><span class=code>setCargo</span></dt>
+<dd>건네진 노드의 카르고에, 건네진 값을 설정합니다.</dd>
+
+</dl>
+
+<p>프로바이더 코드를 작성해 보겠습니다.</p>
+
+
+<span class=code>&nbsp; &nbsp; &nbsp; <span class=keyword>class</span> Tree :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class=keyword>def</span> <span class=function>__init__</span> (self) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; self.array = [None]*32
+<br></span>
+<p>
+지금까지는 놀랄 것도 없습니다. 실체 변수 <span class=code>array</span>는 리스트로서 초기 크기는 제한이 없습니다 (필요한 대로 바꿀 수 있습니다).</p>
+
+<p>
+트리가 비어있는지 점검하려면, 루트 노드의 카르고가 <span class=code>None</span>인지 점검하면 됩니다. 다시, 루트 노드는 인덱스 1에 위치합니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>class</span> Tree :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;...
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>def</span> <span class=function>empty</span> (self) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>return</span> (self.array[1] == None)
+<br></span>
+<p>
+<span class=code>left</span>, <span class=code>right</span> 그리고 <span class=code>parent</span>의 구현은 그냥 산술연산입니다:</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>class</span> Tree :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;...
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>def</span> <span class=function>parent</span> (self, ix) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> ix == 1 : <span class=keyword>return</span> None
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>return</span> ix/2
+<br>
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>def</span> <span class=function>left</span>&nbsp; (self, ix) : <span class=keyword>return</span> ix*2
+<br>
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>def</span> <span class=function>right</span> (self, ix) : <span class=keyword>return</span> ix*2 + 1
+<br></span>
+<p>
+다시 주목하세요. 클라이언트 코드는 노드 인덱스를 유지하고 건넵니다. 그로부터 왼쪽노드와 오른쪽노드 그리고 부모 노드가 계산됩니다. 반환된 인덱스는 또다른 인덱스입니다.</p>
+
+<p>
+카르고 자체에 접근하려면 배열의 원소를 얻거나 설정하면 됩니다. 어떤 종류의 연산이든 먼저 간단하게 에러 점검을 한 후에 데이터 구조에 접근하고 필요하면 그 배열의 크기를 바꾸는 것이 좋은 생각입니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>class</span> Tree
+<br>&nbsp; &nbsp; &nbsp; &nbsp;...
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>def</span> <span class=function>setCargo</span> (self, ix, cargo) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;need = ix - (len(self.array)-1)
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> need &gt; 0 :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;self.array.extend([None]*need)
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;self.array[ix] = cargo
+<br>
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>def</span> <span class=function>getCargo</span> (self, ix) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> ix &gt;= len(self.array) : <span class=keyword>return</span> None
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>return</span> self.array[ix]
+<br></span>
+<p>
+<span class=code>setCargo</span>에서 배열이 성장할 필요가 있는지 점검합니다. 그렇다면 새 노드의 개수가 계산되고 배열은 확장됩니다. 이런 노드에 대한 최초 카르고는 (아직 사용되지 않은 고로) None입니다. 스택 ADT에서 배열의 크기를 바꿀 때 새로운 배열을 만들고 그 내용을 복사했다는 사실을 기억하세요.</p>
+
+<p>
+<span class=code>getCargo</span>에서 배열의 경계를 넘어서서 접근하고 있는지 점검합니다. 그렇다면 <span class=code>None</span>이 반환되는데 설정되지 않은 노드이기 때문입니다.</p>
+
+<p>
+트리를 구축할 준비가 되었습니다. 상호대화 프롬프트에서 구축해 보겠습니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;&gt;&gt;&gt; tree = Tree ()
+<br>&nbsp; &nbsp;&gt;&gt;&gt; root = 1
+<br>&nbsp; &nbsp;&gt;&gt;&gt; tree.setCargo (root, <span class=quote>"cargo for root"</span>)
+<br></span>
+<p>
+구성자는 빈 트리를 구축합니다. 이 경우 클라이언트는 루트의 인덱스가 <span class=code>1</span>이라는 사실을 안다고 간주합니다. 물론 트리 구현에서 그 정보를 제공하는 것이 더 바람직할 것입니다. 어쨌든, <span class=code>setCargo</span>를 요청하면 문자열 <span class=code><span class=quote>"cargo for root"</span></span>를 루트 노드에 삽입합니다.</p>
+
+<p>
+자손을 루트 노드에 추가하려면:</p>
+
+
+<span class=code>&nbsp; &nbsp;&gt;&gt;&gt; tree.setCargo (tree.left(root), <span class=quote>"cargo for left"</span>)
+<br>&nbsp; &nbsp;&gt;&gt;&gt; tree.setCargo (tree.right(root), <span class=quote>"cargo for right"</span>)
+<br></span>
+<p>
+마지막으로 이 ADT에 전위식으로 트리의 내용을 인쇄하도록 함수를 적용시켜 보겠습니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>def</span> <span class=function>printPreorder</span> (tree, index=1) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;cargo = tree.getCargo (index)
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> cargo != None :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>print</span> cargo
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;printPreorder (tree, tree.left(index))
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;printPreorder (tree, tree.right(index))
+<br></span>
+<p>
+루트를 매개변수로 건네어 클라이언트로부터 이 메쏘드를 요청합니다. 그 출력결과는 다음과 같습니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;&gt;&gt;&gt; printPreorder (tree)
+<br>&nbsp; &nbsp;cargo <span class=keyword>for</span> root
+<br>&nbsp; &nbsp;cargo <span class=keyword>for</span> left
+<br>&nbsp; &nbsp;cargo <span class=keyword>for</span> right
+<br></span>
+<p>
+이 구현은 트리에 필요한 기본 연산을 제공합니다. 그러나 아직 필요한 것이 많이 남아 있습니다.  앞서 언급하였듯이 이 트리는 위에서 아래로 구축되어야 하며 그것이 언제나 편리한 것은 아닙니다. 한편 (각 노드가 또다른 객체인) 연결 트리보다 저장 공간이 훨씬 덜 듭니다. 그리고 카르고가 간단한 데이터 값으로 구성된다면, 아주 빨리 접근할 수 있을 것입니다.</p>
+
+<p>
+부연하면, 이 데이터 구조는 "Heap"을 구현하는데 사용됩니다. 여기에서 카르고는 "어느 정도" 정렬되어 있습니다. 그렇지만 힙에 데이터를 추가하고 열람하는 일은 이 ADT와 상당히 다릅니다. 힙(Heap)은 선점 큐 ADT를 아주 훌륭하게 (그리고 빠르게) 구현할 수 있습니다.</p>
+
+<a name=11></a><br>
+<h3>21.11 동물 트리</h3>
+
+<p>
+트리 클래스의 배열 구현을 잘 이용하는 작은 프로그램을 가지고 이 장을 닫겠습니다. 프로그램은 사용자와 대화하면서 동물의 특징에 관한 지식 트리를 만듭니다. 트리는 위에서 아래로 만들어지기 때문에 마지막 ADT가 자연스럽습니다. 코드를 보기 전에 먼저 샘플 대화를 보겠습니다.</p>
+
+
+<span class=code>&nbsp; &nbsp;Are you thinking of an animal? y
+<br>&nbsp; &nbsp;Is it a bird? n
+<br>&nbsp; &nbsp;What <span class=keyword>is</span> the animals name? dog
+<br>&nbsp; &nbsp;What question would distinguish a dog <span class=keyword>from</span> a bird? Can it fly
+<br>&nbsp; &nbsp;If the animal were dog the answer would be? n
+<br>
+<br>&nbsp; &nbsp;Are you thinking of an animal? y
+<br>&nbsp; &nbsp;Can it fly? n
+<br>&nbsp; &nbsp;Is it a dog? n
+<br>&nbsp; &nbsp;What <span class=keyword>is</span> the animals name? cat
+<br>&nbsp; &nbsp;What question would distinguish a cat <span class=keyword>from</span> a dog? Does it bark
+<br>&nbsp; &nbsp;If the animal were cat the answer would be? n
+<br>
+<br>&nbsp; &nbsp;Are you thinking of an animal? y
+<br>&nbsp; &nbsp;Can it fly? n
+<br>&nbsp; &nbsp;Does it bark? y
+<br>&nbsp; &nbsp;Is it a dog? y
+<br>
+<br>&nbsp; &nbsp;Are you thinking of an animal? n
+<br></span>
+<p>
+입력으로부터 새로운 동물에 관한 정보를 받아 트리가 구축되고 있다는 것을 쉽게 상상할 수 있습니다. 다음 회에는 사용자의 예 아니오 응답을 지침으로 삼아 트리를 위에서 아래로 순회합니다.</p>
+
+<p>이제 코드를 봅시다.</p>
+
+
+<span class=code>&nbsp; &nbsp;<span class=keyword>from</span> string&nbsp; &nbsp; &nbsp;<span class=keyword>import</span> lower
+<br>&nbsp; &nbsp;<span class=keyword>def</span> <span class=function>yes</span> (ques) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;ans = lower (raw_input (ques))
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>return</span> (ans[0:1] == <span class=quote>'y'</span>)
+<br>
+<br>&nbsp; &nbsp;<span class=keyword>def</span> <span class=function>main</span> () :
+<br>&nbsp; &nbsp; &nbsp; &nbsp;tree = Tree()
+<br>&nbsp; &nbsp; &nbsp; &nbsp;root = 1
+<br>&nbsp; &nbsp; &nbsp; &nbsp;tree.setCargo (root, <span class=quote>"bird"</span>)
+<br>&nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>while</span> 1 :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>print
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;if not</span> yes(<span class=quote>"Are you thinking of an animal? "</span>) : <span class=keyword>break</span>
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;p = root
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>while</span> tree.getCargo(tree.left(p)) != None :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> yes(tree.getCargo(p)+<span class=quote>"? "</span>) : p = tree.right(p)
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>else</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : p = tree.left(p)
+<br>
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;guess = tree.getCargo(p)
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> yes(<span class=quote>"Is it a "</span> + guess + <span class=quote>"? "</span>) : <span class=keyword>continue</span>
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;animal&nbsp; &nbsp;= raw_input (<span class=quote>"What is the animals name? "</span>)
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;ques = <span class=quote>"What question would distinguish a %s from a %s? "</span>
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;question = raw_input (ques % (animal,guess))
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;tree.setCargo (p, question)
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>if</span> yes (<span class=quote>"If the animal were %s the answer would be? "</span> % animal) :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;tree.setCargo (tree.left (p),guess)
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;tree.setCargo (tree.right(p),animal)
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=keyword>else</span> :
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;tree.setCargo (tree.left (p),animal)
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;tree.setCargo (tree.right(p),guess)
+<br></span>
+<p>
+<span class=code>yes</span> 함수는 편의를 위한 함수입니다. 건넨 질문을 물어보고 사용자가 "y", "yes", "Y", 등등으로 응답하면 참을 돌려줍니다. 내부의 <span class=code><span class=keyword>while</span></span> 회돌이는 사용자를 가이드 삼아 트리를 위에서부터 아래로 순회합니다. 트리가 새로운 동물로 커지면 필요한 정보가 열람됩니다. 현재 잎노드는 새로운 질문으로 가지가 되고 새로운 동물과 예전 동물로 두 개의 잎노드가 거기에 붙습니다.</p>
+
+<p>
+프로그램의 한 가지 단점은 종료하면 조심스럽게 가르친 것들을 모조리 잊어버린다는 것입니다! 연습삼아 지식 트리를 디스크에 저장하는 다양한 방법을 생각해 보십시오. 그리고 그렇게 구현해 보십시오.</p>
+
+<p>
+또다른 연습문제로서 이 프로그램이 우리가 처음으로 만든 ADT를 사용할 수 있는지 알아 보십시오. 사용이 불가능하다면 그 ADT와 그의 구현에 무엇을 더 추가해야 할지 알아 보십시오.</p>
+
+<a name=12></a><br>
+<h3>21.12 어휘집</h3>
+
+<dl>
+
+<dt>이진 트리</dt>
+<dd>각 노드가 0, 1, 또는 2 개의 자손 노드를 가리키는 트리.</dd>
+
+<dt>루트(root)</dt>
+<dd>트리에서 최상위 노드. 이 노드를 가리키는 노드는 없다.</dd>
+
+<dt>잎(leaf)</dt>
+<dd>트리에서 제일 낮은 노드. 더 이상 다른 노드를 가리키지 않는다.</dd>
+
+<dt>부모(parent)</dt>
+<dd>주어진 노드를 가리키는 노드.</dd>
+
+<dt>자손(child)</dt>
+<dd>한 노드가 가리키는 노드 중의 하나.</dd>
+
+<dt>레벨(level)</dt>
+<dd>루트에서 같은 거리에 있는 노드 집합.</dd>
+
+<dt>전위 표기법(prefix notation)</dt>
+<dd>각 연산자가 피 연산자 앞에 나타나도록 수학적 표현을 표기하는 방법.</dd>
+
+<dt>전위순회(preorder)</dt>
+<dd>트리를 순회하는 방법으로서 각 노드를 방문한 후에 자손 노드를 방문한다.</dd>
+
+<dt>후위순회(postorder)</dt>
+<dd>트리를 순회하는 방법으로서, 간 노드의 자손을 방문한 후에 노드 자신을 방문한다.</dd>
+
+<dt>중위순회(inorder)</dt>
+<dd>트리를 순회하는 방법으로서, 왼쪽 하부트리, 루트, 오른쪽 하부트리 순서로 방문한다.</dd>
+
+<dt>이진 연산자</dt>
+<dd>피 연산자를 두 개 취하는 연산자.</dd>
+
+<dt>객체 캡슐화(object encapsulation)</dt>
+<dd>두 객체의 구현을 가능하면 따로 유지하는 설계 목표.  클래스는 다른 클래스의 구현 상세를 알 필요가 없다.</dd>
+
+<dt>메쏘드 캡슐화(method encapsulation)</dt>
+<dd>메쏘드 인터페이스를 그의 구현 상세와 분리하려는 설계 목표.</dd>
+
+<dt>접근자 메쏘드(accessor method)</dt>
+<dd>클래스 내부 속성에 클라이언트가 간접적으로 접근하도록 허용해주는 메쏘드.</dd>
+
+</dl>
+
+<p>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="app01.htm"><img border="0" alt="Next" src="images/next.png"></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png"></a></td>
+    <td width="20" class=head><a href="chap20.htm"><img border="0" alt="Previous" src="images/prev.png"></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png"></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="images/index.png"></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+</body>
+</html>

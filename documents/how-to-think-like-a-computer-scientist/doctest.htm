@@ -1,0 +1,737 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Doctests and test driven development</title>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+<body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="modulefile.htm"><img border="0" alt="Next" src="images/next.png"></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png"></a></td>
+    <td width="20" class=head><a href="app04.htm"><img border="0" alt="Previous" src="images/prev.png"></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png"></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="images/index.png"></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+<h2>부록 E</h2>
+<h1>Doctest 그리고 테스트 주도형 개발</h1>
+
+<h2><code>doctest</code>로 테스트 자동화하기</h2>
+
+<p><code>doctest</code>는 파이썬 표준 라이브러리의 모듈로서 파이썬의 문서화 문자열과 상호대화 쉘 그리고 내부검사 능력을 혁신적으로 사용한다.
+</p>
+
+
+<h2>문서화문자열(docstrings)</h2>
+
+<p>
+파이썬의 문서화문자열(<strong>docstring</strong>)은 모듈과 클래스 그리고 메쏘드와 함수를 손쉽게 문서화하는 방법을 제공한다. 문서화문자열은 그냥 문자열 상수로서 한 객체의 정의에서 첫 서술문에 나타난다. 다음은 트리에 관한 장에서 가져온 예로서 그의 사용법을 보여준다:
+</p>
+
+<pre class="python">
+def total(tree):
+    """total(tree) -> sum
+
+      Return the sum of the values of the elements of a tree of numbers.
+    """
+    if tree == None: return 0
+    return total(tree.left) + total(tree.right)
+</pre>
+
+<p>
+위의 예제가 <code>trees.py</code>이라는 모듈이라고 가정하면, 이제 다음과 같이 할 수 있다:</p>
+
+<pre class="python-shell">
+&gt;&gt;&gt; from trees import *
+&gt;&gt;&gt; print total.__doc__
+total(tree) -> sum
+
+      Return the sum of the values of the elements of a tree of numbers.
+
+</pre>
+
+
+<h2><code>doctest</code> 모듈</h2>
+
+<p>
+<code>doctest</code> 모듈은 파이썬 2.3에서 도입되었다. 파이썬 핵심 개발자 팀 피터스(Tim Peters)가 만든 <code>doctest</code> 모듈은 프로그래머가 문서화문자열을 사용하여 테스트를 자동화할 수 있도록 해 준다.
+</p> 
+
+<pre class="python">
+"""
+  &gt;&gt;&gt; distance(1, 2, 4, 6)
+  5.0
+"""
+
+def distance(x1, y1, x2, y2):
+    return 0.0 
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+</pre>
+
+<p>
+위의 예제는 제 5 장 <em>프로그램 개발</em> 섹션에서 가져 왔다. 이 프로그램을 실행하면 다음과 같이 출력된다:
+</p>
+
+<pre class="shell">
+**********************************************************************
+File "doctest_example01.py", line 2, in __main__
+Failed example:
+    distance(1, 2, 4, 6)
+Expected:
+    5.0
+Got:
+    0.0
+**********************************************************************
+1 items had failures:
+   1 of   1 in __main__
+***Test Failed*** 1 failures.
+</pre>
+
+<p>
+문서테스트는 문서화문자열 안에 샘플 파이썬 인터프리터 세션으로 작성된다. 이 예제에서 문서테스트는 모듈의 문서화문자열에 있지만, 테스트되고 있는 함수의 문서화 문자열에 두어도 된다.
+</p>
+<p>
+각 테스트는 파이썬 표현식으로 구성된다. 프롬프트(<code>&gt;&gt;&gt;</code>) 다음에 표현식이 주어지고 다음 줄에 예상 평가가 따른다.  doctest 모듈은 인터프리터에서 각 표현식을 실행하여 평가된 것을 예상된 결과와 비교한다.
+</p>
+
+
+<h2>Doctest 연습문제</h2>
+<p>
+아래의 각 연습문제에서 코드가 doctest를 통과하도록 작성하라.
+</p>
+
+<h2>Chapter 2</h2>
+<ol>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; n
+  17
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; s
+  'I am a string!'
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; type(m)
+  &lt;type 'float'&gt;
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; type(r)
+  &lt;type 'int'&gt;
+"""
+</pre>
+</div></li>
+
+</ol>
+
+<h2>Chapter 5</h2>
+<ol>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; avg(3, 5)
+  4.0
+  &gt;&gt;&gt; avg(8, 10)
+  9.0
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; is_even(8)
+  True
+  &gt;&gt;&gt; is_even(11)
+  False
+  &gt;&gt;&gt; is_even(2)
+  True
+  &gt;&gt;&gt; is_even(5)
+  False
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; is_odd(8)
+  False
+  &gt;&gt;&gt; is_odd(11)
+  True
+  &gt;&gt;&gt; is_odd(2)
+  False
+  &gt;&gt;&gt; is_odd(5)
+  True
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; double(3)
+  6
+  &gt;&gt;&gt; double(4.5)
+  9.0
+  &gt;&gt;&gt; double("Pizza")
+  'PizzaPizza' 
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; f(0)
+  5
+  &gt;&gt;&gt; f(1)
+  8
+  &gt;&gt;&gt; f(2)
+  11
+  &gt;&gt;&gt; f(3)
+  14 
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; g(0)
+  -7
+  &gt;&gt;&gt; g(1)
+  -2
+  &gt;&gt;&gt; g(2)
+  3
+  &gt;&gt;&gt; g(3)
+  8
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; str_double("Python")
+  'Python Python' 
+  &gt;&gt;&gt; str_double(5)
+  '5 5'
+  &gt;&gt;&gt; str_double(None)
+  'None None' 
+  &gt;&gt;&gt; str_double(True)
+  'True True' 
+"""
+</pre>
+</div></li>
+
+</ol>
+
+
+<h2>Chapter 6</h2>
+<ol>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; is_prime(3)
+  True
+  &gt;&gt;&gt; is_prime(6)
+  False
+  &gt;&gt;&gt; is_prime(2)
+  True
+  &gt;&gt;&gt; is_prime(9)
+  False
+  &gt;&gt;&gt; is_prime(19)
+  True
+  &gt;&gt;&gt; is_prime(53)
+  True
+  &gt;&gt;&gt; is_prime(55)
+  False
+"""
+</pre>
+</div></li>
+
+</ol>
+
+
+<h2>Chapter 7</h2>
+<ol>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; s1[4]
+  '3'
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; len(message) 
+  15
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; s2[4:]
+  'Python!'
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; type(s3)
+  &lt;type 'str'&gt;
+  &gt;&gt;&gt; s3[3]
+  'q'
+  &gt;&gt;&gt; s3[7]
+  '3'
+  &gt;&gt;&gt; len(s3)
+  22
+  &gt;&gt;&gt; s3[10:16]
+  'cheese'
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; s4 + s5
+  'happy birthday!'
+  &gt;&gt;&gt; s4 &lt; s5
+  True
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; count_letters('a', 'banana')
+  3 
+  &gt;&gt;&gt; count_letters('b', 'banana')
+  1 
+  &gt;&gt;&gt; count_letters('n', 'banana')
+  2
+  &gt;&gt;&gt; count_letters('x', 'banana')
+  0
+  &gt;&gt;&gt; count_letters('i', 'Mississippi')
+  4
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; replace('a', 'i', 'banana')
+  'binini' 
+  &gt;&gt;&gt; replace('i', 'o', 'Mississippi')
+  'Mossossoppo'
+  &gt;&gt;&gt; replace('a', '', 'banana')
+  'bnn'
+  &gt;&gt;&gt; replace('a', 'aba', 'banana')
+  'babanabanaba'
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; reverse("Python")
+  'nohtyP'
+  &gt;&gt;&gt; reverse("Try to say this backwards!")
+  '!sdrawkcab siht yas ot yrT'
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; extract_email("This has bill@gmail.com in it.")
+  'bill@gmail.com'
+  &gt;&gt;&gt; extract_email("Can you find an email address bob@bob.com in this string?")
+  'bob@bob.com'
+"""
+</pre>
+</div></li>
+
+</ol>
+
+
+<h2>Chapter 8</h2>
+<ol>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; lst1[4]
+  3
+  &gt;&gt;&gt; lst1[0]
+  5
+  &gt;&gt;&gt; lst1[2]
+  17
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; lst2[1]
+  'banana' 
+  &gt;&gt;&gt; lst2[0] &lt; lst2[1]
+  True 
+  &gt;&gt;&gt; lst2[2:]
+  ['cherry', 'date', 'elderberry', 'fig', 'grapefruit'] 
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; 43 in lst3
+  False 
+  &gt;&gt;&gt; 22 in lst3
+  True 
+  &gt;&gt;&gt; len(lst3)
+  5
+  &gt;&gt;&gt; lst3[1:3]
+  [12, 22]
+  &gt;&gt;&gt; lst3[0] &lt; lst3[1]
+  True
+  &gt;&gt;&gt; lst3[4] &lt; lst3[3]
+  False
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; find_sum([3, 1, 1, 0]) 
+  5 
+  &gt;&gt;&gt; find_sum([1, 2]) 
+  3
+  &gt;&gt;&gt; find_sum([1, 2, 3, 4, 5, 6]) 
+  21 
+  &gt;&gt;&gt; find_sum([42]) 
+  42
+  &gt;&gt;&gt; find_sum([]) 
+  0
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; find_max([1, 2, 3, 4]) 
+  4
+  &gt;&gt;&gt; find_max([4, 3, 2, 1]) 
+  4
+  &gt;&gt;&gt; find_max([8, 51, 5, 73, 4, 67])
+  73
+  &gt;&gt;&gt; find_max(['Tsagaank', 'Shitaye', 'Xavier', 'Bao', 'Julia'])
+  'Xavier' 
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; only_evens([1, 2, 3, 4, 5, 6, 7, 8])
+  [2, 4, 6, 8]
+  &gt;&gt;&gt; only_evens([12, 34, 37, 43, 58, 60, 88])
+  [12, 34, 58, 60, 88]
+  &gt;&gt;&gt; only_evens([12, 34, 36, 44])
+  [12, 34, 36, 44]
+  &gt;&gt;&gt; only_evens([13, 35, 37, 49])
+  []
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; only_odds([1, 2, 3, 4, 5, 6, 7, 8])
+  [1, 3, 5, 7]
+  &gt;&gt;&gt; only_odds([12, 34, 37, 43, 58, 60, 88])
+  [37, 42]
+  &gt;&gt;&gt; only_odds([12, 34, 36, 44])
+  []
+  &gt;&gt;&gt; only_odds([13, 35, 37, 49])
+  [13, 35, 37, 49]
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; index_of(12, [4, 8, 12, 16, 20]) 
+  2
+  &gt;&gt;&gt; index_of(20, [4, 8, 12, 16, 20]) 
+  4
+  &gt;&gt;&gt; index_of(8, [4, 8, 12, 16, 20]) 
+  1
+  &gt;&gt;&gt; index_of(9, [4, 8, 12, 16, 20]) 
+  -1
+  &gt;&gt;&gt; index_of('Bao', ['Tsagaank', 'Shitaye', 'Xavier', 'Bao', 'Julia'])
+  3
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; remove_at(0, [5, 4, 3, 2])
+  [4, 3, 2] 
+  &gt;&gt;&gt; remove_at(2, [5, 4, 3, 2])
+  [5, 4, 2] 
+  &gt;&gt;&gt; remove_at(4, ['a', 'b', 'c', 'd', 'e', 'f'])
+  ['a', 'b', 'c', 'd', 'f']
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; remove_val(3, [5, 4, 3, 2])
+  [5, 4, 2]
+  &gt;&gt;&gt; remove_val(5, [5, 4, 3, 2])
+  [4, 3, 2]
+  &gt;&gt;&gt; remove_val('e', ['a', 'b', 'c', 'd', 'e', 'f'])
+  ['a', 'b', 'c', 'd', 'f']
+  &gt;&gt;&gt; remove_val(6, [5, 4, 3, 2])
+  [5, 4, 3, 2]
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; sort_list([3, 7, 1, 8, 2])
+  [1, 2, 3, 7, 8]
+  &gt;&gt;&gt; sort_list([6, 5, 4, 3, 2, 1])
+  [1, 2, 3, 4, 5, 6]
+  &gt;&gt;&gt; sort_list(['cherries', 'pears', 'apples', 'bananas', 'apricots'])
+  ['apples', 'apricots', 'bananas', 'cherries', 'pears']
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; mean([1, 2])
+  1.5
+  &gt;&gt;&gt; mean([1, 2, 4, 7])
+  3.5
+  &gt;&gt;&gt; mean([1, 1, 1, 1, 1])
+  1.0
+  &gt;&gt;&gt; mean([5, 10, 15, 20, 25])
+  15.0
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; median([1, 1, 2, 3, 3])
+  2
+  &gt;&gt;&gt; median([3, 2, 1, 1, 3])
+  2
+  &gt;&gt;&gt; median([1, 1, 3, 3])
+  2.0
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; mode([1, 2, 2, 3, 4, 5, 6])
+  2
+  &gt;&gt;&gt; mode([1, 2, 3, 4, 4, 5, 6])
+  4
+  &gt;&gt;&gt; mode([1, 2, 3, 4, 4, 5, 6, 6, 6, 7])
+  6
+"""
+</pre>
+</div></li>
+
+</ol>
+
+
+<h2>Chapter 9</h2>
+<ol>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; encapsulate(5, ())
+  (5, )
+  &gt;&gt;&gt; encapsulate(5, [])
+  [5]
+  &gt;&gt;&gt; encapsulate(5, '')
+  '5'
+  &gt;&gt;&gt; encapsulate('bob', (1, 2))
+  ('bob', )
+  &gt;&gt;&gt; encapsulate((1, 2), ['a', 'b', 'c'])
+  [(1, 2)]
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; insert_at_end(3, (1, 2))
+  (1, 2, 3)
+  &gt;&gt;&gt; insert_at_end(3, [1, 2])
+  [1, 2, 3]
+  &gt;&gt;&gt; insert_at_end(3, 'ab')
+  'ab3'
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; insert_in_front('x', 'ab')
+  'xab'
+  &gt;&gt;&gt; insert_in_front('x', (1, 2))
+  ('x', 1, 2)
+  &gt;&gt;&gt; insert_in_front('x', [1, 2])
+  ['x', 1, 2]
+"""
+</pre>
+</div></li>
+
+</ol>
+
+
+<h2>Chapter 10</h2>
+<ol>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; d1 = make_dictionary([('this', 'that')])
+  &gt;&gt;&gt; d1
+  {'this': 'that'}
+  &gt;&gt;&gt; d2 = make_dictionary([('this', 'that'), ('some', 'other'), (4, 'cheese')])
+  &gt;&gt;&gt; d2.has_key('some')
+  True
+  &gt;&gt;&gt; d2.has_key('other')
+  False
+  &gt;&gt;&gt; d2[4]
+  'cheese'
+"""
+</pre>
+</div></li>
+
+<!-- li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; 
+
+"""
+</pre>
+</div></li>
+
+<li><div class="exercise">
+<pre class="python-interpreter">
+"""
+  &gt;&gt;&gt; 
+
+"""
+</pre>
+</div></li -->
+
+</ol>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="modulefile.htm"><img border="0" alt="Next" src="images/next.png"></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png"></a></td>
+    <td width="20" class=head><a href="app04.htm"><img border="0" alt="Previous" src="images/prev.png"></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png"></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="images/index.png"></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+</body>
+</html>

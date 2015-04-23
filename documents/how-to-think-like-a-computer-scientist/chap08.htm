@@ -1,0 +1,1128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>제 8 장 : 리스트(Lists)</title>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+
+<body>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap09.htm" ><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm" ><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap07.htm" ><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm" ><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+  </tr>
+</table>
+<hr>
+
+
+<h2>제 8 장</h2>
+
+<h1>리스트</h1>
+<p>
+<b>리스트(list)</b>는 순서있는 값들의 모둠입니다, 각 값은 지표로 식별됩니다. 리스트를 구성하는 값들을 <b>원소(elements)</b>라고 부릅니다. 리스트는 순서있는 문자들의 모둠이라는 점에서 문자열과 비슷하지만 리스트의 원소는 어떤 유형도 될 수 있다는 점이 다릅니다. 리스트와 문자열을 -- 순서있는 모둠처럼 행동하는 다른 것들도 마찬가지로 --- <b>연속열(sequences)</b>이라고 부릅니다.</p>
+
+<a name=1></a><br>
+<h3>8.1 리스트 값</h3>
+<p>
+리스트를 새로 만드는 방법에는 여러 가지가 있습니다; 가장 간단한 방법은 원소들을 각 괄호로 둘러싸는 것입니다 ( [ ] ):</p>
+
+
+<p><span class=code>[10, 20, 30, 40]
+<br>[<span class=quote>"spam"</span>, <span class=quote>"bungee"</span>, <span class=quote>"swallow"</span>]
+<br></span></p>
+
+<p>
+첫 번째 예제는 정수 네 개를 담은 리스트입니다. 두 번째 예제는 문자열 세 개를 담은 리스트입니다. 리스트의 원소들은 똑 같은 유형이어야만 할 필요가 없습니다. 다음 리스트는 문자열 한개, 부동소수점 한개, 정수 한개, 그리고 또 (너무나 경이롭게도) 다른 리스트 하나를 담고 있습니다:</p>
+
+
+<p><span class=code>[<span class=quote>"hello"</span>, 2.0, 5, [10, 20]]
+<br></span></p>
+
+<p>
+리스트안에 또 다른 리스트가 있는 것을 <b>내포되었다(nested)</b>라고 말합니다.</p>
+<p>
+리스트는 정수를 연속적으로 담고 있는 경우가 아주 많습니다. 그래서 파이썬은 간단하게 그런 리스트를 만드는 방법을 제공합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; range(1,5)
+<br>[1, 2, 3, 4]
+<br></span></p>
+
+<p>
+<span class=code>range</span> 함수는 인자를 두 개 취하고 첫 번째부터 두 번째 인자까지의 정수를 모두 포함하는 리스트 하나를 반환합니다. 첫 번째 인자는 포함하지만 두 번째 인자는 포함하지 않는다는 것을 주의하세요!</p>
+<p>
+<span class=code>range</span> 함수에는 두 가지 형태가 있습니다. 인자가 하나 주어지면, <span class=code>range</span> 함수는 0에서부터 시작하는 리스트 하나를 만듭니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; range(10)
+<br>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+<br></span></p>
+
+<p>
+<span class=code>range</span> 함수에 세 번째 인자가 있다면, 그 인자는 연속적인 값들 사이에 띄어질 공간을 지정합니다. 이것을 일컬어 <b>띄움 크기(step size)</b>라고 부릅니다. 다음 예제는 1에서부터 10미만까지 2만큼씩 띄어서 셉니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; range(1, 10, 2)
+<br>[1, 3, 5, 7, 9]
+<br></span></p>
+
+<p>
+마지막으로, 아무 원소도 없는 특수한 리스트가 있습니다. 그런 리스트를 빈 리스트라고 부릅니다. 그리고 다음과 같이 <span class=code>[ ]</span>라고 표기합니다.</p>
+<p>
+이렇게 여러 방법으로 리스트를 만들 수 있음에도 불구하고, 리스트 값을 변수에 할당할 수 없다거나 리스트를 함수에 매개변수로 넘겨 줄 수 없다면 실망스러울 것입니다. 다음을 보시면 얼마든지 가능하다는 것을 알 수 있습니다.</p>
+
+
+<p><span class=code>vocabulary = [<span class=quote>"ameliorate"</span>, <span class=quote>"castigate"</span>, <span class=quote>"defenestrate"</span>]
+<br>numbers = [17, 123]
+<br>empty = []
+<br><span class=keyword>print</span> vocabulary, numbers, empty
+<br>[<span class=quote>'ameliorate'</span>, <span class=quote>'castigate'</span>, <span class=quote>'defenestrate'</span>] [17, 123] []
+<br></span></p>
+
+
+
+<a name=2></a><br>
+<h3>8.2 원소에 접근하기</h3>
+<p>
+리스트의 원소들에 접근하기 위한 구문은 문자열에서 문자에 접근하기 위한 구문과 똑 같습니다---각 괄호 연산자 (<span class=code>[]</span>)가 바로 그것입니다. 각 괄호안에 있는 표현식은 지표를 지정합니다.  지표는 0에서 시작한다는 것을 기억하세요:</p>
+
+
+<p><span class=code><span class=keyword>print</span> numbers[0]
+<br>numbers[1] = 5
+<br></span></p>
+
+<p>
+각 괄호 연산자(bracket operator)는 표현식의 어느 곳에라도 나타날 수 있습니다. 할당문의 왼쪽에 각 괄호 연산자가 나타나면, 리스트에 있는 원소들 중의 하나가 변경됩니다. 그래서 <span class=code>numbers</span>의 1 번(one-eth) 원소는 123이었지만 이제는 5입니다.</p>
+
+<p>
+어떤 정수 표현식도 지표로 사용할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; numbers[3-2]
+<br>5
+<br>&gt;&gt;&gt; numbers[1.0]
+<br>TypeError: sequence index must be integer
+<br></span></p>
+
+
+
+<p>
+존재하지 않는 원소를 읽거나 쓰려고 시도한다면, 실행시간 에러(runtime error)를 맞이합니다:</p>
+
+
+
+
+<p><span class=code>&gt;&gt;&gt; numbers[2] = 5
+<br>IndexError: list assignment index out of range
+<br></span></p>
+
+
+
+<p>
+지표가 음수 값이라면, 그 지표는 리스트의 끝으로부터 거꾸로 셉니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; numbers[-1]
+<br>5
+<br>&gt;&gt;&gt; numbers[-2]
+<br>17
+<br>&gt;&gt;&gt; numbers[-3]
+<br>IndexError: list index out of range
+<br></span></p>
+
+
+
+<p>
+<span class=code>numbers[-1]</span>은 리스트의 마지막 원소입니다. <span class=code>numbers[-2]</span>는 마지막에서 두 번째 원소이며, <span class=code>numbers[-3]</span>은 존재하지 않습니다.</p>
+
+<p>
+회돌이 변수(loop variable)는 리스트 지표로 아주 흔하게 사용됩니다.</p>
+
+
+<p><span class=code>horsemen = [<span class=quote>"war"</span>, <span class=quote>"famine"</span>, <span class=quote>"pestiness"</span>, <span class=quote>"death"</span>]
+<br>
+<br>i = 0
+<br><span class=keyword>while</span> i &lt; 4:
+<br>&nbsp; <span class=keyword>print</span> horsemen[i]
+<br>&nbsp; i = i + 1
+<br></span></p>
+
+
+
+<p>
+이 <span class=code><span class=keyword>while</span></span> 회돌이는 0에서부터 4까지 셉니다. 회돌이 변수 <span class=code>i</span>가 4라면, 조건은 실패하고 회돌이는 종료합니다. 그래서 회돌이의 몸체는 오직 <span class=code>i</span>가 0, 1, 2, 그리고 3일 때만 실행됩니다.</p>
+<p>
+회돌이를 돌 때마다, 변수 <span class=code>i</span>는 리스트에 대한 지표로 사용되어 <tt>i</tt>번(<tt>i</tt>th) 원소를 인쇄합니다. 이러한 계산 패턴을 <b>리스트 순회(list traversal)</b>라고 부릅니다.</p>
+
+
+
+<a name=3></a><br>
+<h3>8.3 리스트 길이</h3>
+<p>
+<span class=code>len</span> 함수는 리스트의 길이를 반환합니다. 상수 대신에 이 값을 회돌이의 상한 값으로 사용하는 것이 좋은 생각입니다. 이렇게 하면 리스트의 길이가 변할지라도 프로그램을 훓어가면서 회돌이를 모두 변경할 필요가 없습니다; 이렇게 설정된 리스트들은 길이에 상관없이 올바르게 작동할 것입니다:</p>
+
+
+<p><span class=code>horsemen = [<span class=quote>"war"</span>, <span class=quote>"famine"</span>, <span class=quote>"pestiness"</span>, <span class=quote>"death"</span>]
+<br>
+<br>i = 0
+<br><span class=keyword>while</span> i &lt; len(horsemen):
+<br>&nbsp; <span class=keyword>print</span> horsemen[i]
+<br>&nbsp; i = i + 1
+<br></span></p>
+
+<p>
+회돌이의 몸체가 마지막으로 실행될 때, <span class=code>i</span>는 <span class=code>len(horsemen) - 1</span>이며 이것이 마지막 원소의 지표입니다. <span class=code>i</span>가 <span class=code>len(horsemen)</span>와 동등해지면, 조건은 실패하고 몸체는 실행되지 않습니다. <span class=code>len(horsemen)</span>가 적법한 지표가 아니기 때문인데 이것은 좋은 일입니다.</p>
+
+<p>
+리스트 안에 또 다른 리스트를 포함할 수 있지만, 그렇게 내포된 리스트는 여전히 하나의 원소로 취급됩니다. 다음 리스트의 길이는 네 개입니다:</p>
+
+
+<p><span class=code>[<span class=quote>'spam!'</span>, 1, [<span class=quote>'Brie'</span>, <span class=quote>'Roquefort'</span>, <span class=quote>'Pol le Veq'</span>], [1, 2, 3]]
+<br></span></p>
+
+
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, 바로 위에 주어진 리스트를 순회하여 각 원소의 길이를 인쇄하는 회돌이를 작성해 보세요. 만약 정수값을 <span class=code>len</span>에 보내면 무슨 일이 일어납니까?</i> </p>
+
+<a name=4></a><br>
+<h3>8.4 리스트 구성원</h3>
+
+<p>
+연속열에 포함되는지 구성원 테스트를 하는 불리언 연산자는 <span class=code><span class=keyword>in</span></span>입니다. 이 연산자는 <a href="chap07.htm#10">섹션 7.10</a>에서 문자열에 사용했었지만 리스트와 그외 다른 연속열에도 작동합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; horsemen = [<span class=quote>'war'</span>, <span class=quote>'famine'</span>, <span class=quote>'pestiness'</span>, <span class=quote>'death'</span>]
+<br>&gt;&gt;&gt; <span class=quote>'pestiness'</span> <span class=keyword>in</span> horsemen
+<br>1
+<br>&gt;&gt;&gt; <span class=quote>'debauchery'</span> <span class=keyword>in</span> horsemen
+<br>0
+<br></span></p>
+
+
+
+<p>
+"pestiness"는 <span class=code>horsemen</span> 리스트의 구성원이므로, <span class=code><span class=keyword>in</span></span> 연산자는 참을 반환합니다. "debauchery"는 리스트에 있지 않기 때문에, <span class=code><span class=keyword>in</span></span> 연산자는 거짓을 반환합니다.</p>
+
+<p>
+<span class=code><span class=keyword>not</span></span> 연산자를 <span class=code><span class=keyword>in</span></span> 연산자와 조합해 사용하면 원소가 리스트의 구성원인지 아닌지 테스트할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=quote>'debauchery'</span> <span class=keyword>not in</span> horsemen
+<br>1
+<br></span></p>
+
+
+
+<a name=5></a><br>
+<h3>8.5 리스트와 <span class=code><span class=keyword>for</span></span> 회돌이</h3>
+
+<p>
+<a href="chap07.htm#3" >섹션 7.3</a>에서 본 <span class=code><span class=keyword>for</span></span> 회돌이는 리스트와도 작동합니다. <span class=code><span class=keyword>for</span></span> 회돌이의 일반화된 구문은 다음과 같습니다:</p>
+
+
+<p><span class=code><span class=keyword>for</span> VARIABLE <span class=keyword>in</span> LIST:
+<br>&nbsp; BODY
+<br></span></p>
+
+
+
+<p>
+이 서술문은 다음과 동등합니다:</p>
+
+
+<p><span class=code>i = 0
+<br><span class=keyword>while</span> i &lt; len(LIST):
+<br>&nbsp; VARIABLE = LIST[i]
+<br>&nbsp; BODY
+<br>&nbsp; i = i + 1
+<br></span></p>
+
+
+
+<p>
+회돌이 변수 <span class=code>i</span>를 없앨 수 있기 때문에 <span class=code><span class=keyword>for</span></span> 회돌이가 더욱 간결합니다. 다음은 이전의 회돌이를 <span class=code><span class=keyword>for</span></span> 회돌이로 다시 작성한 것입니다.</p>
+
+
+<p><span class=code><span class=keyword>for</span> horseman <span class=keyword>in</span> horsemen:
+<br>&nbsp; <span class=keyword>print</span> horseman
+<br></span></p>
+
+
+
+<p>
+거의 영어처럼 읽혀집니다: "말지기의 (리스트)에 있는 (모든) 말지기에 대하여, 그 말지기의 (이름)을 인쇄하라."</p>
+
+<p>
+리스트 표현식이라면 무엇이든 <span class=code><span class=keyword>for</span></span> 회돌이에 사용할 수 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>for</span> number <span class=keyword>in</span> range(20):
+<br>&nbsp; <span class=keyword>if</span> number % 2 == 0:
+<br>&nbsp; &nbsp; <span class=keyword>print</span>&nbsp; number
+<br>
+<br><span class=keyword>for</span> fruit <span class=keyword>in</span> [<span class=quote>"banana"</span>, <span class=quote>"apple"</span>, <span class=quote>"quince"</span>]:
+<br>&nbsp; <span class=keyword>print</span> <span class=quote>"I like to eat "</span> + fruit + <span class=quote>"s!"</span>
+<br></span></p>
+
+
+
+<p>
+첫 번째 예제는 0부터 19사이에 있는 모든 짝수를 인쇄합니다. 두 번째 예제는 다양한 과일들에 대한 열망을 표현합니다.</p>
+
+<a name=6></a><br>
+<h3>8.6 리스트 연산</h3>
+
+<p>다음 <span class=code>+</span> 연산자는 리스트를 결합합니다:</p>
+
+
+
+
+<p><span class=code>&gt;&gt;&gt; a = [1, 2, 3]
+<br>&gt;&gt;&gt; b = [4, 5, 6]
+<br>&gt;&gt;&gt; c = a + b
+<br>&gt;&gt;&gt; <span class=keyword>print</span> c
+<br>[1, 2, 3, 4, 5, 6]
+<br></span></p>
+
+
+
+<p>
+비슷하게, <span class=code>*</span> 연산자는 주어진 횟수 만큼 리스트를 반복합니다:</p>
+
+
+
+
+<p><span class=code>&gt;&gt;&gt; [0] * 4
+<br>[0, 0, 0, 0]
+<br>&gt;&gt;&gt; [1, 2, 3] * 3
+<br>[1, 2, 3, 1, 2, 3, 1, 2, 3]
+<br></span></p>
+
+
+
+<p>
+첫 번째 예제는 <span class=code>[0]</span>을 네 번 반복합니다. 두 번째 예제는 <span class=code>[1, 2, 3]</span>을 세 번 반복합니다.</p>
+
+<a name=7></a><br>
+<h3>8.7 리스트 조각</h3>
+
+<p>
+<a href="chap07.htm#4">섹션 7.4</a>에서 본 조각썰기 연산(slice operations)은 리스트에도 작동합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; list = [<span class=quote>'a'</span>, <span class=quote>'b'</span>, <span class=quote>'c'</span>, <span class=quote>'d'</span>, <span class=quote>'e'</span>, <span class=quote>'f'</span>]
+<br>&gt;&gt;&gt; list[1:3]
+<br>[<span class=quote>'b'</span>, <span class=quote>'c'</span>]
+<br>&gt;&gt;&gt; list[:4]
+<br>[<span class=quote>'a'</span>, <span class=quote>'b'</span>, <span class=quote>'c'</span>, <span class=quote>'d'</span>]
+<br>&gt;&gt;&gt; list[3:]
+<br>[<span class=quote>'d'</span>, <span class=quote>'e'</span>, <span class=quote>'f'</span>]
+<br>&gt;&gt;&gt; list[:]
+<br>[<span class=quote>'a'</span>, <span class=quote>'b'</span>, <span class=quote>'c'</span>, <span class=quote>'d'</span>, <span class=quote>'e'</span>, <span class=quote>'f'</span>]
+<br></span></p>
+
+
+
+<a name=8></a><br>
+<h3>8.8 리스트는 변경가능하다</h3>
+
+<p>
+문자열과는 다르게 리스트는 변경가능합니다. 이 의미는 리스트의 원소들을 변경할 수 있다는 것을 뜻합니다. 할당문의 왼쪽에 각괄호 연산자를 사용하면, 원소들 중의 하나를 갱신할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; fruit = [<span class=quote>"banana"</span>, <span class=quote>"apple"</span>, <span class=quote>"quince"</span>]
+<br>&gt;&gt;&gt; fruit[0] = <span class=quote>"pear"</span>
+<br>&gt;&gt;&gt; fruit[-1] = <span class=quote>"orange"</span>
+<br>&gt;&gt;&gt; <span class=keyword>print</span> fruit
+<br>[<span class=quote>'pear'</span>, <span class=quote>'apple'</span>, <span class=quote>'orange'</span>]
+<br></span></p>
+
+
+
+<p>
+조각썰기 연산자(slice operator)를 사용하면 여러 원소를 한 번에 갱신할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; list = [<span class=quote>'a'</span>, <span class=quote>'b'</span>, <span class=quote>'c'</span>, <span class=quote>'d'</span>, <span class=quote>'e'</span>, <span class=quote>'f'</span>]
+<br>&gt;&gt;&gt; list[1:3] = [<span class=quote>'x'</span>, <span class=quote>'y'</span>]
+<br>&gt;&gt;&gt; <span class=keyword>print</span> list
+<br>[<span class=quote>'a'</span>, <span class=quote>'x'</span>, <span class=quote>'y'</span>, <span class=quote>'d'</span>, <span class=quote>'e'</span>, <span class=quote>'f'</span>]
+<br></span></p>
+
+
+
+<p>
+빈 리스트를 원소에 할당하면 리스트로부터 그 원소를 제거할 수도 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; list = [<span class=quote>'a'</span>, <span class=quote>'b'</span>, <span class=quote>'c'</span>, <span class=quote>'d'</span>, <span class=quote>'e'</span>, <span class=quote>'f'</span>]
+<br>&gt;&gt;&gt; list[1:3] = []
+<br>&gt;&gt;&gt; <span class=keyword>print</span> list
+<br>[<span class=quote>'a'</span>, <span class=quote>'d'</span>, <span class=quote>'e'</span>, <span class=quote>'f'</span>]
+<br></span></p>
+
+
+
+<p>
+그리고 원소들을 비어있는 조각에 눌러 넣으면 그 원소들을 원하는 위치에 추가할 수도 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; list = [<span class=quote>'a'</span>, <span class=quote>'d'</span>, <span class=quote>'f'</span>]
+<br>&gt;&gt;&gt; list[1:1] = [<span class=quote>'b'</span>, <span class=quote>'c'</span>]
+<br>&gt;&gt;&gt; <span class=keyword>print</span> list
+<br>[<span class=quote>'a'</span>, <span class=quote>'b'</span>, <span class=quote>'c'</span>, <span class=quote>'d'</span>, <span class=quote>'f'</span>]
+<br>&gt;&gt;&gt; list[4:4] = [<span class=quote>'e'</span>]
+<br>&gt;&gt;&gt; <span class=keyword>print</span> list
+<br>[<span class=quote>'a'</span>, <span class=quote>'b'</span>, <span class=quote>'c'</span>, <span class=quote>'d'</span>, <span class=quote>'e'</span>, <span class=quote>'f'</span>]
+<br></span></p>
+
+
+
+<a name=9></a><br>
+<h3>8.9 그외 리스트 연산</h3>
+
+<p>
+조각썰기를 사용하여 리스트 원소들을 삽입하고 삭제하는 것은 어색해 보일 수 있습니다. 그러므로 에러를 야기하기도 쉽습니다. 파이썬은 더욱 쉽게 읽을 수 있도록 또 다른 대안을 제공합니다.</p>
+
+
+
+<p>
+<span class=code><span class=keyword>del</span></span>은 리스트로부터 원소 하나를 제거합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; a = [<span class=quote>'one'</span>, <span class=quote>'two'</span>, <span class=quote>'three'</span>]
+<br>&gt;&gt;&gt; <span class=keyword>del</span> a[1]
+<br>&gt;&gt;&gt; a
+<br>[<span class=quote>'one'</span>, <span class=quote>'three'</span>]
+<br></span></p>
+
+
+
+<p>
+예상하는 바와 같이, <span class=code><span class=keyword>del</span></span>은 음수 지표를 다루며 만약 지표가 범위를 벗어나면 실행시간 에러가 일어납니다.</p>
+
+<p>
+<span class=code><span class=keyword>del</span></span>에 대하여 조각을 지표로 사용할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; list = [<span class=quote>'a'</span>, <span class=quote>'b'</span>, <span class=quote>'c'</span>, <span class=quote>'d'</span>, <span class=quote>'e'</span>, <span class=quote>'f'</span>]
+<br>&gt;&gt;&gt; <span class=keyword>del</span> list[1:5]
+<br>&gt;&gt;&gt; <span class=keyword>print</span> list
+<br>[<span class=quote>'a'</span>, <span class=quote>'f'</span>]
+<br></span></p>
+
+
+
+<p>
+예와 같이 조각썰기는 두 번째 지표 미만까지 모든 원소를 선택합니다.</p>
+
+<p>
+<span class=code>append</span> 함수는 원소(또는 리스트)를 기존 리스트의 끝에 추가합니다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt; a = [<span class=quote>'one'</span>, <span class=quote>'two'</span>]
+<br>&gt;&gt;&gt; append (a, <span class=quote>'three'</span>)
+<br>&gt;&gt;&gt; <span class=keyword>print</span> a
+<br>
+<br></span></p>
+
+
+
+<a name=10></a><br>
+<h3>8.10 객체와 값</h3>
+
+<p>
+다음과 같은 할당 서술문을 실행하면,</p>
+
+
+<p><span class=code>a = <span class=quote>"banana"</span>
+<br>b = <span class=quote>"banana"</span>
+<br></span></p>
+
+
+
+<p>
+<span class=code>a</span>와 <span class=code>b</span>가 <span class=code><span class=quote>"banana"</span></span>라는 문자를 가진 문자열을 가리킬 것이라고 생각합니다. 그러나 <span class=code>a</span>와 <span class=code>b</span>가 <i>같은</i> 문자열을 가르키는지 아닌지는 알 수 없습니다.</p>
+
+<p>가능한 상황은 두 가지가 있습니다:</p>
+
+<p align="center"><img src="illustrations/list1.png"></p>
+
+<p>
+첫 번째 경우는 <span class=code>a</span>와 <span class=code>b</span>가 같은 값을 가지는 서로 다른 두 개를 가리키는 것입니다. 두 번째 경우에는 <span class=code>a</span>와 <span class=code>b</span>가 똑 같은 것을 가르키는 것입니다. 이것한 "것들(things)"은 이름이 있습니다---이른바 <b>객체(objects)</b>라고 부릅니다. 객체는 변수가 가리킬 수 있는 어떤 것입니다.</p>
+
+<p>
+어느 객체라도 유일한 <b>식별자(identifier)</b>가 있습니다. 식별자는 <span class=code>id</span> 함수로 얻을 수 있습니다. <span class=code>a</span>와 <span class=code>b</span>의 식별자를 인쇄해 보면 그 두 변수가 같은 객체를 가리키는지 아닌지 알 수 있습니다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt; id(a)
+<br>135044008
+<br>&gt;&gt;&gt; id(b)
+<br>135044008
+<br></span></p>
+
+
+
+<p>
+실제로 같은 식별자를 두 번 얻습니다. 이것은 파이썬이 오직 한 개의 문자열만 만들었으며, <span class=code>a</span>와 <span class=code>b</span>가 그 문자열을 가리키고 있다는 것을 뜻합니다.</p>
+
+<p>
+흥미롭게도 리스트는 다르게 행동합니다. 리스트를 두 개 만들면, 객체를 두 개 얻습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; a = [1, 2, 3]
+<br>&gt;&gt;&gt; b = [1, 2, 3]
+<br>&gt;&gt;&gt; id(a)
+<br>135045528
+<br>&gt;&gt;&gt; id(b)
+<br>135041704
+<br></span></p>
+
+
+
+<p>
+그래서 상태 다이어그램은 다음과 같이 보입니다:</p>
+
+<p align="center"><img src="illustrations/list2.png"></p>
+
+<p><span class=code>a</span>와 <span class=code>b</span>는 같은 값을 가지지만 같은 객체를 가리키고 있지 않습니다.</p>
+
+<a name=11></a><br>
+<h3>8.11 별명(Aliasing)</h3>
+
+<p>
+변수는 객체를 가리키기 때문에, 변수 하나를 또 다른 변수에 할당하면 두 변수 모두 같은 객체를 가리킵니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; a = [1, 2, 3]
+<br>&gt;&gt;&gt; b = a
+<br></span></p>
+
+
+
+<p>이 경우에 상태 다이어그램은 다음과 같이 보입니다:</p>
+
+<p align="center"><img src="illustrations/list3.png"></p>
+
+<p>
+같은 리스트가 <span class=code>a</span>와 <span class=code>b</span>라는 서로 다른 이름 두 개를 가지기 때문에, 그것을 일컬어 <b>별명화(aliased)</b>되었다고 말합니다. 별명 하나에 변경이 가해지면 다른 별명에도 영향을 미칩니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; b[0] = 5
+<br>&gt;&gt;&gt; <span class=keyword>print</span> a
+<br>[5, 2, 3]
+<br></span></p>
+
+
+
+<p>
+이런 행위가 유용할 수 있음에도 불구하고, 때로는 기대 밖이거나 바람직하지 못합니다. 일반적으로, 변경가능한 객체와 작업할 때는 별명을 피하는 것이 더 안전합니다. 물론, 변경불능 객체에 대해서는 아무런 문제가 없습니다. 그 때문에 경제적으로 사용할 여지만 된다면 파이썬은 자유롭게 문자열을 별명화할 수 있습니다.</p>
+
+<a name=12></a><br>
+<h3>8.12 리스트 복제</h3>
+
+<p>
+리스트를 변경하기를 원하지만 또한 원본을 유지하고 싶다면, 단순히 참조가 아니라 그 리스트 자체의 복사본을 만들 수 있어야 합니다. 이러한 처리과정을 가끔 "복사(copy)"라는 용어와 혼동을 피해서 <b>복제(cloning)</b>라고 부릅니다.</p>
+
+<p>
+가장 쉽게 리스트를 복제하는 방법은 조각썰기 연산자를 사용하는 것입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; a = [1, 2, 3]
+<br>&gt;&gt;&gt; b = a[:]
+<br>&gt;&gt;&gt; <span class=keyword>print</span> b
+<br>[1, 2, 3]
+<br></span></p>
+
+
+
+<p>
+<span class=code>a</span>에서 조각을 취하기만 하면 리스트 하나를 새로이 만듭니다. 이 경우에는 그 조각이 우연하게 전체 리스트로 구성되었습니다.</p>
+<p>
+이제 <span class=code>a</span>에 신경쓸 필요없이 자유롭게 <span class=code>b</span>를 변경할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; b[0] = 5
+<br>&gt;&gt;&gt; <span class=keyword>print</span> a
+<br>[1, 2, 3]
+<br></span></p>
+
+
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습삼아, 이렇게 변경하고 난 후의 <span class=code>a</span>와 <span class=code>b</span>에 관한 상태 다이어그램을 그려 보세요.</i> </p>
+
+<a name=13></a><br>
+<h3>8.13 리스트 매개변수</h3>
+
+<p>
+리스트를 인자로 건네는 것은 실제로는 그 리스트의 복사본이 아니라 그 리스트에 대한 참조점을 건네는 것입니다. 예를 들어, <span class=code>head</span> 함수는 리스트를 매개변수로 취하여 그 첫 번째 원소를 반환합니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>head</span>(list):
+<br>&nbsp; <span class=keyword>return</span> list[0]
+<br></span></p>
+
+
+
+<p>다음은 사용법입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; numbers = [1, 2, 3]
+<br>&gt;&gt;&gt; head(numbers)
+<br>1
+<br></span></p>
+
+
+
+<p>
+매개변수 <span class=code>리스트(list)</span>와 <span class=code>numbers</span> 변수는 같은 객체에 대한 별명입니다. 상태 다이어그램은 다음과 같이 보입니다:</p>
+
+<p align="center"><img src="illustrations/stack5.png"></p>
+
+<p>
+리스트 객체를 두 틀이 공유하므로, 두 틀 사이에 그 리스트를 그렸습니다.</p>
+
+<p>
+한 함수가 리스트 매개변수를 변경하더라도, 호출자는 그 변경사항을 볼 수 있습니다. 예를 들어, <span class=code>deleteHead</span>는 리스트로부터 첫 번째 원소를 제거합니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>deleteHead</span>(list):
+<br>&nbsp; <span class=keyword>del</span> list[0]
+<br></span></p>
+
+
+
+<p>다음은 <span class=code>deleteHead</span>의 사용법입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; numbers = [1, 2, 3]
+<br>&gt;&gt;&gt; delete_head(numbers)
+<br>&gt;&gt;&gt; <span class=keyword>print</span> numbers
+<br>[2, 3]
+<br></span></p>
+
+
+
+<p>
+함수가 리스트를 반환하면, 그 함수는 그 리스트에 대한 참조점을 반환합니다. 예를 들어, <span class=code>tail</span>은 주어진 리스트에서 첫 번째 원소를 제외한 모든 원소들을 담고 있는 리스트 하나를 반환합니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>tail</span>(list):
+<br>&nbsp; <span class=keyword>return</span> list[1:]
+<br></span></p>
+
+
+
+<p>다음은 <span class=code>tail</span>의 사용법입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; numbers = [1, 2, 3]
+<br>&gt;&gt;&gt; rest = tail(numbers)
+<br>&gt;&gt;&gt; <span class=keyword>print</span> rest
+<br>[2, 3]
+<br></span></p>
+
+
+
+<p>
+반환 값을 조각썰기 연산자로 만들었기 때문에, 그 반환값은 새로운 리스트입니다. <span class=code>rest</span>를 만드는 것과 <span class=code>rest</span>에 대해 뒤따르는 어떠한 변경도 <span class=code>numbers</span>에 아무런 영향을 미치지 않습니다.</p>
+
+<a name=14></a><br>
+<h3>8.14 내포된 리스트</h3>
+
+<p>
+내포된 리스트(nested list)는 리스트 안에 한 원소로서 나타나는 또 다른 리스트입니다. 다음 리스트는 3-번(three-eth) 원소가 내포된 리스트입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; list = [<span class=quote>"hello"</span>, 2.0, 5, [10, 20]]
+<br></span></p>
+
+
+
+<p>
+<span class=code>list[3]</span>을 인쇄하면, <span class=code>[10, 20]</span>을 얻습니다. 내포된 리스트에서 원소 하나를 추출하려면, 두 단계를 거쳐 처리할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; elt = list[3]
+<br>&gt;&gt;&gt; elt[0]
+<br>10
+<br></span></p>
+
+
+
+<p>
+또는 그것들을 조합할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; list[3][1]
+<br>20
+<br></span></p>
+
+
+
+<p>
+각괄호 연산자는 왼쪽에서 오른쪽으로 평가합니다. 그래서 이 표현식은 <span class=code>list</span>의 3-번(three-eth) 원소를 얻습니다. 그리고 그 원소에서 1-번(one-eth) 원소를 추출합니다.</p>
+
+<a name=15></a><br>
+<h3>8.15 행렬(Matrixes)</h3>
+
+<p>
+내포된 리스트는 종종 행렬을 표현하는데 사용됩니다. 예를 들어, 다음 행렬은:</p>
+
+<p align="center"><img src="illustrations/matrix.png"></p>
+
+<p>다음과 같이 표현될 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+<br></span></p>
+
+
+
+<p>
+위의 <span class=code>행렬(matrix)</span>은 원소가 세 개인 리스트입니다. 각 원소는 행렬의 행입니다. 전체 행을 보통때 사용하던 방식대로 행렬에서 선택할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; matrix[1]
+<br>[4, 5, 6]
+<br></span></p>
+
+
+
+<p>
+또는 이중-지표(double-index)의 형태를 사용하여 행렬로부터 원소 하나를 선택할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; matrix[1][1]
+<br>5
+<br></span></p>
+
+
+
+<p>
+첫 번째 지표는 행을 선택하며 두 번째 지표는 열을 선택합니다. 이런식으로 행렬을 표현하는 것이 흔하기는 하지만 그것만이 유일한 방법은 아닙니다. 약간 변경하면 행 리스트 대신에 열 리스트를 사용할 수 있습니다. 나중에 사전을 사용한 더 혁명적인 대안을 보여 드리겠습니다.</p>
+
+
+
+<a name=16></a><br>
+<h3>8.16 문자열과 리스트</h3>
+
+<p>
+<span class=code>string</span> 모듈에 있는 유용한 함수들 중에서 문자열로 구성된 리스트에 관계되는 함수가 두가지가 있습니다. <span class=code>split</span> 함수는 문자열을 단어의 리스트로 쪼갭니다. 기본값으로, 개수에 상관없이 공백 문자가 단어사이의 경계로 간주됩니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>import</span> string
+<br>&gt;&gt;&gt; song = <span class=quote>"The rain in Spain..."</span>
+<br>&gt;&gt;&gt; string.split(song)
+<br>[<span class=quote>'The'</span>, <span class=quote>'rain'</span>, <span class=quote>'in'</span>, <span class=quote>'Spain...'</span>]
+<br></span></p>
+
+
+
+<p>
+<b>구분자(delimiter)</b>라고 부르는 선택적인 인자로 어떤 문자가 단어사이의 경계로 사용될지를 지정할 수 있습니다. 다음 예제는 <span class=code>ai</span>라는 문자열을 구분자로 사용합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; string.split(song, <span class=quote>'ai'</span>)
+<br>[<span class=quote>'The r'</span>, <span class=quote>'n in Sp'</span>, <span class=quote>'n...'</span>]
+<br></span></p>
+
+
+
+<p>구분자는 리스트에 나타나지 않는다는 것을 주목하세요.</p>
+
+<p>
+<span class=code>join</span> 함수는 <span class=code>split</span> 함수의 반대 기능을 합니다. <span class=code>join</span> 함수는 문자열의 리스트를 취해서 공백 하나를 사이에 두고 그 원소들을 결합합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; myLst = [<span class=quote>'The'</span>, <span class=quote>'rain'</span>, <span class=quote>'in'</span>, <span class=quote>'Spain...'</span>]
+<br>&gt;&gt;&gt; string.join(myLst)
+<br><span class=quote>'The rain in Spain...'</span>
+<br></span></p>
+
+
+
+<p>
+<span class=code>split</span> 함수처럼 <span class=code>join</span> 함수도 원소들 사이에 삽입되는 선택적인 인자를 하나 취합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; string.join(myLst, <span class=quote>'_'</span>)
+<br><span class=quote>'The_rain_in_Spain...'</span>
+<br></span></p>
+
+
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로 <span class=code>string.join(string.split(song))</span>과 <span class=code>song</span> 사이의 관계를 기술해 보세요. 모든 문자열에 대해서 똑 같습니까? 다르다면 어떤 경우가 그렇습니까?</i> </p>
+
+<a name=17></a><br>
+<h3>8.17 용어 해설</h3>
+
+<dl>
+
+<dt>리스트(list)</dt>
+<dd>이름지어진 객체 집단, 여기에서 각 객체는 지표로 식별된다.</dd>
+
+<dt>지표(index)</dt>
+<dd>리스트의 원소들을 지시하는 정수 값 혹은 정수 변수.</dd>
+
+<dt>원소(element)</dt>
+<dd>리스트(또는 다른 연속열)에 있는 값들 중의 하나. 각괄호 연산자로 리스트의 원소들을 선택한다.</dd>
+
+<dt>연속열(sequence)</dt>
+<dd>순서있는 모둠의 원소들로 구성되는 모든 데이타 유형, 각 원소는 지표로 식별된다.</dd>
+
+<dt>내포된 리스트(nested list)</dt>
+<dd>또다른 리스트의 원소인 리스트.</dd>
+
+<dt>리스트 순회(list traversal)</dt>
+<dd>리스트에 있는 각 원소들에 대한 연속적인 접근.</dd>
+
+<dt>객체(object)</dt>
+<dd>변수가 가리킬 수 있는 것.</dd>
+
+<dt>별명(aliases)</dt>
+<dd>같은 객체를 가리키는 여러 변수들.</dd>
+
+<dt>복제(clone)</dt>
+<dd>기존의 객체와 똑 같은 값을 가지는 객체를 새롭게 생성하는 것. 한 객체에 대한 참조점을 복사하면 별명을 만들어 내지만 그 객체를 복제하지는 않는다.</dd>
+
+<dt>구분자(delimiter)</dt>
+<dd>문자열이 분리되어야 할 곳을 지시하는데 사용되는 문자 또는 문자열.</dd>
+</dl>
+
+<h2>연습문제</h2>
+<ol>
+<li><div class="exercise">
+다음을 순회하는 회돌이를 작성하라:
+<pre class="python">
+['spam!', 1, ['Brie', 'Roquefort', 'Pol le Veq'], [1, 2, 3]]
+</pre>
+그리고 각 원소의 길이를 인쇄하라.  정수를 <code>len</code>에 보내면 무슨 일이 일어나는가?  <code>1</code>을 <code>'one'</code>으로 바꾸고 해법을 다시 실행하라.
+</div></li>
+
+<li><div class="exercise">
+다음과 같은 내용으로 <code>ch09e02.py</code>이라는 파일을 열어라:
+<pre class="python">
+#  여기에 문서화테스트를 추가한다:
+"""
+"""
+
+# 파이썬 코드는 여기에 쓴다:
+
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod() 
+</pre>
+다음의 각 문서화테스트 집합을 파일의 최상위 문서화문자열(docstring)에 추가하고 문서화테스트가 통과하도록 파이썬 코드를 작성하라.
+<ol style="list-style-type: lower-alpha">
+<li><pre class="python">
+"""
+  &gt;&gt;&gt; a_list[3]
+  42
+  &gt;&gt;&gt; a_list[6]
+  'Ni!'
+  &gt;&gt;&gt; len(a_list)
+  8
+"""
+</pre></li>
+<li><pre class="python">
+"""
+  &gt;&gt;&gt; b_list[1:]
+  ['Stills', 'Nash']
+  &gt;&gt;&gt; group = b_list + c_list
+  &gt;&gt;&gt; group[-1]
+  'Young'
+"""
+</pre></li>
+<li><pre class="python">
+"""
+  &gt;&gt;&gt; 'war' in mystery_list
+  False
+  &gt;&gt;&gt; 'peace' in mystery_list
+  True
+  &gt;&gt;&gt; 'justice' in mystery_list
+  True
+  &gt;&gt;&gt; 'oppression' in mystery_list
+  False
+  &gt;&gt;&gt; 'equality' in mystery_list
+  True
+"""
+</pre></li>
+<li><pre class="python">
+"""
+  &gt;&gt;&gt; range(a, b, c)
+  [5, 9, 13, 17]
+"""
+</pre></li>
+</ol>
+한 번에 하나씩만 문서화테스트를 추가하라.  다음 문서화테스트 집합은 앞의 집합이 통과할 때까지 추가되면 안된다.
+</div></li>
+
+<li><div class="exercise">
+다음에 대한 파이썬 인터프리트의 응답은 무엇인가?
+<pre class="python-interpreter">
+&gt;&gt;&gt; range(10, 0, -2) 
+</pre>
+<em>range</em> 함수에 건네는 인자 세가지는 각각 <em>start</em>와 <em>stop</em> 그리고 <em>step</em>이다. 이 예제에서, <code>start</code>는 <code>stop</code> 이상이다. <code>start &lt; stop</code> 그리고 <code>step &lt; 0</code>이라면 무슨 일이 일어나는가? <code>start</code>와 <code>stop</code> 그리고 <code>step</code> 사이의 관계에 관하여 규칙을 작성하라.
+</div></li>
+
+<li><div class="exercise">
+<pre class="python">
+a = [1, 2, 3]
+b = a[:]
+b[0] = 5
+</pre>
+세 번째 줄이 실행되기 전과 후의 <code>a</code>와 <code>b</code>에 대하여 상태 다이어그램을 그려라. 
+</div></li>
+
+<li><div class="exercise">
+다음 프로그램의 출력은 무엇인가?
+<pre class="python">
+this = ['I', 'am', 'not', 'a', 'crook']
+that = ['I', 'am', 'not', 'a', 'crook']
+print "Test 1: %s" % (id(this) == id(that))
+that = this
+print "Test 2: %s" % (id(this) == id(that))
+</pre>
+그 결과를 <em>자세하게</em> 설명하라.
+</div></li>
+
+<li><div class="exercise">
+<code>ch09e06.py</code>라는 파일을 열어  연습문제 2와 같은 절차대로 다음의 문서화테스트를 통과시켜라: 
+<ol style="list-style-type: lower-alpha">
+<li><pre class="python">
+"""
+  &gt;&gt;&gt; 13 in junk
+  True
+  &gt;&gt;&gt; del junk[4]
+  &gt;&gt;&gt; junk
+  [3, 7, 9, 10, 17, 21, 24, 27]
+  &gt;&gt;&gt; del junk[a:b]
+  &gt;&gt;&gt; junk
+  [3, 7, 27]
+"""
+</pre></li>
+<li><pre class="python">
+"""
+  &gt;&gt;&gt; nlist[2][1]
+  0
+  &gt;&gt;&gt; nlist[0][2]
+  17
+  &gt;&gt;&gt; nlist[1][1]
+  5
+"""
+</pre></li>
+<li><pre class="python">
+"""
+  &gt;&gt;&gt; import string
+  &gt;&gt;&gt; string.split(message, '??')
+  ['this', 'and', 'that']
+"""
+</pre></li>
+</ol>
+</div></li>
+
+<li><div class="exercise">
+<code>add_lists(a, b)</code> 함수를 작성하라. 이 함수는 길이 같은 숫자로 구성된 리스트를 두 개 취하여 각각 상응하는 원소들의 합을 담아 새 리스트로 돌려준다.
+<pre class="python">
+def add_lists(a, b):
+    """
+      &gt;&gt;&gt; add_lists([1, 1], [1, 1])
+      [2, 2]
+      &gt;&gt;&gt; add_lists([1, 2], [1, 4])
+      [2, 6]
+      &gt;&gt;&gt; add_lists([1, 2, 1], [1, 4, 3])
+      [2, 6, 4]
+    """
+</pre>
+<code>add_lists</code>는 위의 문서화테스트를 통과해야 한다.
+</div></li>
+
+<li><div class="exercise">
+<code>mult_lists(a, b)</code> 함수를 작성하라. 이 함수는 길이가 같은 숫자 리스트 두 개를 받아 각각 상응하는 원소들의 곱을 담아 새 리스트로 돌려준다.
+<pre class="python">
+def mult_lists(a, b):
+    """
+      &gt;&gt;&gt; mult_lists([1, 1], [1, 1])
+      2
+      &gt;&gt;&gt; mult_lists([1, 2], [1, 4])
+      9
+      &gt;&gt;&gt; mult_lists([1, 2, 1], [1, 4, 3])
+      12
+    """
+</pre>
+<code>mult_lists</code>가 위의 문서화테스트를 통과하는지 확인하라.
+</div></li>
+
+<li><div class="exercise">
+다음 두 함수를 <code>matrices.py</code>에 추가하라. 이 모듈은 테스트-주도형 개발에 관한 섹션에 소개된 바 있다:
+<pre class="python">
+def add_row(matrix):
+    """
+      &gt;&gt;&gt; m = [[0, 0], [0, 0]]
+      &gt;&gt;&gt; add_row(m)
+      [[0, 0], [0, 0], [0, 0]]
+      &gt;&gt;&gt; n = [[3, 2, 5], [1, 4, 7]]
+      &gt;&gt;&gt; add_row(n)
+      [[3, 2, 5], [1, 4, 7], [0, 0, 0]]
+      &gt;&gt;&gt; n
+      [[3, 2, 5], [1, 4, 7]]
+    """
+
+def add_column(matrix):
+    """
+      &gt;&gt;&gt; m = [[0, 0], [0, 0]]
+      &gt;&gt;&gt; add_column(m)
+      [[0, 0, 0], [0, 0, 0]]
+      &gt;&gt;&gt; n = [[3, 2], [5, 1], [4, 7]]
+      &gt;&gt;&gt; add_column(n)
+      [[3, 2, 0], [5, 1, 0], [4, 7, 0]]
+      &gt;&gt;&gt; n
+      [[3, 2], [5, 1], [4, 7]]
+    """
+</pre>
+새로운 함수는 문서화테스트를 통과해야 한다.  각 함수에서 마지막 문서화테스트는 <code>add_row</code>와 <code>add_column</code>이 순수한 함수라고 확인함에 주목하라.
+</div></li>
+
+<li><div class="exercise">
+<code>add_matrices(m1, m2)</code> 함수를 작성하라. 이 함수는 <code>m1</code>과 <code>m2</code>를 취해 그의 합을 답은 새로운 행렬을 돌려준다. <code>m1</code>과 <code>m2</code>가 크기가 같다고 생각해도 좋다.  두 행렬을 더하려면 상응하는 값을 더하면 된다.
+<pre class="python">
+def add_matrices(m1, m2):
+    """
+      &gt;&gt;&gt; a = [[1, 2], [3, 4]]
+      &gt;&gt;&gt; b = [[2, 2], [2, 2]]
+      &gt;&gt;&gt; add_matrices(a, b)
+      [[3, 4], [5, 6]]
+      &gt;&gt;&gt; c = [[8, 2], [3, 4], [5, 7]]
+      &gt;&gt;&gt; d = [[3, 2], [9, 2], [10, 12]]
+      &gt;&gt;&gt; add_matrices(c, d)
+      [[11, 4], [12, 6], [15, 19]]
+      &gt;&gt;&gt; c
+      [[8, 2], [3, 4], [5, 7]]
+      &gt;&gt;&gt; d
+      [[3, 2], [9, 2], [10, 12]]
+    """
+</pre>
+새로 만든 함수를 <code>matrices.py</code>에 추가하고 위의 문서화테스트를 통과하는지 확인하라.  뒤의 두 문서화테스트는 <code>add_matrices</code>가 순수한 함수인지 확인한다.
+</div></li>
+
+<li><div class="exercise">
+<code>m</code>과 <code>n</code>의 행렬을 스칼라 값으로 곱하는 <code>scalar_mult(n, m)</code> 함수를 작성하라.
+<pre class="python">
+def scalar_mult(n, m):
+    """
+      &gt;&gt;&gt; a = [[1, 2], [3, 4]]
+      &gt;&gt;&gt; scalar_mult(3, a)
+      [[3, 6], [9, 12]]
+      &gt;&gt;&gt; b = [[3, 5, 7], [1, 1, 1], [0, 2, 0], [2, 2, 3]]
+      &gt;&gt;&gt; scalar_mult(10, b)
+      [[30, 50, 70], [10, 10, 10], [0, 20, 0], [20, 20, 30]]
+      &gt;&gt;&gt; b
+      [[3, 5, 7], [1, 1, 1], [0, 2, 0], [2, 2, 3]]
+    """
+</pre>
+새로 만든 함수를 <code>matrices.py</code>에 추가하고 위의 문서화테스트를 통과하는지 확인하라.
+</div></li>
+
+<li><div class="exercise">
+<pre class="python">
+def row_times_column(m1, row, m2, column):
+    """
+      &gt;&gt;&gt; row_times_column([[1, 2], [3, 4]], 0, [[5, 6], [7, 8]], 0)
+      19
+      &gt;&gt;&gt; row_times_column([[1, 2], [3, 4]], 0, [[5, 6], [7, 8]], 1)
+      22
+      &gt;&gt;&gt; row_times_column([[1, 2], [3, 4]], 1, [[5, 6], [7, 8]], 0)
+      43
+      &gt;&gt;&gt; row_times_column([[1, 2], [3, 4]], 1, [[5, 6], [7, 8]], 1)
+      50
+    """
+
+def matrix_mult(m1, m2):
+    """
+      &gt;&gt;&gt; matrix_mult([[1, 2], [3,  4]], [[5, 6], [7, 8]])
+      [[19, 22], [43, 50]]
+      &gt;&gt;&gt; matrix_mult([[1, 2, 3], [4,  5, 6]], [[7, 8], [9, 1], [2, 3]])
+      [[31, 19], [85, 55]]
+      &gt;&gt;&gt; matrix_mult([[7, 8], [9, 1], [2, 3]], [[1, 2, 3], [4, 5, 6]])
+      [[39, 54, 69], [13, 23, 33], [14, 19, 24]]
+    """
+</pre>
+새로 만든 함수를 <code>matrices.py</code>에 추가하고 위의 문서화테스트를 통과하는지 확인하라.
+</div></li>
+
+<li><div class="exercise">
+<pre class="python">
+import string
+
+song = "The rain in Spain..."
+</pre>
+<code>string.join(string.split(song))</code>과 <code>song</code> 사이의 관계를 기술하라. 모든 문자열에 대하여 같은가?  언제 다른가?
+</div></li>
+
+<li><div class="exercise">
+<code>replace(s, old, new)</code> 함수를 작성하라. 이 함수는 문자열 <code>s</code>에서 <code>old</code>가 출현하면 모두 <code>new</code>로 교체한다.
+<pre class="python">
+def replace(s, old, new):
+    """
+      &gt;&gt;&gt; replace('Mississippi', 'i', 'I')
+      'MIssIssIppI'
+      &gt;&gt;&gt; s = 'I love spom!  Spom is my favorite food.  Spom, spom, spom, yum!'
+      &gt;&gt;&gt; replace(s, 'om', 'am')
+      'I love spam!  Spam is my favorite food.  Spam, spam, spam, yum!'
+      &gt;&gt;&gt; replace(s, 'o', 'a')
+      'I lave spam!  Spam is my favarite faad.  Spam, spam, spam, yum!'
+    """
+</pre>
+해법은 위의 문서화테스트를 통과해야 한다.  <em>힌트: <code>string.split</code>과 <code>string.join</code>를 사용하라.</em>
+</div></li>
+</ol>
+
+<p>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap09.htm" ><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm" ><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap07.htm" ><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+    <td width="20" class=head><a href="dex.htm" ><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+  </tr>
+</table>
+<hr>
+
+</body>
+</html>

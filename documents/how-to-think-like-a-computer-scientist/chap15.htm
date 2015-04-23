@@ -1,0 +1,486 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>제 15 장 : 객체들의 모둠(Sets of objects)</title>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+
+<body>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap16.htm"><img border="0" alt="Next" src="images/next.png"></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png"></a></td>
+    <td width="20" class=head><a href="chap14.htm"><img border="0" alt="Previous" src="images/prev.png"></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png"></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="images/index.png"></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+
+<h2>제 15 장</h2>
+
+<h1>객체 집합</h1>
+
+
+<a name=1></a><br>
+<h3>15.1 작성(Composition)</h3>
+
+<p>
+지금까지 여러 작성의 예제를 보았습니다. 그 중의 한 예제는 메쏘드 요청을 표현식의 일부로 사용하고 있었습니다. 또다른 예제는 내포된 구조의 서술문들입니다; <span class=code><span class=keyword>if</span></span> 서술문을 <span class=code><span class=keyword>while</span></span> 회돌이 안에 사용할 수 있으며, 또 하나의 <span class=code><span class=keyword>if</span></span> 서술문 안에 사용합니다. 등등.</p>
+
+<p>
+이러한 패턴을 본 적이 있고 리스트와 객체에 대하여 배웠기 때문에, 객체를 담은 리스트를 만들 수 있다고 해도 크게 놀라지는 않으리라 생각합니다. 또 (속성으로) 리스트를 담은 객체를 만들 수 있습니다; 리스트를 담고 있는 리스트를 만들 수도 있고; 객체를 담은 객체도 만들 수 있습니다; 등등.</p>
+
+<p>
+이 장과 다음 장에서는 이러한 조합의 여러 예를 <span class=code>Card</span> 객체를 예로 사용하여 살펴 보겠습니다.</p>
+
+<a name=2></a><br>
+<h3>15.2 <span class=code>Card</span> 객체</h3>
+
+<p>
+일상적인 카드 놀이에 익숙하지 않다면 이제 카드 한 채를 장만할 좋은 기회입니다. 그렇지 않으면 이 장을 이해하기가 힘들 것입니다. 카드 한 채에는 카드가 52장이 있습니다. 각 카드는 네 벌중의 하나에 속하고 열세 개의 계급중의 하나에 속합니다. 벌에는 (브리지 게임에서 내림 차순으로) 스페이드(Spades), 하트(Hearts), 다이아몬드(Diamonds), 그리고 클럽(Clubs)이 있습니다. 계급에는 에이스(Ace), 2, 3, 4, 5, 6, 7, 8, 9, 10, 잭(Jack), 퀸(Queen), 그리고 킹(King)이 있습니다. 하고자 하는 게임에 따라 에이스의 계급은 킹보다 높을 수도 있고 2보다 낮을 수도 있습니다.</p>
+
+
+
+<p>
+새로운 객체를 하나 정의하여 카드 게임을 표현하고 싶다면 속성이 무엇이 되어야 할지는 확실합니다: <span class=code>계급(rank)</span>과 <span class=code>벌(suit)</span>이 그것입니다. 그렇지만 이 속성들이 어떤 유형이 되어야 할지는 명확하지 않습니다. 한 가지 가능성은 문자열을 사용하는 것인데, 예를 들어 벌에 대해서는 <span class=code><span class=quote>"Spade"</span></span>를 계급에 대해서는 <span class=code><span class=quote>"Queen"</span></span>과 같은 단어를 사용하는 것입니다. 이러한 구현방식의 문제점 하나는 어느 카드가 더 높은 계급인지 또는 더 높은 벌인지 알아보기 위해 카드를 비교하기가 어렵다는 것입니다.</p>
+
+
+
+<p>
+다른 대안은 정수를 사용하여 계급과 벌을 <b>코드화(encode)</b> 하는 것입니다. "코드화(encode)"라는 단어의 의미는 어떤 사람이 생각하듯이 그 의미가 비밀스런 코드로 번역한다든가 암호화한다는 것을 뜻하지 않습니다. 컴퓨터 과학자가 사용하는 "코드화(encode)"의 의미는 "연속되어 있는 숫자들과 내가 표현하고자 하는 항목들 사이에 짝짓기를 정의한다"라는 뜻입니다. 예를 들면:</p>
+
+
+
+<table align=center>
+<tr><td style="padding-right: 8;">Spades</td><td style="padding-right: 8;"><tt>-&gt;</tt></td><td style="padding-right: 8;">3<br></td></tr>
+<tr><td style="padding-right: 8;">Hearts</td><td style="padding-right: 8;"><tt>-&gt;</tt></td><td style="padding-right: 8;">2<br></td></tr>
+<tr><td style="padding-right: 8;">Diamonds</td><td style="padding-right: 8;"><tt>-&gt;</tt></td><td style="padding-right: 8;">1<br></td></tr>
+<tr><td style="padding-right: 8;">Clubs</td><td style="padding-right: 8;"><tt>-&gt;</tt></td><td style="padding-right: 8;">0</td></tr>
+</table>
+
+
+<p>
+이러한 짝짓기에서 볼수 있는 확실한 특징은 벌이 정수에 순서대로 짝짓기되기 때문에 정수를 비교해 보면 벌들을 비교할 수 있다는 것입니다. 계급에 대한 짝짓기는 대단히 쉽습니다; 수치로 표현되는 계급은 각각 상응하는 정수에 짝짓기 됩니다. 그리고 얼굴이 있는 카드에 대한 짝짓기는 다음과 같이 짝짓기 됩니다:</p>
+
+
+
+<table align=center>
+<tr><td style="padding-right: 8;">Jack</td><td style="padding-right: 8;"><tt>-&gt;</tt></td><td style="padding-right: 8;">11<br></td></tr>
+<tr><td style="padding-right: 8;">Queen</td><td style="padding-right: 8;"><tt>-&gt;</tt></td><td style="padding-right: 8;">12<br></td></tr>
+<tr><td style="padding-right: 8;">King</td><td style="padding-right: 8;"><tt>-&gt;</tt></td><td style="padding-right: 8;">13<br></td></tr>
+</table>
+
+
+<p>
+이러한 짝짓기에 대하여 수학적 표기법을 사용하고 있는 이유는 짝짓기가 파이썬 프로그램에 속하는 것이 아니기 때문입니다. 짝짓기는 프로그램 디자인에 속하기는 하지만 명시적으로 코드에 나타나지 않습니다. <span class=code>Card</span> 유형에 대한 클래스 정의는 다음과 같이 보입니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Card:
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__init__</span>(self, suit=0, rank=0):
+<br>&nbsp; &nbsp; self.suit = suit
+<br>&nbsp; &nbsp; self.rank = rank
+<br></span></p>
+
+
+
+<p>
+언제나 그렇듯이 각 속성에 대하여 선택적인 매개변수를 취하는 초기화 메쏘드를 제공합니다.</p>
+<p>
+클럽 3을 표현하는 객체를 만들려면 다음 명령어를 사용하세요:</p>
+
+
+<p><span class=code>threeOfClubs = Card(0, 3)
+<br></span></p>
+
+<p>
+첫 번째 인자인 <span class=code>0</span>은 클럽이라는 벌을 표현합니다.</p>
+
+<a name=3></a><br>
+
+<h3>15.3 클래스 속성과 <span class=code>__str__</span> 메쏘드</h3>
+
+<p>
+사람들이 쉽게 읽을 수 있는 형태로 <span class=code>Card</span> 객체를 인쇄하기 위해, 그 정수 코드를 단어에 짝짓기 해 봅시다. 문자열로 구성된 리스트라면 자연스럽게 짝짓기할 수 있습니다. 이러한 리스트를 클래스 정의의 맨위에 <b>클래스 속성</b>으로 할당합니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Card:
+<br>&nbsp; suitList = [<span class=quote>"Clubs"</span>, <span class=quote>"Diamonds"</span>, <span class=quote>"Hearts"</span>, <span class=quote>"Spades"</span>]
+<br>&nbsp; rankList = [<span class=quote>"narf"</span>, <span class=quote>"Ace"</span>, <span class=quote>"2"</span>, <span class=quote>"3"</span>, <span class=quote>"4"</span>, <span class=quote>"5"</span>, <span class=quote>"6"</span>, <span class=quote>"7"</span>,
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class=quote>"8"</span>, <span class=quote>"9"</span>, <span class=quote>"10"</span>, <span class=quote>"Jack"</span>, <span class=quote>"Queen"</span>, <span class=quote>"King"</span>]
+<br>
+<br>&nbsp; <span class=comment># 메쏘드 init 생략
+</span><br>
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__str__</span>(self):
+<br>&nbsp; &nbsp; <span class=keyword>return</span> (self.rankList[self.rank] + <span class=quote>" of "</span> +
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; self.suitList[self.suit])
+<br></span></p>
+
+
+
+<p>
+클래스 속성은 모든 메쏘드의 바깥에 정의됩니다. 그리고 클래스 안에 존재하는 메쏘드라면 모두 클래스 속성에 접근할 수 있습니다.</p>
+
+<p>
+<span class=code>__str__</span> 메쏘드 안에서, <span class=code>suitList</span>와 <span class=code>rankList</span>를 사용하여 <span class=code>suit</span>와 <span class=code>rank</span>의 수치 값을 문자열에 짝짓기 할 수 있습니다. 예를 들어, 다음 표현식 self.suitList[self.suit]의 의미는 "<span class=code>self</span>라는 객체로부터 <span class=code>suit</span>라는 속성을 <span class=code>suitList</span>라는 이름의 클래스 속성에 대한 지표로 사용하여, 적절한 문자열을 선택할 것"이라는 뜻입니다.</p>
+
+<p>
+<span class=code>rankList</span>에 첫 번째 원소로<span class=code><span class=quote>"narf"</span></span>가 있는 이유는 리스트의 0-번(zero-eth) 원소에 대한 위치 유지자(place keeper)로 작동시키기 위한 것입니다. 이 원소는 전혀 사용되지 않을 것입니다. 오직 유효한 계급은 1에서 13까지 입니다. 이런 쓰레기 항목이 전적으로 불필요한 것은 아닙니다. 보통때와 같이 0에서 시작할 수도 있겠지만, 2는 2로, 3은 3으로, 등등과 같이 코드화하는 것이 편리합니다.</p>
+
+<p>
+지금까지 다루어 본 메쏘드들을 사용하면, 카드를 만들고 인쇄할 수 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; card1 = Card(1, 11)
+<br>&gt;&gt;&gt; <span class=keyword>print</span> card1
+<br>Jack of Diamonds
+<br></span></p>
+
+
+
+<p>
+<span class=code>suitList</span>와 같은 클래스 속성은 모든 <span class=code>Card</span> 객체가 공유합니다. 이렇게 공유하면 어떤 <span class=code>Card</span> 객체를 사용하더라도 클래스 속성에 접근할 수 있다는 이점이 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; card2 = Card(1, 3)
+<br>&gt;&gt;&gt; <span class=keyword>print</span> card2
+<br>3 of Diamonds
+<br>&gt;&gt;&gt; <span class=keyword>print</span> card2.suitList[1]
+<br>Diamonds
+<br></span></p>
+
+
+
+<p>
+단점이라면 만약 클래스 속성 하나를 변경하면 그 클래스의 모든 실체에 영향을 미치게 된다는 것입니다. 예를 들어, "Jack of Diamonds"가 실제로는 "Jack of Swirly Whales"로 불리워져야 한다고 결정하면 다음과 같이 할 수 있습니다:</p>
+
+
+
+
+<p><span class=code>&gt;&gt;&gt; card1.suitList[1] = <span class=quote>"Swirly Whales"</span>
+<br>&gt;&gt;&gt; <span class=keyword>print</span> card1
+<br>Jack of Swirly Whales
+<br></span></p>
+
+
+
+<p>
+문제는 <i>모든</i> 다이아몬드가 그냥 Swirly Whales가 되어 버렸다는 것입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; <span class=keyword>print</span> card2
+<br>3 of Swirly Whales
+<br></span></p>
+
+
+
+<p>
+클래스 속성을 변경하는 것은 보통은 좋은 생각이 아닙니다.</p>
+
+<a name=4></a><br>
+<h3>15.4 카드를 비교하기</h3>
+
+<p>
+기본 유형에 대해서는 (<span class=code>&lt;</span>와 <span class=code>&gt;</span> 그리고 <span class=code>==</span> 등등과 같은) 조건 연산자가 있어서 값들을 비교하여 하나가 다른 하나보다 더 큰지 아니면 더 작은지 또는 같은지를 결정합니다. 사용자-정의 유형에 대해서는 <span class=code>__cmp__</span>라는 이름의 메쏘드를 제공하면 내장 연산자의 행위를 오버라이드(override)할 수 있습니다. 관례적으로 <span class=code>__cmp__</span>는 <span class=code>self</span>와 <span class=code>other</span>라는 인자 두 개를 취해서 <span class=code>self</span>가 더 크면 1을 반환하고 <span class=code>other</span>가 더 크면 -1을 반환합니다. 그리고 그 둘이 서로 같으면 0을 반환합니다.</p>
+
+
+
+<p>
+어떤 유형들은 완전한 순서가 있습니다. '순서가 있다'라는 의미는 어떤 두 원소를 비교해서 어느 것이 더 큰지 말할 수 있다는 것을 뜻합니다. 예를 들면, 정수와 부동-소수점수는 완전한 순서가 있습니다. 어떤 모둠은 순서가 없습니다. '순서가 없다'라고 하는 의미는 한 원소가 다른 원소보다 더 크다라고 말할 수 있는 의미있는 방법이 전혀 없다는 것입니다. 예를 들면 과일은 순서가 없습니다. 사과와 오렌지는 비교할 수가 없습니다.</p>
+
+<p>
+카드 게임에서 카드 모둠은 부분적으로 순서가 있습니다. '부분적으로 순서가 있다'라는 것은 어떤 때는 카드를 비교할 수 있고 어떤 때는 비교할 수 없다는 것을 뜻합니다. 예를 들어, 이미 알고 있듯이 클럽 3은 클럽 2보다 높습니다. 그리고 다이아몬드 3은 클럽 3보다 높습니다. 그러나 클럽 3과 다이아몬드 2중 어느 것이 더 높습니까?  한 쪽이 더 높은 계급이지만 다른 쪽은 더 높은 벌에 속합니다.</p>
+<p>
+카드를 비교할 수 있도록 만들고자 한다면 계급과 벌중 어느 것이 더 중요한지를 결정해야 합니다. 솔직히 말해 선택은 엿장수 마음대로입니다. 선택을 돕기 위해 벌이 더 중요하다고 가정하겠습니다. 왜냐하면 카드 한 채를 새로 사면 제일 먼저 클럽이 위에 오고, 다음에 다이아몬드가 오며, 등등이 가지런히 정렬되어 있기 때문입니다.</p>
+
+<p>
+그런 결정을 가지고 <span class=code>__cmp__</span> 메쏘드를 작성할 수 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>__cmp__</span>(self, other):
+<br>&nbsp; <span class=comment># 벌을 점검한다.
+</span><br>&nbsp; <span class=keyword>if</span> self.suit &gt; other.suit: <span class=keyword>return</span> 1
+<br>&nbsp; <span class=keyword>if</span> self.suit &lt; other.suit: <span class=keyword>return</span> -1
+<br>&nbsp; <span class=comment># 벌이 같다면... 계급을 점검한다.
+</span><br>&nbsp; <span class=keyword>if</span> self.rank &gt; other.rank: <span class=keyword>return</span> 1
+<br>&nbsp; <span class=keyword>if</span> self.rank &lt; other.rank: <span class=keyword>return</span> -1
+<br>&nbsp; <span class=comment># 계급이 같다면... 동급이다
+</span><br>&nbsp; <span class=keyword>return</span> 0
+<br></span></p>
+
+
+
+<p>이런 순서대로라면, 에이스(Aces)는 듀스(Deuces)보다 아래쪽에 나타납니다.</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, <span class=code>__cmp__</span>를 수정하여 에이스(Aces)가 킹(Kings)보다 계급이 더 높게 만들어 보세요.</i> </p>
+
+<a name=5></a><br>
+<h3>15.5 채(Decks)</h3>
+
+<p>
+이제 <span class=code>Card</span>를 표현하는 객체가 확보되었으므로, 논리적으로 다음 단계는 클래스 하나를 정의하여 <span class=code>Deck</span>를 표현하는 것입니다. 물론, 채(deck)는 카드로 구성됩니다. 그래서 각 <span class=code>Deck</span> 객체는 카드들을 담은 리스트를 속성으로 가지게 될 것입니다.</p>
+
+
+
+<p>
+다음은 <span class=code>Deck</span> 클래스에 대한 클래스 정의입니다. 초기화 메쏘드는 <span class=code>cards</span>라는 속성을 만들고 52장의 카드를 담은 표준적인 모둠을 만들어 냅니다:</p>
+
+
+
+
+<p><span class=code><span class=keyword>class</span> Deck:
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__init__</span>(self):
+<br>&nbsp; &nbsp; self.cards = []
+<br>&nbsp; &nbsp; <span class=keyword>for</span> suit <span class=keyword>in</span> range(4):
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>for</span> rank <span class=keyword>in</span> range(1, 14):
+<br>&nbsp; &nbsp; &nbsp; &nbsp; self.cards.append(Card(suit, rank))
+<br></span></p>
+
+
+
+<p>
+내포된 회돌이로 아주 쉽게 채(deck)를 채워 넣을 수 있습니다. 바깥 회돌이는 벌을 0에서 3까지 늘어 놓습니다. 안쪽 회돌이는 계급을 1에서 13까지 열거합니다. 바깥 회돌이는 네 번을 반복하고 안쪽 회돌이는 열 세번을 반복하기 때문에, 몸체가 실행되는 총 횟수는 (13 곱하기 4이므로) 52번입니다. 한 번 반복할 때마다 현재 벌과 계급으로 <span class=code>Card</span> 실체 하나를 만들고 만들어진 카드를 <span class=code>cards</span> 리스트에 추가합니다.</p>
+
+<p>
+<span class=code>append</span> 메쏘드는 리스트에 작동하지만 당연히 터플에는 작동하지 않습니다.</p>
+
+
+
+<a name=6></a><br>
+<h3>15.6 채(deck)를 인쇄하기</h3>
+
+<p>
+여느때 처럼 새로운 유형의 객체를 하나 정의하면 객체의 내용을 인쇄하는 메쏘드도 필요합니다. <span class=code>Deck</span>을 인쇄하기 위해 리스트를 순회하면서 각 <span class=code>Card</span>를 인쇄합니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Deck:
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>printDeck</span>(self):
+<br>&nbsp; &nbsp; <span class=keyword>for</span> card <span class=keyword>in</span> self.cards:
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>print</span> card
+<br></span></p>
+
+
+
+<p>
+지금부터는 생략 기호(<span class=code>...</span>)로 클래스에서 다른 메쏘드들을 생략했다는 것을 나타내겠습니다.</p>
+
+<p>
+<span class=code>printDeck</span> 메쏘드를 위하여 <span class=code>Deck</span> 클래스에 대하여 <span class=code>__str__</span> 메쏘드를 작성할 수도 있습니다. <span class=code>__str__</span>을 사용하면 더욱 유연하다는 이점이 있습니다. 그 객체의 내용을 그저 인쇄하기 보다는 <span class=code>__str__</span>은 문자열 표현을 만들어 내기 때문에 인쇄하기 전에 프로그램의 다른 곳에서 사용할 수 있으며 또는 나중에 사용하기 위해 저장할 수도 있습니다.</p>
+
+<p>
+다음은 <span class=code>Deck</span>의 문자열 표현을 반환하는 <span class=code>__str__</span> 버전입니다. 약간 모양을 내기 위해 이 버전은 카드를 계단형식으로 정렬합니다. 각 카드는 바로 앞의 카드보다 공간 하나 만큼씩 더 들여쓰기 됩니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Deck:
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__str__</span>(self):
+<br>&nbsp; &nbsp; s = <span class=quote>""</span>
+<br>&nbsp; &nbsp; <span class=keyword>for</span> i <span class=keyword>in</span> range(len(self.cards)):
+<br>&nbsp; &nbsp; &nbsp; s = s + <span class=quote>" "</span>*i + str(self.cards[i]) + <span class=quote>"\n"</span>
+<br>&nbsp; &nbsp; <span class=keyword>return</span> s
+<br></span></p>
+
+
+
+<p>
+이 예제는 여러 특징을 보여주고 있습니다. 첫 번째로, <span class=code>self.cards</span>를 순회하여 각 카드를 변수에 할당하는 대신에, 회돌이 변수와 카드 리스트에 대한 지표로 <span class=code>i</span>를 사용하고 있습니다.</p>
+
+<p>
+두 번째로, 문자열 곱셈 연산자를 사용하여 각 카드를 바로 앞의 카드보다 공간 하나만큼씩 더 들여쓰기 하고 있습니다. 다음 표현식 <span class=code><span class=quote>" "</span>*i</span>는 <span class=code>i</span>의 현재 값과 같은 개수의 공백을 산출합니다.</p>
+
+<p>
+세 번째로, <span class=code><span class=keyword>print</span></span> 명령어를 사용하여 카드를 인쇄하는 대신에 <span class=code>str</span> 함수를 사용하고 있습니다. 객체를 인자로 <span class=code>str</span>에 넘겨주는 것은 그 객체에게 <span class=code>__str__</span> 메쏘드를 요청하는 것과 똑 같습니다.</p>
+
+<p>
+마지막으로, 변수 <span class=code>s</span>를 <b>누산자(accumulator)</b>로 사용하고 있습니다. 맨 처음에 <span class=code>s</span>는 빈 문자열입니다. 회돌이를 돌 때마다 새로운 문자열 하나가 만들어지고 <span class=code>s</span>의 예전 값과 결합되어 새로운 값이 됩니다. 회돌이가 끝나면 <span class=code>s</span>에는 <span class=code>Deck</span>의 완전한 문자열 표현이 담깁니다. 다음과 같이 보입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; deck = Deck()
+<br>&gt;&gt;&gt; <span class=keyword>print</span> deck
+<br>Ace of Clubs
+<br> 2 of Clubs
+<br>&nbsp; 3 of Clubs
+<br>&nbsp; &nbsp;4 of Clubs
+<br>&nbsp; &nbsp; 5 of Clubs
+<br>&nbsp; &nbsp; &nbsp;6 of Clubs
+<br>&nbsp; &nbsp; &nbsp; 7 of Clubs
+<br>&nbsp; &nbsp; &nbsp; &nbsp;8 of Clubs
+<br>&nbsp; &nbsp; &nbsp; &nbsp; 9 of Clubs
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;10 of Clubs
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Jack of Clubs
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Queen of Clubs
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; King of Clubs
+<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Ace of Diamonds
+<br></span></p>
+
+
+
+<p>
+기타 등등. 비록 결과가 52 줄에 걸쳐 나타나는 듯이 보여도 새줄(newlines) 문자를 담고 있는 기다란 문자열 한 개일 뿐입니다.</p>
+
+<a name=7></a><br>
+<h3>15.7 채(deck)를 뒤섞기</h3>
+
+<p>
+채가 완전하게 뒤섞이면 어떤 카드든지 그 채에 나타날 가능성이 같아지고 그 채의 어느 곳이든지 어떤 카드를 포함할 가능성이 같아집니다.</p>
+
+
+
+<p>
+채를 뒤섞기 위해 <span class=code>random</span> 모듈에 있는 <span class=code>randrange</span> 함수를 사용하겠습니다. <span class=code>a</span>와 <span class=code>b</span>라는 정수형 인자 두개를 가지고, <span class=code>randrange</span> 함수는 <span class=code>a &lt;= x &lt; b</span> 범위에서 무작위로 숫자 하나를 뽑습니다. 상한 값이 확실하게 <span class=code>b</span> 미만이기 때문에 리스트의 길이를 두 번째 매개변수로 사용할 수 있으며 적법한 지표를 얻을 것이라고 확신할 수 있습니다. 예를 들어, 다음 표현식은 채에서 무작위로 뽑을 카드의 지표를 선택합니다:</p>
+
+
+<p><span class=code>random.randrange(0, len(self.cards))
+<br></span></p>
+
+
+
+<p>
+쉽게 채를 뒤섞는 방법은 카드를 순회하면서 각 카드를 무작위로 뽑힌 카드와 서로 교환하는 것입니다. 그 카드가 자기 자신과 교환될 가능성도 있기는 하지만, 상관이 없습니다. 사실, 그럴 가능성을 미연에 방지한다면 카드의 순서가 진짜로 무작위적이 되지는 않을 것입니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Deck:
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>shuffle</span>(self):
+<br>&nbsp; &nbsp; <span class=keyword>import</span> random
+<br>&nbsp; &nbsp; nCards = len(self.cards)
+<br>&nbsp; &nbsp; <span class=keyword>for</span> i <span class=keyword>in</span> range(nCards):
+<br>&nbsp; &nbsp; &nbsp; j = random.randrange(i, nCards)
+<br>&nbsp; &nbsp; &nbsp; self.cards[i], self.cards[j] = self.cards[j], self.cards[i]
+<br></span></p>
+
+
+
+<p>
+채에 카드가 52장이 있다고 가정하기 보다는 리스트의 실제 길이를 얻어서 그 길이를 <span class=code>nCards</span>에 저장합니다.</p>
+<p>
+채에 있는 각 카드에 대하여, 아직 뒤섞이지 않은 카드들 중에서 무작위로 카드 한 장을 선택합니다. 그리고나서 현재 카드(<span class=code>i</span>)와 선택된 카드(<span class=code>j</span>)를 교환합니다. 카드를 교환하기 위해 <a href="chap09.htm#2" tppabs="http://www.ibiblio.org/obp/thinkCSpy/chap09.htm#2">섹션 9.2</a>에서 처럼 터플 할당(tuple assignment)을 사용합니다 :</p>
+
+
+<p><span class=code>self.cards[i], self.cards[j] = self.cards[j], self.cards[i]
+<br></span></p>
+
+
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, 연속열 할당을 사용하지 말고 위의 코드를 재작성해 보세요.</i> </p>
+
+<a name=8></a><br>
+<h3>15.8 카드를 제거하고 나누어 주기</h3>
+
+<p>
+<span class=code>Deck</span> 클래스에 대하여 유용할 만한 또 다른 메쏘드 하나는 <span class=code>removeCard</span>입니다. 이 메쏘드는 카드 한 장을 매개변수로 취해 그 카드를 제거하고, 그 카드가 채에 있다면 참(1)을 반환하고 그렇지 않으면 거짓(0)을 반환합니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Deck:
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>removeCard</span>(self, card):
+<br>&nbsp; &nbsp; <span class=keyword>if</span> card <span class=keyword>in</span> self.cards:
+<br>&nbsp; &nbsp; &nbsp; self.cards.remove(card)
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>return</span> 1
+<br>&nbsp; &nbsp; <span class=keyword>else</span>:
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>return</span> 0
+<br></span></p>
+
+
+
+<p>
+다음 <span class=code><span class=keyword>in</span></span> 연산자는 첫 번째 피연산자가 두 번째 피연산자 안에 존재하면 참을 반환합니다. 이 때 두 번째 피연산자는 반드시 리스트나 터플이어야 합니다. 첫 번째 피연산자가 객체라면 파이썬은 그 객체의 <span class=code>__cmp__</span> 메쏘드를 사용하여 리스트 안에 존재하는 항목들과 같은지를 결정합니다. <span class=code>Card</span> 객체에 있는 <span class=code>__cmp__</span> 메쏘드는 깊은 동등성(deep equality)을 점검하기 때문에 <span class=code>removeCard</span> 메쏘드도 깊은 동등성을 점검합니다.</p>
+<p>
+카드를 나누어 주기 위해 제일 위에 있는 카드를 제거해서 반환하고자 합니다. 리스트 메쏘드인 <span class=code>pop</span>을 사용하면 편리하게 반환할 수 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Deck:
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>popCard</span>(self):
+<br>&nbsp; &nbsp; <span class=keyword>return</span> self.cards.pop()
+<br></span></p>
+
+
+
+<p>
+실제로, <span class=code>pop</span> 리스트에서 <i>가장 마지막</i> 카드를 제거합니다. 그래서 채의 아래에서부터 카드를 효과적으로 나누어줍니다.</p>
+
+
+
+<p>
+하고자 할 만한 연산이 하나 더 있다면 불리언 함수인 <span class=code>isEmpty</span>인데, 이 함수는 채가 아무 카드도 가지고 있지 않다면 참을 반환합니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Deck:
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>isEmpty</span>(self):
+<br>&nbsp; &nbsp; <span class=keyword>return</span> (len(self.cards) == 0)
+<br></span></p>
+
+
+
+<a name=9></a><br>
+<h3>15.9 용어 해설</h3>
+
+<dl>
+
+<dt>코드화(encode)</dt>
+<dd>한 모둠의 값을 다른 모둠의 값들을 사용하여 두 모둠 사이에 짝짓기를 구성함으로써 표현하는 것.</dd>
+
+<dt>클래스 속성(class attribute)</dt>
+<dd>클래스 정의 안에 있으나 모든 메쏘드의 바깥쪽에 정의된 변수. 클래스 속성은 그 클래스 안에 있는 어떤 메쏘드에서도 접근할 수 있으며, 그 클래스의 모든 실체가 공유한다.</dd>
+
+<dt>누산자(accumulator)</dt>
+<dd>회돌이에서 일련의 값들을 누적하는데 사용되는 변수. 예를 들어 값들을 문자열로 결합하거나 또는 값들을 합산하는데 사용된다.</dd>
+
+
+
+</dl>
+<h2>연습문제</h2>
+<ol>
+<li><div class="exercise">
+<code>__cmp__</code>를 수정하여 Aces가 Kings 보다 서열이 더 높도록 만들어라.
+</div></li>
+</ol>
+
+<p>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap16.htm"><img border="0" alt="Next" src="images/next.png"></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png"></a></td>
+    <td width="20" class=head><a href="chap14.htm"><img border="0" alt="Previous" src="images/prev.png"></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png"></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="images/index.png"></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+</body>
+</html>

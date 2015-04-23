@@ -1,0 +1,461 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>제 17 장 : 연결 리스트(linked list)</title>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+
+<body>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap18.htm"><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap16.htm"><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+
+<h2>제 17 장</h2>
+
+<h1>연결 리스트</h1>
+
+
+<a name=1></a><br>
+<h3>17.1 내장된 참조(Embedded references)</h3>
+<p>
+지금까지 다른 객체를 참조하는 속성의 예를 본 바 있습니다. 이것을 내장된 참조(<b>embedded references</b>)라고 부릅니다 (<a href="chap12.htm#8">Section 12.8</a> 참조). 일반적인 데이타 구조인 연결 리스트(<b>linked list</b>)가 이 특징을 이용합니다.</p>
+<p>
+연결 리스트는 노드(<b>nodes</b>)로 구성되는데, 리스트에서 각 노드는 다음 노드에 대한 참조점을 포함합니다. 게다가, 각 노드는 카르고(<b>cargo</b>)라고 부르는 한 단위의 데이타를 포함합니다.</p>
+<p>
+연결 리스트는 재귀적인 정의를 가지기 때문에 재귀 데이타 구조(<b>recursive data structure</b>)로 간주됩니다.</p>
+<p style="margin-left: 30px; margin-right: 30px;"> 연결 리스트는 다음과 같이: 
+<ul>
+<li><span class=code>None</span>으로 표현되는, 비어있는 리스트이거나,</li>
+<li>카르고(cargo) 객체와 연결리스트에 대한 참조점을 포함하는 노드입니다.</li>
+</ul>
+</p>
+<p>
+재귀 데이타 구조는 재귀적인 메쏘드에 알맞습니다.</p>
+
+<a name=2></a><br>
+<h3>17.2 <span class=code>Node</span> 클래스</h3>
+<p>
+새로 클래스를 만들때와 마찬가지로 새로운 유형을 보여주고 만드는 기본적인 메카니즘을 테스트할 수 있도록 초기화 메쏘드와 <span class=code>__str__</span> 메쏘드로 시작하겠습니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> Node:
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__init__</span>(self, cargo=None, next=None):
+<br>&nbsp; &nbsp; self.cargo = cargo
+<br>&nbsp; &nbsp; self.next&nbsp; = next
+<br>
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__str__</span>(self):
+<br>&nbsp; &nbsp; <span class=keyword>return</span> str(self.cargo)
+<br></span></p>
+
+<p>
+보통때와 같이, 초기화 메쏘드에 대한 매개변수들은 선택적입니다. 기본값으로 카르고와 링크는, 즉 <span class=code>next</span>는 모두 <span class=code>None</span>으로 설정됩니다.</p>
+<p>
+한 노드의 문자열 표현은 단지 카르고의 문자열 표현입니다. 어떤 값도 <span class=code>str</span> 함수에 건넬 수 있으므로, 리스트에 어떤 값도 저장할 수 있습니다.</p>
+<p>
+지금까지 구현한 것을 테스트 해보려면 <span class=code>Node</span>를 만들고 그것을 출력하면 됩니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; node = Node(<span class=quote>"test"</span>)
+<br>&gt;&gt;&gt; <span class=keyword>print</span> node
+<br>test
+<br></span></p>
+
+<p>
+더 재미있게 하려면 여러 노드를 가진 리스트가 필요합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; node1 = Node(1)
+<br>&gt;&gt;&gt; node2 = Node(2)
+<br>&gt;&gt;&gt; node3 = Node(3)
+<br></span></p>
+
+<p>
+이 코드는 세 개의 노드를 만듭니다. 그러나 그 노드들이 아직 연결(<b>linked</b>)된 것은 아니기 때문에 리스트를 가진 것은 아닙니다. 상태 다이어그램은 이렇게 보입니다:</p>
+
+<p align="center"><img src="illustrations/link1.png" illustrations/link1.png"></p>
+
+<p>
+노드들을 연결하려면 첫 번째 노드가 두 번째 노드를 가리키게 만들고 두 번째 노드는 세 번째 노드를 가리키게 만들어야 합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; node1.next = node2
+<br>&gt;&gt;&gt; node2.next = node3
+<br></span></p>
+
+<p>
+세 번째 노드가 가진 참조점은 <span class=code>None</span>인데, 이것은 그 노드가 리스트의 마지막임을 나타내 줍니다. 이제 상태 다이어그램은 이렇게 보입니다:</p>
+
+<p align="center"><img src="illustrations/link2.png" illustrations/link2.png"></p>
+
+<p>
+이제 노드를 만들고 그것들을 리스트에 연결하는 법을 배웠습니다. 이 시점에서 약간 분명하지 않은 것은 왜 그렇게 해야 하는 것이냐 하는 것입니다.</p>
+
+<a name=3></a><br>
+<h3>17.3 집단으로서의 리스트</h3>
+<p>
+리스트는 여러 객체들을 하나의 개체로 조립할 수 있기 때문에 유용합니다. 때로는 이 개체를 집단(<b>collection</b>)이라고 부릅니다. 예제에서, 리스트의 첫 번째 노드는 전체 리스트에 대한 참조점으로 작용합니다.</p>
+<p>
+리스트를 매개변수로 건네주려면 첫 번째 노드를 가르키는 참조점을 건네주기만 하면 됩니다. 예를 들어, <span class=code>printList</span> 함수는 한개의 노드를 인자로 취합니다. 리스트의 머리에서 시작하여, 그 함수는 각 노드를 마지막에 다다를 때까지 출력합니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>printList</span>(node):
+<br>&nbsp; <span class=keyword>while</span> node:
+<br>&nbsp; &nbsp; <span class=keyword>print</span> node,
+<br>&nbsp; &nbsp; node = node.next
+<br>&nbsp; <span class=keyword>print</span>
+<br></span></p>
+
+
+
+<p>
+이 메쏘드에 요청하기 위해 첫 번째 노드에 대한 참조점을 건넵니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; printList(node1)
+<br>1 2 3
+<br></span></p>
+<p>
+<span class=code>printList</span>안에는 리스트의 첫 번째 노드에 대한 참조점이 있습니다. 그러나 거기에는 다른 노드들에 대한 참조점을 가지는 어떠한 변수도 없습니다. 각 노드로부터 <span class=code>next</span> 값을 사용하여 다음 노드를 얻어야 합니다.</p>
+<p>
+연결 리스트를 순회하려면 <span class=code>node</span>와 같은 회돌이 변수를 사용하여 각각의 다른 노드들을 연속적으로 참조하는 것이 일반적입니다.</p>
+<p>
+다음 다이어그램은 <span class=code>list</span>의 값과 <span class=code>node</span>가 취하는 값들을 보여줍니다:</p>
+
+<p align="center"><img src="illustrations/link3.png"></p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>관례적으로 리스트는 <span class=code>[1, 2, 3]</span>와 같이 보통 그 요소들은 컴마로 분리되고 각괄호에 둘러싸여 출력됩니다.  연습으로, <span class=code>printList</span>를 수정하여 이런 형식으로 출력을 만들어 보세요.</i> </p>
+
+<a name=4></a><br>
+<h3>17.4 리스트와 재귀</h3>
+<p>
+재귀적인 메쏘드를 사용하면 많은 리스트 연산을 자연스럽게 표현할 수 있습니다. 예를 들어, 다음은 리스트를 거꾸로 출력하는 재귀적인 알고리즘입니다:</p>
+
+<ol>
+
+<li>리스트를 두 개의 조각으로 분리한다: 첫 번째 노드 (머리(head)라고 부른다)와; 그리고 그 나머지 (꼬리(tail)로 분리한다.</li>
+
+<li>꼬리를 거꾸로 출력한다.</li>
+
+<li>머리를 출력한다.</li>
+
+</ol>
+
+<p>
+물론, 2 단계는 재귀 호출이므로 리스트를 거꾸로 출력하는 방법을 가지고 있다고 가정합니다. 그러나 그 재귀 호출이 작동한다고---신념에 찬 도약으로---가정한다면 이 알고리즘이 작동한다고 확신할 수 있습니다.</p>
+
+
+
+<p>
+필요한 모든 것은 기저 케이스와 모든 리스트에 대하여 그것을 증명하는 방법이며, 결국 기저 케이스에 도착하는 것입니다. 리스트를 재귀적으로 정의하면 자연스럽게 기저 케이스는 빈 리스트이며 <span class=code>None</span>으로 표현됩니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>printBackward</span>(list):
+<br>&nbsp; <span class=keyword>if</span> list == None: <span class=keyword>return</span>
+<br>&nbsp; head = list
+<br>&nbsp; tail = list.next
+<br>&nbsp; printBackward(tail)
+<br>&nbsp; <span class=keyword>print</span> head,
+<br></span></p>
+
+
+
+<p>
+첫 번째 줄은 아무것도 하지 않음으로써 기저 케이스를 처리합니다. 다음의 두 줄은 리스트를 머리(<span class=code>head</span>)와 꼬리(<span class=code>tail</span>)로 분리합니다. 마지막 두 줄은 리스트를 인쇄합니다. 마지막 줄의 쉼표는 파이썬이 각 노드를 인쇄한 후에 새줄문자(newline)를 인쇄하지 못하도록 합니다.</p>
+<p>
+<span class=code>printList</span>에 요청한 것처럼 다음과 같이 이 메쏘드를 요청합니다 :</p>
+
+
+<p><span class=code>&gt;&gt;&gt; printBackward(node1)
+<br>3 2 1
+<br></span></p>
+
+
+
+<p>결과는 거꾸로 된 리스트입니다.</p>
+
+<p>
+왜 <span class=code>printList</span>와 <span class=code>printBackward</span>가 함수이며 <span class=code>Node</span> 클래스의 메쏘드가 아닌지 궁금할 것입니다. 그 이유는 <span class=code>None</span>을 사용하여 빈 리스트를 표현하기를 원하고 <span class=code>None</span>에 있는 메쏘드에 요청하는 것은 적법하지 않기 때문입니다. 이러한 제한 때문에 산뜻한 객체-지향 스타일로 리스트-처리 코드를 작성하는 것은 어색합니다.</p>
+<p>
+<span class=code>printBackward</span>가 항상 종료할 것이라는 것을 증명할 수 있을까요? 다른 말로 해서, 그것은 항상 기저 케이스에 도달할까? 사실, 대답은 아니오입니다. 어떤 리스트에서 이 메쏘드는 충돌할 것입니다.</p>
+
+<a name=5></a><br>
+<h3>17.5 무한 리스트</h3>
+<p>
+한 노드는 리스트에서 그 자신을 포함하여 이전의 노드를 거꾸로 참조할 수 있습니다. 예를 들어, 다음 그림은 두 개의 노드를 가진 리스트를 보여주는데, 그 중의 하나는 자기 자신을 참조하고 있습니다:</p>
+
+<p align="center"><img src="illustrations/link4.png" illustrations/link4.png"></p>
+
+<p>
+이 리스트에 대하여 <span class=code>printList</span>를 요청하면 영원히 회돌이를 돌 것입니다. <span class=code>printBackward</span>를 요청하면 무한대로 재귀할 것입니다. 이러한 종류의 행위 때문에 무한 리스트는 다루기가 어렵습니다.</p>
+<p>
+그럼에도 불구하고 무한 리스트는 종종 쓸모가 있습니다. 예를 들어, 숫자를 자리마다 리스트로 표현할 수 있습니다. 그리고 무한 리스트를 사용하면 반복적인 분수를 표현할 수 있습니다.</p>
+<p>
+그것과는 상관없이 <span class=code>printList</span>와 <span class=code>printBackward</span>가 끝난다는 것을 증명할 수 없다는 것은 문제입니다. 할수 있는 최선은 다음의 가설입니다, "만약 리스트가 회돌이를 포함하고 있지 않다면, 이러한 메쏘드들은 종료할 것이다."  이러한 종류의 주장을 전제조건(<b>precondition</b>)이라고 부릅니다. 매개변수들 중의 하나에 제한을 가합니다. 그리고 그 제한이 만족되면 그 메쏘드의 행위를 기술합니다. 곧 더 많은 예제들을 보여 드리겠습니다.</p>
+
+
+
+<a name=6></a><br>
+<h3>17.6 근본적인 모호성 공리</h3>
+
+<p>
+어쩌면 <span class=code>printBackward</span>의 일부를 보고 놀랄지도 모르겠습니다:</p>
+
+
+<p><span class=code>&nbsp; &nbsp; head = list
+<br>&nbsp; &nbsp; tail = list.next
+<br></span></p>
+
+
+
+<p>
+첫 번째 할당후에 <span class=code>head</span>와 <span class=code>list</span>는 유형이 같고 값이 같습니다. 그러면 왜 새로운 변수를 만들었을까?</p>
+<p>
+이유는 두 변수들이 서로 다른 임무를 수행하기 때문입니다. <span class=code>head</span>를 한 개의 노드에 대한 참조점으로 간주하고,  <span class=code>list</span>를 리스트의 첫 번째 노드에 대한 참조점으로 간주합니다. 이러한 "임무"는 프로그램의 부분은 아닙니다; 그 임무는 프로그래머의 마음에 있습니다.</p>
+<p>
+일반적으로 프로그램을 보고서 변수 하나가 어떤 임무를 수행하는지 알 수 없습니다. 이 모호성은 유용할 수 있습니다. 그러나 또한 프로그램을 읽기 어렵게 만들 수 있습니다. 가끔 <span class=code>node</span>와 <span class=code>list</span>같은 변수 이름들을 사용하여 변수를 어떻게 사용하기를 원하는지 문서화하거나 때로는 추가로 변수들을 만들어서 모호성을 없애기도 합니다.</p>
+<p>
+<span class=code>head</span>와 <span class=code>tail</span> 없이 <span class=code>printBackward</span>를 작성할 수 있습니다. 이렇게 하면 더욱 간단하기는 하겠지만 모호해질 가능성이 더 높습니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>printBackward</span>(list) :
+<br>&nbsp; <span class=keyword>if</span> list == None : <span class=keyword>return</span>
+<br>&nbsp; printBackward(list.next)
+<br>&nbsp; <span class=keyword>print</span> list,
+<br></span></p>
+<p>
+두 개의 함수 호출을 보고서 <span class=code>printBackward</span>가 그의 인자들을 집단으로 취급한다는 사실을 기억해야 합니다. 그리고 <span class=code><span class=keyword>print</span></span>는 그의 인자들을 하나의 객체로 취급한다는 사실을 기억해야 합니다.</p>
+
+<p>
+<b>근본적인 모호성 공리(fundamental ambiguity theorem)</b>란 노드를 가리키는 참조점에 내재하는 모호성을 말합니다:</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> 한 노드를 가리키는 변수는 그 노드를 단일 객체로 취급할 수도 있고 또는 리스트에 담긴 노드들을 가리키는 첫 번째 노드로 취급할 수도 있다.</p>
+
+<a name=7></a><br>
+<h3>17.7 리스트를 수정하기</h3>
+<p>
+두 가지 방법으로 연결리스트를 수정할 수 있습니다. 분명히 한 노드의 카르고를 변경할 수 있습니다. 그러나 더 흥미있는 연산은 노드를 더하거나 제거하거나 또는 재조직하는 것입니다.</p>
+
+<p>예제로 리스트에서 두 번째 노드를 제거하고 제거된 노드의 참조점을 반환하는 메쏘드를 작성해 봅시다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>removeSecond</span>(list):
+<br>&nbsp; <span class=keyword>if</span> list == None: <span class=keyword>return</span>
+<br>&nbsp; first = list
+<br>&nbsp; second = list.next
+<br>&nbsp; <span class=comment># 첫 노드가 세 번째 노드를 가리키게 만든다.
+</span><br>&nbsp; first.next = second.next
+<br>&nbsp; <span class=comment># 두 번째 노드를 나머지 리스트로부터 분리한다.
+</span><br>&nbsp; second.next = None
+<br>&nbsp; <span class=keyword>return</span> second
+<br></span></p>
+
+<p>
+역시 임시 변수를 사용하여 코드를 더 읽기 쉽게 합니다. 다음은 이 메쏘드를 사용하는 방법입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; printList(node1)
+<br>1 2 3
+<br>&gt;&gt;&gt; removed = removeSecond(node1)
+<br>&gt;&gt;&gt; printList(removed)
+<br>2
+<br>&gt;&gt;&gt; printList(node1)
+<br>1 3
+<br></span></p>
+
+
+
+<p>이 상태 다이어그램은 연산의 효과를 보여줍니다:</p>
+
+<p align="center"><img src="illustrations/link5.png" illustrations/link5.png"></p>
+
+<p>
+이 메쏘드를 요청하면서 오직 하나의 원소만을 가진 리스트(싱글턴(<b>singleton</b>))를 넘겨주면 어떤 일이 일어나는가? 빈 리스트를 인자로 건네주면 어떤 일이 일어나는가? 이 메쏘드에 대하여 전제조건이 있는가? 그렇다면, 그 메쏘드를 수정하여 현명하게 전제조건의 위반을 처리해 보세요.</p>
+
+
+
+<a name=8></a><br>
+<h3>17.8 포장자(Wrappers)와 도움자(helpers)</h3>
+<p>
+하나의 리스트 연산을 두 개의 메쏘드로 분리하면 종종 유용합니다. 예를 들어, 리스트를 관례적인 리스트 형태인 <span class=code>[3, 2, 1]</span>로 거꾸로 인쇄하려면 <span class=code>printBackward</span> 메쏘드를 사용하여 <span class=code>3, 2,</span>를 인쇄할 수 있지만 양쪽의 각괄호와 첫 번째 노드를 인쇄할 메쏘드가 따로 필요합니다. 그 메쏘드를 <span class=code>printBackwardNicely</span>이라고 불러 봅시다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>printBackwardNicely</span>(list) :
+<br>&nbsp; <span class=keyword>print</span> <span class=quote>"["</span>,
+<br>&nbsp; <span class=keyword>if</span> list != None :
+<br>&nbsp; &nbsp; head = list
+<br>&nbsp; &nbsp; tail = list.next
+<br>&nbsp; &nbsp; printBackward(tail)
+<br>&nbsp; &nbsp; <span class=keyword>print</span> head,
+<br>&nbsp; <span class=keyword>print</span> <span class=quote>"]"</span>,
+<br></span></p>
+
+<p>
+역시, 좋은 생각은 이러한 메쏘드들을 점검하여 빈 리스트 혹은 싱글턴과 같은 특별한 경우에 잘 작동하는지 알아 보는 것입니다.</p>
+<p>
+프로그램 어딘가에 이 메쏘드를 사용할 때 <span class=code>printBackwardNicely</span>를 직접적으로 요청을 하면, 이 메쏘드는 <span class=code>printBackward</span>를 요청합니다. 그런 의미에서 <span class=code>printBackwardNicely</span>는 포장자(<b>wrapper</b>)로 작동합니다. 그리고 <span class=code>printBackwardNicely</span>는 <span class=code>printBackward</span>를 도움자(<b>helper</b>)로 사용합니다.</p>
+
+<a name=9></a><br>
+<h3>17.9 <span class=code>LinkedList</span> 클래스</h3>
+<p>
+리스트를 구현하고 있는 방식에 약간 미묘한 문제가 있습니다. 원인과 결과를 거꾸로 하여 대안적인 구현을 먼저 제시하겠습니다. 그리고 나서 그 구현이 어떤 문제들을 해결하는지 설명하겠습니다.</p>
+<p>
+먼저 <span class=code>LinkedList</span>라고 부르는 새로운 클래스 하나를 만들겠습니다. 이 클래스의 속성은 정수로서 리스트의 길이와 첫 번째 노드에 대한 참조점을 포함합니다. <span class=code>LinkedList</span> 객체는 <span class=code>Node</span>객체들을 담은 리스트를 조작하기 위한 처리자로 작동합니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> LinkedList :
+<br>&nbsp; <span class=keyword>def</span> <span class=function>__init__</span>(self) :
+<br>&nbsp; &nbsp; self.length = 0
+<br>&nbsp; &nbsp; self.head&nbsp; &nbsp;= None
+<br></span></p>
+
+<p>
+<span class=code>LinkedList</span> 클래스에 대하여 한 가지 좋은 점은 이 클래스가 <span class=code>printBackwardNicely</span>와 같은 포장자(wrapper) 함수를 배치하기에 자연스러운 곳이라는 것입니다. 포장자 함수를 <span class=code>LinkedList</span> 클래스의 메쏘드로 만들 수 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> LinkedList:
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>printBackward</span>(self):
+<br>&nbsp; &nbsp; <span class=keyword>print</span> <span class=quote>"["</span>,
+<br>&nbsp; &nbsp; <span class=keyword>if</span> self.head != None:
+<br>&nbsp; &nbsp; &nbsp; self.head.printBackward()
+<br>&nbsp; &nbsp; <span class=keyword>print</span> <span class=quote>"]"</span>,
+<br>
+<br><span class=keyword>class</span> Node:
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>printBackward</span>(self):
+<br>&nbsp; &nbsp; <span class=keyword>if</span> self.next != None:
+<br>&nbsp; &nbsp; &nbsp; tail = self.next
+<br>&nbsp; &nbsp; &nbsp; tail.printBackward()
+<br>&nbsp; &nbsp; <span class=keyword>print</span> self.cargo,
+<br></span></p>
+
+<p>
+그냥 복잡하게 만들어 혼란을 유도하기 위해 <span class=code>printBackwardNicely</span>의 이름을 바꾸었습니다. 이제 <span class=code>printBackward</span>라는 이름의 메쏘드가 두 개 있습니다: 하나는 <span class=code>Node</span> 클래스(도움자)에 있으며; 그리고 하나는 <span class=code>LinkedList</span> 클래스(포장자)에 있습니다.  포장자가 <span class=code>self.head.printBackward</span>를 요청하면, 이 메쏘드는 도움자를 호출합니다. 왜냐하면 <span class=code>self.head</span>는 <span class=code>Node</span> 객체이기 때문입니다.</p>
+<p>
+<span class=code>LinkedList</span> 클래스의 또 다른 혜택은 리스트의 첫 번째 요소를 더 쉽게 추가하거나 제거할 수 있게 하여 준다는 것입니다. 예를 들어, <span class=code>addFirst</span>는 <span class=code>LinkedList</span>들을 위한 메쏘드입니다; 이 메쏘드는 카르고 한 항목을 인자로 취하고 그것을 리스트의 처음에 배치합니다:</p>
+
+
+<p><span class=code><span class=keyword>class</span> LinkedList:
+<br>&nbsp; ...
+<br>&nbsp; <span class=keyword>def</span> <span class=function>addFirst</span>(self, cargo):
+<br>&nbsp; &nbsp; node = Node(cargo)
+<br>&nbsp; &nbsp; node.next = self.head
+<br>&nbsp; &nbsp; self.head = node
+<br>&nbsp; &nbsp; self.length = self.length + 1
+<br></span></p>
+
+<p>
+평상시와 마찬가지로 이러한 코드를 점검하여 특수한 경우들을 처리하는지를 살펴보아야 합니다. 예를 들어, 그 리스트가 처음부터 비어 있다면 무슨일이 일어나는가?</p>
+
+<a name=10></a><br>
+<h3>17.10 불변량(Invariants)</h3>
+<p>
+어떤 리스트들은 "구성이 잘 되어" 있습니다; 다른 리스트들은 그렇지 않습니다. 예를 들어, 만약 리스트가 회돌이를 포함하고 있다면 그 리스트에서 메쏘드중 많은 메쏘드들은 충돌할 것입니다. 그래서 리스트가 어떤 회돌이도 포함하고 있지 않기를 요구하고 싶을 것입니다. 또 다른 요구조건은 <span class=code>LinkedList</span> 객체에 있는 <span class=code>length</span> 값이 그 리스트에 있는 노드의 실제 개수와 동등해야 한다는 것입니다.</p>
+<p>
+이러한 요구조건들을 불변량(<b>invariants</b>)이라고 부릅니다. 왜냐하면 이상적으로 불변량은 모든 객체에 대하여 언제나 참이어야 하기 때문입니다. 객체에 대하여 불변량을 지정하는 것은 유용한 프로그래밍 관습입니다. 왜냐하면 그렇게 해야 더 쉽게 코드의 정확성을 증명할 수 있고, 더 쉽게 데이타 구조의 무결성을 점검할 수 있으며, 더 쉽게 에러를 탐지할 수 있기 때문입니다.</p>
+<p>
+불변량에 대하여 가끔식 혼동되는 일 하나는 어떤 때는 불변량을 위반할 때가 있다는 것입니다. 예를 들어, <span class=code>addFirst</span>의 중간에서 노드를 추가한 후에 그렇지만 <span class=code>length</span>를 증가시키기 전에는 불변량이 위반됩니다. 이런 종류의 위반은 받아들일 수 있습니다; 사실, 적어도 잠시 동안 불변량을 위반하지 않고서는 객체를 변경하기가 종종 불가능한 경우가 있습니다. 보통 어떤 메쏘드도 불변량을 위반하면 반드시 그 불변량을 복구해야 합니다.</p>
+
+<p>
+불변량을 무시하는 코드가 상당히 길어진다면, 그 불변량에 의존하는 연산들이 수행되지 않도록 주석을 달아 정황을 분명하게 기술해 두는 것이 중요합니다.</p>
+
+
+
+<a name=11></a><br>
+<h3>17.11 용어 해설</h3>
+
+<dl>
+
+<dt>내장된 참조점(embedded reference)</dt>
+<dd>객체의 속성에 저장된 참조점.</dd>
+
+<dt>연결 리스트(linked list)</dt>
+<dd>일련의 연결 노드를 사용하여 집단을 구현하는 데이타 구조.</dd>
+
+<dt>노드(node)</dt>
+<dd>리스트의 한 요소, 같은 유형의 또 다른 객체에 대한 참조점을 담고 있는 객체로 일반적으로 구현된다.</dd>
+
+<dt>카르고(cargo)</dt>
+<dd>한 노드에 포함된 데이타 항목.</dd>
+
+<dt>링크(link)</dt>
+<dd>한 객체를 또 다른 객체에 연결하는데 사용되는 내장된 참조점.</dd>
+
+<dt>전제조건(precondition)</dt>
+<dd>한 메쏘드가 올바르게 작동하기 위해 반드시 참이어야 하는 표명(assertion).</dd>
+
+<dt>근본적인 모호성 공리(fundamental ambiguity theorem)</dt>
+<dd>한 리스트에 대한 참조점은 단일 객체로 취급될 수도 있고 노드를 담은 리스트의 첫 번째 노드로 취급될 수도 있다.</dd>
+
+<dt>싱글턴(singleton)</dt>
+<dd>단일 노드만을 가지는 연결 리스트.</dd>
+
+<dt>포장자(wrapper)</dt>
+<dd>호출자와 도움자 사이의 중재자 역할을 하는 메쏘드로, 종종 포장자를 사용하면 메쏘드를 에러가-덜-나도록 혹은 더 쉽게 요청할 수 있다.</dd>
+
+<dt>도움자(helper)</dt>
+<dd>직접적으로 호출자가 요청하지는 않지만 다른 메쏘드들이 부분적인 연산을 수행하는데 사용되는  메쏘드.</dd>
+
+<dt>불변량(invariant)</dt>
+<dd>한 객체에 대하여 (그 객체가 변경되는 동안은 제외하고) 언제나 참이어야만 하는 표명(assertion).</dd>
+
+</dl>
+<h2>연습문제</h2>
+<ol>
+<li><div class="exercise">
+관례상, 리스트는 <code>[1, 2, 3]</code>과 같이 원소 사이에 컴마를 두고 각괄호 안에 인쇄된다. <code>printList</code>를 수정하여 이런 형태로 출력하라.
+</div></li>
+</ol>
+
+<p>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap18.htm"><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap16.htm"><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png" ></td>
+  </tr>
+</table>
+<hr>
+
+</body>
+</html>

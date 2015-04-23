@@ -1,0 +1,477 @@
+<html>
+<head>
+  <title>GASP: Graphics API for Students of Python</title>
+</head>
+
+<body>
+<h1>GASP: 파이썬 신도를 위한 API</h1>
+
+<h2>좌표</h2>
+<p>
+창의 좌하의 위치가 (0, 0)이다. 창은 크기가 기본 값으로 640 X 480 필셀이다. (원한다면 크기를 바꿀 수 있다.) 좌표는 픽셀 단위로 주어진다.
+</p>
+<p>
+좌표를 취하는 모든 함수는 터플 (x, y)로 받는다.
+</p>
+
+<pre class="python">
+Circle((300, 200), 10)     # :) 이건 좋다
+Circle(300, 200, 10)       # :( 이건 나쁘다
+</pre>
+
+<h2>색상</h2>
+<p>
+color 모듈에 접근하기 위하여module GASP has to offer. 
+
+Call <code>color.*</code> where <code>*</code> is the color you wish to call. 
+
+For example:
+</p>
+<code> color.black </code>
+<p>
+This is the color black. Check out the gasp color refrence chart to see all of
+the availble color options.
+</p> 
+
+<h2>The Essentials</h2>
+
+<pre class="python">
+from gasp import *
+
+begin_graphics()
+
+... 			# all of your code
+
+end_graphics()
+
+</pre>
+
+<p>
+These are the essentials. <code> from gasp import * </code> imports the gasp module,
+<code>begin_graphics()</code> starts the graphics window, and <code>end_graphics()</code> quits the graphics 
+window. It's dead simple, but also dead necessary. 
+</p>
+
+
+<h2>Graphics Functions</h2>
+
+<h3>begin_graphics()</h3>
+<pre class="python">
+begin_graphics(height=640, width=480, title="Gasp", background=color.white)
+</pre>
+<p>
+This by default creates a graphics window with the dimensions 640x480, 
+a title of Gasp, and a background color of white.
+</p>
+<dl>
+  <dt>height</dt>
+    <dd>The windows height in pixels.</dd>
+  <dt>width</dt>
+    <dd> The width of the window in pixels.</dd>
+  <dt>title</dt>
+    <dd> A string that will be the title of the window </dd>
+  <dt>background</dt>
+    <dd> It is the background of the graphics window. It can either be a color or an image</dd>
+</dl>
+
+<h3>end_graphics()</h3>
+<pre class="python">
+endgraphics() 
+</pre>
+<p>
+Ends a graphics window.
+</p>
+
+<h3>clear_screen()</h3>
+<pre class="python">
+clear_screen()
+</pre>
+<p> 
+Clears everything off of the graphics window. It looks like a new graphcs window 
+as if you just called begin_graphics(). 
+</p>
+
+<h3>remove_from_screen()</h3>
+<pre class="python">
+remove_from_screen(obj)
+</pre>
+<p>
+removes those objects from the screen
+</p>
+
+<dl>
+  <dt>obj</dt>
+    <dd> A screen object of a list of screen_objects you would like to remove 
+         from the screen</dd>
+</dl>
+
+<h2>Screen Objects</h2>
+<p>
+The objects that you will be displayed in your graphics window. You can 
+manipulate these objects using the screen object methods 
+</p>
+
+<h3>Plot</h3>
+<pre class="python">
+Plot(pos, color=color.black, size=1)
+</pre>
+<p>
+It puts a dot on the screen.
+</p>
+
+<dl>
+  <dt>pos</dt>
+    <dd>The coordinate on the screen that you wish to plot.</dd>
+  <dt>color</dt>
+    <dd>The color you wish the dot to be.</dd>
+  <dt>size</dt>
+    <dd>An integer that determinse the size the of the dot</dd>
+</dl>
+
+<h3>Line</h3>
+<pre class="python">
+Line(start, end, color=color.black)
+</pre>
+<p>
+Creates a line on the screen.
+</p>
+
+<dl>
+  <dt>start</dt>
+    <dd>The starting coordinate of the line.</dd>
+  <dt>end</dt>
+    <dd>The coordinate at which the line will end.</dd>
+  <dt>color</dt>
+    <dd>The color of the line</dd>
+</dl>
+
+<h3>Box</h3>
+<pre class="python">
+Box(center, width, height, filled=False, color=color.black, thickness=1)
+</pre>
+<p>
+This creates a Box on the screen
+</p>
+
+<dl>
+  <dt>center</dt>
+    <dd> A coorinate where the center of your box will be.</dd>
+  <dt>width</dt>
+    <dd> The width in pixels of the box. </dd>
+  <dt>height</dt>
+    <dd> The height of the box in pixels. </dd>
+  <dt>filled</dt>
+    <dd> A boolean value that determines if your box will be filled</dd>
+  <dt>color</dt>
+    <dd> The color of your box. </dd>
+  <dt>thickness</dt>
+    <dd> The thickness in pixels of your box's lines. </dd>
+</dl> 
+
+<h3>Polygon</h3>
+<pre class="python">
+Polygon(points, filled=False, color=color.black, thickness=1) 
+</pre>
+<p>
+Creates a polygon on the screen
+</p>
+
+<dl>
+  <dt>points</dt>
+    <dd>A list of coorinates that is each point on the polygon. The must be more
+         than two items in the list </dd>
+  <dt>filled</dt>
+    <dd> A boolean value. If it is False the polygon will not be filled. 
+        Else, the polygon will not be filled</dd>
+  <dt>color</dt>
+    <dd> The color of the polygon's lines </dd>
+  <dt>thickness</dt>
+    <dd> An integer that determines the thickness of the lines. </dd>
+</dl>
+
+<h3>Circle</h3>
+<pre class="python">
+Circle(center, radius, filled=False, color=color.black, thickness=1)
+</pre>
+<p>
+Draws a circle, its <code>center</code> is a set of coordinates, and the <code>radius</code> is in pixels. It defaults to not being filled and the color black.
+</p>
+
+<dl>
+  <dt>center</dt>
+    <dd> The circle's center coordinate.</dd>
+  <dt>width</dt>
+    <dd> An integer that is the radius of the circle </dd>
+  <dt>filled</dt>
+    <dd> A boolean value that determines if your circle will be filled</dd>
+  <dt>color</dt>
+    <dd> The color of your circle. </dd>
+  <dt>thickness</dt>
+    <dd> The thickness in pixels of the circles lines. </dd>
+</dl>
+
+<h3>Arc</h3>
+<pre class="python">
+Arc(center, radius, start_angle, end_angle, filled=False, color=color.black, thickness=1)
+</pre>
+<p>
+Creates an arc on the screen.
+</p>
+
+<dl>
+  <dt>center</dt>
+    <dd> A coordinate that is the center of the arc. </dd>
+  <dt>radius</dt>
+    <dd> An integer that is the distance between the center and the outer edge 
+            of the arc.</dd>
+  <dt>start_angle</dt>
+    <dd> The start angle in degrees of the arc </dd>
+  <dt>end_angle</dt>
+    <dd> The end angle in degrees of your arc </dd>
+  <dt>filled</dt>
+    <dd> A boolean value that if True it fills the arc </dd>
+  <dt>color</dt>
+    <dd> The color the arc </dd>
+  <dt>thickness</dt>
+    <dd> The thickness in pixels of the arc </dd>
+</dl>
+
+<h3>Oval</h3>
+<pre class="python">
+Oval(center, width, height, filled=False, color=color.black, thickness=1)
+</pre>
+<p>
+Puts an oval on the screen wherever you want.
+</p>
+<dl>
+  <dt>center</dt>
+    <dd>The center coordinate of the Oval</dd>
+  <dt>width</dt>
+    <dd>The width in pixels of the oval</dd>
+  <dt>height</dt>
+    <dd>The height of the oval in pixels</dd>
+  <dt>filled</dt>
+    <dd>A boolean value determining if the oval will be filles or not.</dd>
+  <dt>color</dt>
+    <dd> The oval's color </dd>
+  <dt>thickness</dt>
+    <dd> The thickness of the ovals lines </dd>
+</dl>
+
+<h3>Image</h3>
+<pre class="python">
+Image(self, file_path, center, width=None, height=None):
+</pre>
+<p>
+It uploads an image onto the screen. If you only pass width and not a height it automatically scales the height to fit the width you passed it. It is the same for the height.
+</p>
+
+<dl>
+  <dt>file_path</dt>
+    <dd> The path name where the image is. </dd>
+  <dt>center</dt>
+    <dd> The center coordinate of the image </dd>
+  <dt>width</dt>
+    <dd> The width of the image in pixels. If width equals None then it 
+        defaults to the image files width </dd>
+  <dt>height</dt>
+    <dd> The height of the image in pixels. If no height is passed it defaults 
+        to the image files height </dd>
+</dl>
+
+<h2>Screen Object Methods</h2>
+<p>
+The methods that manipulates screen objects
+</p>
+
+<h3>move_to()</h3>
+<pre class="python">
+move_to(obj, pos)
+</pre>
+<p>
+Move a screen object to a pos
+</p>
+
+<dl>
+ <dt>obj</dt>
+    <dd> A screen object you wish to move. </dd>
+ <dt>pos</dt>
+    <dd> The coordinate on the screen that the object will move to </dd>
+</dl>
+
+<h3>move_by()</h3>
+<pre class="python">
+move_by(obj, dx, dy)
+</pre>
+<p>
+Move a screen object relative to it's position
+</p>
+
+<dl>
+  <dt>obj</dt>
+    <dd>The screen object you wish to move</dd>
+  <dt>dx</dt>
+    <dd> How much the object will move in the 'x' direction. Positive or 
+        negative.</dd>
+  <dt>dy</dt>
+    <dd> How much the object will move in the 'y' direction. A pixel value.</dd>
+</dl>
+
+<h3>rotate_to()</h3>
+<pre class="python">
+rotate_to(obj, angle)
+</pre>
+<p>
+Rotate an object to an angle
+</p>
+
+<dl>
+  <dt>obj</dt>
+    <dd> The screen object that will be rotated </dd>
+  <dt>angle</dt>
+    <dd> The angle in degrees that the object will be rotated to </dd>
+</dl>
+
+<h3>rotate_by()</h3>
+<pre class="python">
+rotate_by(obj, angle)
+</pre>
+<p>
+Rotate an object a certain degree.
+</p>
+<dl>
+  <dt>obj</dt>
+    <dd> The screen object you wish to rotate </dd>
+  <dt>angle</dt>
+    <dd> The degree that the object will be rotate. Can be positive or negative.        </dd>
+</dl>
+
+
+<h2>Text</h2>
+<p>
+</p>
+
+<h3>Text()</h3>
+<pre class="python">
+Text(text, pos, color=color.black, size=12)
+</pre>
+<p>
+Puts text on the screen
+</p>
+
+<dl>
+  <dt>text</dt>
+    <dd> A string of the text that will be displayed </dd>
+  <dt>pos</dt>
+    <dd> The center coordinate of the text </dd>
+  <dt>color</dt>
+    <dd> The color of the text </dd>
+  <dt>size</dt>
+    <dd> The font size </dd>
+</dl>
+
+<h2>Sound</h2>
+<p>
+All of the functions that manipulate sound.
+</p>
+
+<h3>Sound()</h3>
+<pre class="python">
+Sound(file_path)
+</pre>
+<p>
+Creates a sound object
+</p>
+
+<dl>
+  <dt>file_path</dt>
+    <dd> The path of the sound file you wish to make the sound object out of </dd>
+</dl>
+
+<h3>play_sound()</h3>
+<pre class="python">
+play_sound(obj, loop=False)
+</pre>
+<p>
+Plays a sound object
+</p>
+
+<dl>
+  <dt>obj</dt>
+    <dd>A sound object</dd>
+  <dt>loop</dt>
+    <dd> If loop equals false in will play the file all the way through one 
+        time. If loop equals True it will repeat the file untill it is stopped 
+        </dd>
+</dl>   
+
+<h3>stop_sound()</h3>
+<pre class="python">
+stop_sound(obj, finish=False, fade=True)
+</pre>
+<p>
+It stops a sound object that was playing
+</p>
+
+<dl>
+  <dt>obj</dt>
+    <dd> The sound object you wish to stop </dd>
+  <dt>finish</dt>
+    <dd> If True it will wait to stop the file untill it has finished. If False
+ it will imedietly stop.</dd>
+  <dt>fade</dt>
+    <dd> If True it will fade out. If False it will stop the sound </dd>
+</dl>
+
+<h2>Mouse</h2>
+<p>
+</p>
+
+<h3>mouse_position()</h3>
+<pre class="python">
+mouse_position()
+</pre>
+<p>
+Returns the current mouse coordinate
+</p>
+
+<h3>mouse_buttons()</h3>
+<pre class="python">
+mouse_buttons()
+</pre>
+<p>
+returns a dictionary of the buttons state. There is a 'left', 'middle', and 'right' key.
+</p>
+
+
+<h2>Keyboard</h2>
+<p>
+</p>
+
+<h3>keys_pressed()</h3>
+<pre class="python">
+keys_pressed()
+</pre>
+<p>
+returns a list of all of the keys pressed at that moment.
+</p>
+
+
+<h2>Gasp Tools</h2>
+
+<h3>screen_shot</h3>
+<pre class="python">
+screen_shot(filename)
+</pre>
+<p>
+It saves a screenshot of the current graphics screen to a png file.
+</p>
+
+<dl>
+  <dt>filename</dt>
+  <dd> The file path relative to the current directory that the image will be
+  written to. </dd>
+</dl>
+
+</body>
+</html>

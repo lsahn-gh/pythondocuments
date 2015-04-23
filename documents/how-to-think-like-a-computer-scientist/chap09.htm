@@ -1,0 +1,1003 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>제 9장 : 터플(Tuples)</title>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+
+<body>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap10.htm"><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png" ></a></td>
+    <td width="20" class=head><a href="chap08.htm"><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png" ></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm" ><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+
+<h2>제 9 장</h2>
+
+<h1>터플</h1>
+
+
+<a name=1></a><br>
+<h3>9.1 변경가능성과 터플</h3>
+<p>
+지금까지 두 가지 복합유형을 보았습니다: 하나는 문자로 구성되어 있는 문자열이고; 다른 하나는 임의의 유형의 원소들로 구성된 리스트가 그것입니다. 차이점 하나는 리스트의 원소들은 변경될 수 있지만, 문자열 안에 있는 문자들은 변경될 수 없다는 것입니다. 다른 말로 하면, 문자열은 <b>변경불능(immutable)</b>이고 리스트는 <b>변경가능(mutable)</b>합니다.</p>
+<p>
+파이썬에는 <b>터플(tuple)</b>이라고 부르는 또다른 유형이 있습니다. <b>터플(tuple)</b>은 변경불가능하다는 점만 빼면 리스트와 비슷합니다. 구문적으로 말하면 터플은 값이 쉼표로-분리된 리스트입니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; tuple = <span class=quote>'a'</span>, <span class=quote>'b'</span>, <span class=quote>'c'</span>, <span class=quote>'d'</span>, <span class=quote>'e'</span>
+<br></span></p>
+
+<p>
+반드시 그런 것은 아니지만 관례적으로 터플은 반괄호(parentheses)로 둘러쌉니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; tuple = (<span class=quote>'a'</span>, <span class=quote>'b'</span>, <span class=quote>'c'</span>, <span class=quote>'d'</span>, <span class=quote>'e'</span>)
+<br></span></p>
+<p>
+원소가 한 개만 있는 터플을 만들려면, 마지막에 쉼표를 포함해야 합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; t1 = (<span class=quote>'a'</span>,)
+<br>&gt;&gt;&gt; type(t1)
+<br>&lt;type <span class=quote>'tuple'</span>&gt;
+<br></span></p>
+
+
+
+<p>
+이 쉼표가 없다면 파이썬은 <span class=code>(<span class=quote>'a'</span>)</span>를 반괄호에 싸인 문자열로 취급합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; t2 = (<span class=quote>'a'</span>)
+<br>&gt;&gt;&gt; type(t2)
+<br>&lt;type <span class=quote>'string'</span>&gt;
+<br></span></p>
+
+
+
+<p>
+구문에 관한 문제를 접어두면 터플에 관한 연산은 리스트에 관한 연산과 똑 같습니다. 다음 지표 연산자는 터플에서 원소 하나를 선택합니다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt; tuple = (<span class=quote>'a'</span>, <span class=quote>'b'</span>, <span class=quote>'c'</span>, <span class=quote>'d'</span>, <span class=quote>'e'</span>)
+<br>&gt;&gt;&gt; tuple[0]
+<br><span class=quote>'a'</span>
+<br></span></p>
+
+<p>
+그리고 조각썰기 연산자는 일정 범위의 원소들을 선택합니다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt; tuple[1:3]
+<br>(<span class=quote>'b'</span>, <span class=quote>'c'</span>)
+<br></span></p>
+
+
+
+<p>
+그러나 터플에서 원소중의 하나를 변경하려고 시도하면 에러를 맞이합니다:</p>
+
+
+
+
+<p><span class=code>&gt;&gt;&gt; tuple[0] = <span class=quote>'A'</span>
+<br>TypeError: object doesn't support item assignment
+<br></span></p>
+
+
+
+<p>
+물론, 터플의 원소는 변경할 수 없지만 그 터플을 다른 터플로 대치할 수는 있습니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; tuple = (<span class=quote>'A'</span>,) + tuple[1:]
+<br>&gt;&gt;&gt; tuple
+<br>(<span class=quote>'A'</span>, <span class=quote>'b'</span>, <span class=quote>'c'</span>, <span class=quote>'d'</span>, <span class=quote>'e'</span>)
+<br></span></p>
+
+
+
+<a name=2></a><br>
+<h3>9.2 터플 할당</h3>
+
+<p>
+두 변수의 값을 서로 교환하는 것이 유용할 때가 종종 있습니다. 관례적인 할당 서술문을 사용하면 임시 변수를 사용해야만 합니다. 예를 들어, <span class=code>a</span>와 <span class=code>b</span>를 교환하려면 다음과 같이 합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; temp = a
+<br>&gt;&gt;&gt; a = b
+<br>&gt;&gt;&gt; b = temp
+<br></span></p>
+
+
+<p>
+자주 이렇게 해야 한다면, 이러한 접근법은 귀찮아집니다. 파이썬은 <b>터플 할당(tuple assignment)</b>이라는 형태를 제공하여 이 문제를 깔끔하게 해결해 줍니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; a, b = b, a
+<br></span></p>
+
+
+
+<p>
+왼쪽은 변수를 담은 터플이고; 오른쪽은 값을 담은 터플입니다. 각 값은 그의 변수에 각각 할당됩니다. 오른쪽에 있는 모든 표현식들은 할당되기 전에 먼저 평가됩니다. 이 특징 덕분에 터플 할당은 상당히 다재다능할 수 있습니다.</p>
+
+<p>
+당연히 왼쪽에 있는 변수들의 개수와 오른쪽에 있는 변수들의 개수는 반드시 똑 같아야 합니다:</p>
+
+
+<p><span class=code>&gt;&gt;&gt; a, b, c, d = 1, 2, 3
+<br>ValueError: unpack tuple of wrong size
+<br></span></p>
+
+
+
+<a name=3></a><br>
+<h3>9.3 반환값으로서의 터플</h3>
+
+<p>
+함수는 터플을 반환 값으로 반환할 수 있습니다. 예를 들어, 매개변수 두 개를 변경하는 함수를 다음과 같이 작성할 수 있습니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>swap</span>(x, y):
+<br>&nbsp; <span class=keyword>return</span> y, x
+<br></span></p>
+
+
+
+<p>
+그러면 이제 변수가 두 개인 터플에 그 반환 값을 할당할 수 있습니다:</p>
+
+
+<p><span class=code>a, b = swap(a, b)
+<br></span></p>
+
+
+
+<p>
+이 경우에는 <span class=code>swap</span>을 함수로 만들어야 할 이점은 별로 없습니다. 사실 <span class=code>swap</span>을 캡슐화하고자 하면 위험합니다. 다음과 같은 실수를 저지르기 쉽습니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>swap</span>(x, y):&nbsp; &nbsp; &nbsp; <span class=comment># incorrect version
+</span><br>&nbsp; x, y = y, x
+<br></span></p>
+
+
+
+<p>이 함수를 다음과 같이 호출한다면:</p>
+
+
+<p><span class=code>swap(a, b)
+<br></span></p>
+
+
+
+<p>
+그러면 <span class=code>a</span>와 <span class=code>x</span>는 같은 값에 대한 별명이기 때문에 <span class=code>swap</span> 안에서 <span class=code>x</span>를 변경하면 <span class=code>x</span>는 다른 값을 가리키게 되지만 <span class=code>__main__</span> 안에 있는 <span class=code>a</span>에 대해서는 아무런 영향도 미치지 않습니다.</p>
+
+<p>
+이 함수는 에러 메시지를 내지 않고 실행되지만, 원하던 바를 실행하지는 않습니다. 이것은 의미구조적(semantic) 에러의 한 예입니다.</p>
+
+
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로 왜 작동하지 않는지 살펴 볼 수 있도록 이 함수에 대한 상태 다이어그램을 그려 보세요.</i> </p>
+
+<h3>9.3.1 순수 함수와 변경자 심화 연구</h3>
+<span class="index" value="modifier" />
+<span class="index" value="function type!modifier" />
+<span class="index" value="side effect" />
+<span class="index" value="pure function" />
+<span class="index" value="function type!pure" />
+
+<p>리스트에 관련된 <em>순수 함수</em>와 <em>변경자(modifiers)</em>를 연구해 보았습니다. 터플은 변경 불능이므로 터플에 대하여 변경자를 작성할 수는 없습니다.</p>
+
+<p>다음은 새로운 값을 리스트의 중간에 끼워넣는 변경자입니다:</p>
+
+<pre class="python">
+#
+# seqtools.py
+#
+
+def insert_in_middle(val, lst):
+    middle = len(lst)/2
+    lst[middle:middle] = [val]
+</pre>
+
+<p>실행해 보면 어떻게 작동하는지 보실 수 있습니다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; from seqtools import *
+&gt;&gt;&gt; my_list = ['a', 'b', 'd', 'e']
+&gt;&gt;&gt; insert_in_middle('c', my_list)
+&gt;&gt;&gt; my_list
+['a', 'b', 'c', 'd', 'e']
+</pre>
+
+<p>그렇지만 터플에다 사용해 보면, 에러가 일어납니다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; my_tuple = ('a', 'b', 'd', 'e')
+&gt;&gt;&gt; insert_in_middle('c', my_tuple)
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+  File "seqtools.py", line 7, in insert_in_middle
+    lst[middle:middle] = [val]
+TypeError: 'tuple' object does not support item assignment
+&gt;&gt;&gt; 
+</pre>
+
+<p>문제는 터플이 변경불능이며 조각썰기 할당을 지원하는 않는다는 것입니다. 이 문제를 간단하게 해결하는 방법은 <code>insert_in_middle</code>를 순수 함수로 만드는 것입니다:</p>
+
+<pre class="python">
+def insert_in_middle(val, tup):
+    middle = len(tup)/2
+    return tup[:middle] + (val,) + tup[middle:]
+</pre>
+
+<p>이 버전은 이제 터플에 작동하지만, 리스트나 문자열에는 작동하지 않습니다. 모든 연속열 유형에 작동시키고 싶으면, 올바른 연속열 유형 안에 값을 캡슐화 넣는 방법이 필요합니다. 작은 도움자 함수가 트릭을 부립니다:</p>
+
+<pre class="python">
+def encapsulate(val, seq):
+    if type(seq) == type(""):
+        return str(val)
+    if type(seq) == type([]):
+        return [val]
+    return (val,) 
+</pre>
+
+<p>
+이제 내장 연속열 유형 각각에 작동하도록 <code>insert_in_middle</code>를 작성할 수 있습니다:</p>
+
+<pre class="python">
+def insert_in_middle(val, seq):
+    middle = len(seq)/2
+    return seq[:middle] + encapsulate(val, seq) + seq[middle:]
+</pre>
+
+<p>앞의 두 <code>insert_in_middle</code> 버전은 순수 함반입니다. 부작용은 전혀 없습니다. <code>encapsulate</code>와 앞 <code>insert_in_middle</code> 버전을 <code>seqtools.py</code>에 추가하면, 테스트해 볼 수 있습니다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; from seqtools import *
+&gt;&gt;&gt; my_string = 'abde'
+&gt;&gt;&gt; my_list = ['a', 'b', 'd', 'e']
+&gt;&gt;&gt; my_tuple = ('a', 'b', 'd', 'e')
+&gt;&gt;&gt; insert_in_middle('c', my_string)
+'abcde'
+&gt;&gt;&gt; insert_in_middle('c', my_list)
+['a', 'b', 'c', 'd', 'e']
+&gt;&gt;&gt; insert_in_middle('c', my_tuple)
+('a', 'b', 'c', 'd', 'e')
+&gt;&gt;&gt; my_string
+'abde'
+</pre>
+
+<p><code>my_string</code>와 <code>my_list</code> 그리고 <code>my_tuple</code>의 값은 변경되지 않습니다. <code>insert_in_middle</code>를 사용하여 값을 바꾸고 싶으면, 함수 호출로 돌려받는 그 값을 다시 그 변수에 할당해야 합니다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; my_string = insert_in_middle('c', my_string)
+&gt;&gt;&gt; my_string
+'abcde' 
+</pre>
+
+<a name=4></a><br>
+<h3>9.4 무작위 수</h3>
+
+<p>
+대부분의 컴퓨터 프로그램은 실행될 때마다 같은 일을 합니다. 그래서 그런 프로그램을 일컬어 <b>결정론적(deterministic)</b>이라고 말합니다. 결정론(Determinism)은 보통은 좋습니다. 왜냐하면 같은 계산으로 같은 결과를 산출할 것이라고 예상하기 때문입니다. 그렇지만 어떤 어플리케이션에 대해서는 컴퓨터가 예측불가능하기를 바랄 때가 있습니다. 게임이 확실한 예이기는 하지만, 그 보다도 그런 경우는 훨씬 더 많습니다.</p>
+
+<p>
+알고 보면 프로그램을 진짜로 비결정론적으로 만드는 것은 그렇게 쉽지 않습니다. 그러나 여러가지 방법으로 프로그램을 적어도 비결정론적으로 보이게 만들 수는 있습니다. 그 중에 하나는 무작위 수를 생성해서 그 무작위 수를 사용하여 프로그램의 출력결과를 결정하는 것입니다. 파이썬은 <b>의사무작위(pseudorandom)</b> 수를 만드는 내장 함수를 제공합니다. <b>의사무작위(pseudorandom)</b> 수는 수학적인 의미에서는 진짜로 무작위적인 것은 아니지만 우리의 목적은 충분히 만족시켜 줄 것입니다.</p>
+
+<p>
+<span class=code>random</span> 모듈에 담겨 있는 함수중에 <span class=code>random</span>이라고 부르는 함수는 0.0에서 1.0 사이의 부동-소수점 수를 반환합니다. <span class=code>random</span> 함수를 호출할 때마다, 기다란 숫자의 형태로 다음과 같은 숫자를 얻습니다. 샘플을 보려면, 다음 회돌이를 실행해 보세요:</p>
+
+
+<p><span class=code><span class=keyword>import</span> random
+<br>
+<br><span class=keyword>for</span> i <span class=keyword>in</span> range(10):
+<br>&nbsp; x = random.random()
+<br>&nbsp; <span class=keyword>print</span> x
+<br></span></p>
+
+
+
+<p>
+0.0과 <span class=code>high</span>와 같은 상한값 사이의 무작위 수 하나를 만들고자 한다면, <span class=code>x</span>에 <span class=code>high</span>를 곱하세요.</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로 <span class=code>low</span>와 <span class=code>high</span> 사이의 무작위 수 하나를 만들어 보세요.</i> </p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습문제를 하나 더 풀어보세요. 양 끝점을 포함하여 <span class=code>low</span>와 <span class=code>high</span>사이의 무작위 정수를 하나 만들어 보세요.</i> </p>
+
+<a name=5></a><br>
+<h3>9.5 무작위 수 리스트</h3>
+
+<p>
+첫 번째 단계는 무작위 값들을 담은 리스트를 만드는 것입니다. <span class=code>randomList</span>는 정수형 매개변수 하나를 취해 주어진 길이로 무작위 수 리스트를 반환합니다. 먼저 <span class=code>n</span>개의 0을 담은 리스트로 시작합니다. 회돌이를 돌 때마다, 원소들 중의 한 원소를 무작위 수로 대치합니다. 반환 값은 완성된 리스트를 가리키는 참조점입니다:</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>randomList</span>(n):
+<br>&nbsp; s = [0] * n
+<br>&nbsp; <span class=keyword>for</span> i <span class=keyword>in</span> range(n):
+<br>&nbsp; &nbsp; s[i] = random.random()
+<br>&nbsp; <span class=keyword>return</span> s
+<br></span></p>
+
+
+
+<p>
+이 함수를 원소가 여덟 개인 리스트로 테스트하겠습니다. 디버깅의 목적을 위해서는 작은 리스트로 시작하는 것이 좋습니다.</p>
+
+
+<p><span class=code>&gt;&gt;&gt; randomList(8)
+<br>0.15156642489
+<br>0.498048560109
+<br>0.810894847068
+<br>0.360371157682
+<br>0.275119183077
+<br>0.328578797631
+<br>0.759199803101
+<br>0.800367163582
+<br></span></p>
+
+
+
+<p>
+<span class=code>random</span> 함수로 만든 숫자들은 일정한 형태로 분배됩니다. 일정한 형태라는 것은 각 값이 출현할 가능성이 같다는 것을 뜻합니다.</p>
+
+<p>
+가능한 값들의 범위를 동등한-크기의 "깡통"으로 나눈다면 그리고 각 깡통에 떨어지는 무작위 수의 횟수를 센다면, 대체로 각 깡통에 같은 개수를 얻어야 합니다.</p>
+
+<p>
+그 범위를 깡통으로 나누고 각 깡통에 담긴 값들의 개수를 세는 프로그램을 작성하면 이 이론을 테스트할 수 있습니다.</p>
+
+<a name=6></a><br>
+<h3>9.6 횟수세기</h3>
+
+<p>
+이와 같은 문제에 접근하는 좋은 방법은 문제를 부분문제들로 쪼개어서 이전에 본 적이 있는 계산 형태에 적합한 부분문제들을 찾아 보는 것입니다.</p>
+
+<p>
+이 경우에 숫자들의 리스트를 순회해서 주어진 범위에 값이 떨어지는 횟수를 세고 싶습니다. 이 작업은 익숙하게 보입니다. 
+<a href="chap07.htm#8">섹션 7.8</a>에서 문자열을 순회해서 주어진 문자가 나타나는 횟수를 세는 프로그램을 작성했었습니다.</p>
+<p>
+그래서 예전의 그 프로그램을 복사해서 현재 당면한 문제에 적용시키면 처리할 수 있습니다. 원래 프로그램은 다음과 같았습니다:</p>
+
+
+<p><span class=code>count = 0
+<br><span class=keyword>for</span> char <span class=keyword>in</span> fruit:
+<br>&nbsp; <span class=keyword>if</span> char == <span class=quote>'a'</span>:
+<br>&nbsp; &nbsp; count = count + 1
+<br><span class=keyword>print</span> count
+<br></span></p>
+
+
+
+<p>
+첫 번째 단계는 <span class=code>fruit</span>를 with <span class=code>list</span>로 대치하고 <span class=code>char</span>를 <span class=code>num</span>으로 대치하는 것입니다. 이렇게 한다고 해서 프로그램이 변경되지는 않습니다; 단지 더 읽기 쉬어질 뿐입니다.</p>
+
+<p>
+두 번째 단계는 테스트를 변경하는 것입니다. 문자들을 찾는 것에는 관심이 없습니다. <span class=code>num</span>이 주어진 값 <span class=code>low</span>와 <span class=code>high</span> 사이에 있는지 알고 싶습니다.</p>
+
+
+<p><span class=code>count = 0
+<br><span class=keyword>for</span> num <span class=keyword>in</span> list
+<br>&nbsp; <span class=keyword>if</span> low &lt; num &lt; high:
+<br>&nbsp; &nbsp; count = count + 1
+<br><span class=keyword>print</span> count
+<br></span></p>
+
+
+
+<p>
+마지막 단계는 이 코드를 <span class=code>inBucket</span>이라고 부르는 함수에 캡슐화해 넣는 것입니다. 매개변수는 리스트 그리고 <span class=code>low</span>와 <span class=code>high</span> 값입니다.</p>
+
+
+<p><span class=code><span class=keyword>def</span> <span class=function>inBucket</span>(list, low, high):
+<br>&nbsp; count = 0
+<br>&nbsp; <span class=keyword>for</span> num <span class=keyword>in</span> list:
+<br>&nbsp; &nbsp; <span class=keyword>if</span> low &lt; num &lt; high:
+<br>&nbsp; &nbsp; &nbsp; count = count + 1
+<br>&nbsp; <span class=keyword>return</span> count
+<br></span></p>
+
+
+
+<p>
+기존에 있는 프로그램을 복사해서 수정하면 이 함수를 신속하게 작성할 수 있으며 디버깅 시간을 많이 절약할 수 있습니다. 이런 개발 계획을 <b>패턴 일치(pattern matching)</b>라고 부릅니다. 이전에 풀어본 적이 있는 문제에 마주하면 그 해결법을 다시 사용하세요.</p>
+
+<a name=7></a><br>
+<h3>9.7 많은 깡통</h3>
+
+<p>
+깡통의 개수가 증가함에 따라서 <span class=code>inBucket</span>은 약간 기묘하게 됩니다. 깡통이 두 개일때는 그렇게 나쁘지 않습니다:</p>
+
+
+<p><span class=code>low = inBucket(a, 0.0, 0.5)
+<br>high = inBucket(a, 0.5, 1)
+<br></span></p>
+
+
+
+<p>그러나 깡통이 네 개라면 골치가 아파집니다.</p>
+
+
+<p><span class=code>bucket1 = inBucket(a, 0.0, 0.25)
+<br>bucket2 = inBucket(a, 0.25, 0.5)
+<br>bucket3 = inBucket(a, 0.5, 0.75)
+<br>bucket4 = inBucket(a, 0.75, 1.0)
+<br></span></p>
+
+
+
+<p>
+문제가 두 가지 있습니다. 하나는 각 결과에 대하여 변수 이름을 새로 따로따로 만들어 두어야 한다는 것이고 다른 하나는 각 깡통의 범위를 계산해야 한다는 것입니다.</p>
+
+<p>
+두 번째 문제를 먼저 풀어 보겠습니다. 깡통의 개수가 <span class=code>numBuckets</span>이라면 각 깡통의 너비는 <span class=code>1.0 / numBuckets</span>입니다.</p>
+
+<p>
+회돌이를 사용하여 각 깡통의 범위를 계산해 보겠습니다. 회돌이 변수인 <span class=code>i</span>는 1에서부터 <span class=code>numBuckets-1</span>까지 셉니다:</p>
+
+
+<p><span class=code>bucketWidth = 1.0 / numBuckets
+<br><span class=keyword>for</span> i <span class=keyword>in</span> range(numBuckets):
+<br>&nbsp; low = i * bucketWidth
+<br>&nbsp; high = low + bucketWidth
+<br>&nbsp; <span class=keyword>print</span> low, <span class=quote>"to"</span>, high
+<br></span></p>
+
+
+
+<p>
+각 깡통의 하한값을 계산하려면 회돌이 변수에 깡통의 너비를 곱합니다. 상한값은 그냥 <span class=code>bucketWidth</span>만큼 떨어진 값입니다.</p>
+
+<p>
+<span class=code>numBuckets = 8</span>이라면, 출력결과는 다음과 같습니다:</p>
+
+
+<p><span class=code>0.0 to 0.125
+<br>0.125 to 0.25
+<br>0.25 to 0.375
+<br>0.375 to 0.5
+<br>0.5 to 0.625
+<br>0.625 to 0.75
+<br>0.75 to 0.875
+<br>0.875 to 1.0
+<br></span></p>
+
+
+
+<p>
+각 깡통이 같은 너비이며 서로 겹치지 않으며 0.0에서부터 1.0까지 전 범위에 걸친다는 것을 확인할 수 있습니다.</p>
+
+<p>
+이제 첫 번째 문제로 돌아가 봅시다. 회돌이 변수를 사용하여 한 번에 한 개씩 가리킬 정수 여덟 개를 저장할 방법이 필요합니다. 지금쯤이면 이렇게 생각하고 있을 것입니다 "리스트를 사용하면 되겠군!"</p>
+
+<p>
+깡통 리스트는 단 한 번만 실행되기를 원하기 때문에 회돌이 바깥에 만들어야 합니다. 회돌이 안에서 <span class=code>inBucket</span>을 반복적으로 호출하여 리스트에서 <span class=code>i</span>-번(<span class=code>i</span>-eth) 원소를 갱신할 것입니다:</p>
+
+
+<p><span class=code>numBuckets = 8
+<br>buckets = [0] * numBuckets
+<br>bucketWidth = 1.0 / numBuckets
+<br><span class=keyword>for</span> i <span class=keyword>in</span> range(numBuckets):
+<br>&nbsp; low = i * bucketWidth
+<br>&nbsp; high = low + bucketWidth
+<br>&nbsp; buckets[i] = inBucket(list, low, high)
+<br><span class=keyword>print</span> buckets
+<br></span></p>
+
+
+
+<p>1000 개의 값들을 담은 리스트로, 이 코드는 다음과 같은 깡통 리스틀 만들어 냅니다:</p>
+
+
+<p><span class=code>[138, 124, 128, 118, 130, 117, 114, 131]
+<br></span></p>
+
+
+
+<p>
+이 숫자들은 125에 상당히 근접해 있으며, 예상한 그대로 입니다. 적어도 무작위 수 생성기가 작동하고 있다는 것을 믿을 수 있을 정도로 충분히 근접합니다.</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, 이 함수를 약간 더 긴 리스트로 테스트해 보세요. 그리고 각 깡통에 담긴 값들의 개수가 고르게 되는지 살펴 보세요.</i> </p>
+
+<a name=8></a><br>
+<h3>9.8 단 한번에 해결하는 법</h3>
+
+<p>
+이 프로그램은 비록 작동하지만 효율성이 뛰어나지는 않습니다. <span class=code>inBucket</span>를 호출할 때마다 이 프로그램은 전체 리스트를 순회합니다. 깡통의 개수가 증가함에 따라 수 많은 순회에 직면하게 됩니다.</p>
+
+<p>
+전체 리스트를 한 번만 통과하여 각 값에 대하여 그 값이 떨어지는 깡통의 지표를 계산하는 것이 더 좋을 것입니다. 그러면 적절하게 카운터를 증가시킬 수 있습니다.</p>
+
+<p>
+이전 섹션에서 지표 <span class=code>i</span>를 취해고 그 지표에 <span class=code>bucketWidth</span>를 곱해서 주어진 깡통의 하한값을 찾았습니다. 이제 0.0에서1.0 사이에 있는 값 하나를 취하고자 합니다. 그리고 그 값이 떨어지는 깡통의 지표를 찾고자 합니다.</p>
+
+<p>
+이 문제는 이전 문제의 반대이므로, 곱하는 대신에 <span class=code>bucketWidth</span>로 나누어야 한다는 것을 짐작할 수 있습니다. 여러분의 추측이 맞습니다.</p>
+
+<p>
+<span class=code>bucketWidth = 1.0 / numBuckets</span>이므로, <span class=code>bucketWidth</span>으로 나누는 것은 <span class=code>numBuckets</span>으로 곱하는 것과 동일합니다. 만약 0.0과 1.0범위의 숫자를  <span class=code>numBuckets</span>으로 곱하면, 0.0에서 <span class=code>numBuckets</span> 범위에 존재하는 숫자를 얻습니다. 그 숫자를 다음으로 낮은 정수로 내림하면, 정확하게 찾던 값을 얻습니다---깡통 지표를 말이지요:</p>
+
+
+<p><span class=code>numBuckets = 8
+<br>buckets = [0] * numBuckets
+<br><span class=keyword>for</span> i <span class=keyword>in</span> list:
+<br>&nbsp; index = int(i * numBuckets)
+<br>&nbsp; buckets[index] = buckets[index] + 1
+<br></span></p>
+
+
+
+<p>
+부동-소수점 수를 정수로 변환하기 위하여 <span class=code>int</span> 함수를 사용했습니다.</p>
+
+<p>
+이 계산으로 범위를 벗어나는 (음수 혹은 <span class=code>len(buckets)-1</span> 이상인) 지표를 만들어 낼 수 있나요?</p>
+
+<p>
+각 범위에 존재하는 값들의 개수를 센 값이 담긴 <span class=code>깡통(buckets)</span>과 같은 리스트를 <b>히스토그램(histogram)</b>이라고 부릅니다.</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, 이름이 <span class=code>histogram</span>인 함수를 하나 작성해 보세요. 이 함수는 리스트 하나와 깡통들을 매개변수로 취해 주어진 개수만큼의 깡통을 가지고 있는 히스토그램을 반환합니다.</i> </p>
+
+<h3>9.* 지능형 리스트</h3>
+<span class="index" value="list comprehension" />
+
+<p>
+<b>지능형 리스트</b>는 간결하고 수학적인 구문을 사용하여 다른 리스트로부터 리스트를 만들어 내는 구문 구조입니다:</p>
+
+<pre class="python-interpreter">
+&gt;&gt;&gt; numbers = [1, 2, 3, 4]
+&gt;&gt;&gt; [x**2 for x in numbers]
+[1, 4, 9, 16]
+&gt;&gt;&gt; [x**2 for x in numbers if x**2 &gt; 8]
+[9, 16] 
+&gt;&gt;&gt; [(x, x**2, x**3) for x in numbers]
+[(1, 1, 1), (2, 4, 8), (3, 9, 27), (4, 16, 64)]
+&gt;&gt;&gt; files = ['bin', 'Data', 'Desktop', '.bashrc', '.ssh', '.vimrc']
+&gt;&gt;&gt; [name for name in files if name[0] != '.']
+['bin', 'Data', 'Desktop']
+&gt;&gt;&gt; letters = ['a', 'b', 'c']
+&gt;&gt;&gt; [n*letter for n in numbers for letter in letters]
+['a', 'b', 'c', 'aa', 'bb', 'cc', 'aaa', 'bbb', 'ccc', 'aaaa', 'bbbb', 'cccc']
+&gt;&gt;&gt;
+</pre>
+
+<p>지능형 리스트 표현식에 대한 일반 구문은 다음과 같습니다:</p>
+
+<pre class="python">
+[<em>expr</em> for <em>item1</em> in <em>seq1</em> for <em>item2</em> in <em>seq2</em> ... for <em>itemx</em> in <em>seqx</em> if <em>condition</em>]
+</pre>
+
+<p>이 리스트 표현식은 다음과 같은 효과가 있습니다:</p>
+
+<pre class="python">
+output_sequence = []
+for <em>item1</em> in <em>seq1</em>:
+    for <em>item2</em> in <em>seq2</em>:
+        ...
+            for <em>itemx</em> in <em>seqx</em>:
+                if <em>condition</em>:
+                    output_sequence.append(<em>expr</em>)
+</pre>
+
+<p>보시다시피 지능형 리스트가 훨씬 더 간결합니다.</p>
+
+
+<h3>미니 사례 연구: 트리</h3>
+
+<p>
+다음 프로그램은 유닉스 <a href="http://en.wikipedia.org/wiki/Tree_(Unix)">tree</a> 프로그램의 행위를 부분적으로 구현합니다.</p>
+
+<pre class='python'>
+#!/usr/bin/env python
+
+import os
+import sys
+
+
+def getroot():
+    if len(sys.argv) == 1:
+        path = ''
+    else:
+        path = sys.argv[1]
+
+    if os.path.isabs(path):
+        tree_root = path
+    else:
+        tree_root = os.path.join(os.getcwd(), path)
+
+    return tree_root
+
+
+def getdirlist(path):
+    dirlist = os.listdir(path)
+    dirlist = [name for name in dirlist if name[0] != '.']
+    dirlist.sort()
+    return dirlist
+
+
+def traverse(path, prefix='|--', s='.\n', f=0, d=0):
+    dirlist = getdirlist(path)
+
+    for num, file in enumerate(dirlist):
+        lastprefix = prefix[:-3] + '`--'
+        dirsize = len(dirlist)
+
+        if num &lt; dirsize - 1:
+            s += '%s %s\n' % (prefix, file)
+        else:
+            s += '%s %s\n' % (lastprefix, file)
+        path2file = os.path.join(path, file)
+
+        if os.path.isdir(path2file):
+            d += 1
+            if getdirlist(path2file):
+                s, f, d = traverse(path2file, '|   ' + prefix, s, f, d)
+        else:
+            f += 1
+
+    return s, f, d
+
+
+if __name__ == '__main__':
+    root =  getroot()
+    tree_str, files, dirs = traverse(root)
+
+    if dirs == 1:
+        dirstring = 'directory'
+    else:
+        dirstring = 'directories'
+    if files == 1:
+        filestring = 'file'
+    else:
+        filestring = 'files'
+
+    print tree_str
+    print '%d %s, %d %s' % (dirs, dirstring, files, filestring)
+</pre>
+
+<p>아래 연습문제에서 이 프로그램을 탐험하도록 요구하겠습니다.</p>
+
+<a name=9></a><br>
+<h3>9.9 용어 해설</h3>
+
+<dl>
+
+<dt>변경불능 유형(immutable type)</dt>
+<dd>원소를 변경할 수 없는 데이타 유형. 변경불능 유형의 원소에 할당하면 에러가 일어난다.</dd>
+
+<dt>변경가능 유형(mutable type)</dt>
+<dd>원소를 변경할 수 있는 데이타 유형. 변경가능 유형은 모두 복합 유형이다. 리스트와 사전은 변경가능 데이타 유형이다; 문자열과 터플은 변경불능 데이타 유형이다.</dd>
+
+<dt>터플(tuple)</dt>
+<dd>변경불능이라는 점만 제외하고 리스트와 비슷한 연속열 유형. 터플은 사전에서의 키와 같이 변경불능 유형이 요구되는 곳이면 어느곳에나 사용될 수 있다.</dd>
+
+<dt>터플 할당(tuple assignment)</dt>
+<dd>할당 서술문을 하나만 사용하여 터플에 있는 모든 원소들에 할당하는 것. 터플 할당은 직렬적이기 보다는 병렬적이기 때문에 값들을 변경할 때 유용하다.</dd>
+
+<dt>결정론적인(deterministic)</dt>
+<dd>호출될 때마다 똑 같은 일을 하는 것.</dd>
+
+<dt>의사무작위(pseudorandom)</dt>
+<dd>무작위적으로 보이지만 실제로는 결정론적인 계산의 결과인 일련의 숫자들.</dd>
+
+<dt>히스토그램(histogram)</dt>
+<dd>무언가 일어난 횟수를 세어 그 값들을 정수로 담아놓은 리스트.</dd>
+
+<dt>패턴 일치(pattern matching)</dt>
+<dd>익숙한 계산 패턴을 구별하고 비슷한 문제에 대하여 그 해결책을 다시 사용하는 프로그램 계발 계획.</dd>
+
+<dt>지능형 리스트(list comprehension)</dt>
+<dd>다른 리스트로부터 리스트를 만들어내는 구문 구조. 수학적인 <a href="http://en.wikipedia.org/wiki/Set-builder_notation">집합-구축 표기법</a>과 유사한 구문을 사용한다.
+</dd>
+
+
+</dl>
+<h2>연습문제</h2>
+<ol>
+<li><div class="exercise">
+<pre class="python">
+def swap(x, y):      # 올바르지 않은 버전
+     print  "before swap statement: id(x):", id(x), "id(y):", id(y)
+     x, y = y, x
+     print  "after swap statement: id(x):", id(x), "id(y):", id(y)
+
+a, b = 0, 1
+print  "before swap function call: id(a):", id(a), "id(b):", id(b)
+swap(a, b)
+print  "after swap function call: id(a):", id(a), "id(b):", id(b)
+</pre>
+이 프로그램을 실행시키고 그 결과를 기술하라. 그 결과를 보고 왜 이 <code>swap</code> 버전이 의도대로 작동하지 않는지 설명하라. <code>swap</code>을 호출한 후에 <code>a</code>와 <code>b</code>의 값은 무엇이 되는가?
+</div></li>
+
+<li><div class="exercise">
+<code>seqtools.py</code>라는 모듈을 만들어라. <code>encapsulate</code> 함수와 <code>insert_in_middle</code> 함수를 추가하라. 이 두 함수가 의도대로 작동하는지 다음 세가지 연속열 유형으로 테스트하는 문서화테스트를 추가하라.
+</div></li>
+
+<li><div class="exercise">
+다음 함수들을 <code>seqtools.py</code>에 추가하라:
+<pre class="python">
+def make_empty(seq):
+    """
+      &gt;&gt;&gt; make_empty([1, 2, 3, 4])
+      []
+      &gt;&gt;&gt; make_empty(('a', 'b', 'c'))
+      ()
+      &gt;&gt;&gt; make_empty("No, not me!")
+      ''
+    """
+
+def insert_at_end(val, seq):
+    """
+      &gt;&gt;&gt; insert_at_end(5, [1, 3, 4, 6])
+      [1, 3, 4, 6, 5]
+      &gt;&gt;&gt; insert_at_end('x', 'abc')
+      'abcx'
+      &gt;&gt;&gt; insert_at_end(5, (1, 3, 4, 6))
+      (1, 3, 4, 6, 5)
+    """
+
+def insert_in_front(val, seq):
+    """
+      &gt;&gt;&gt; insert_in_front(5, [1, 3, 4, 6])
+      [5, 1, 3, 4, 6]
+      &gt;&gt;&gt; insert_in_front(5, (1, 3, 4, 6))
+      (5, 1, 3, 4, 6)
+      &gt;&gt;&gt; insert_in_front('x', 'abc')
+      'xabc'
+    """
+
+def index_of(val, seq, start=0):
+    """
+      &gt;&gt;&gt; index_of(9, [1, 7, 11, 9, 10])
+      3
+      &gt;&gt;&gt; index_of(5, (1, 2, 4, 5, 6, 10, 5, 5))
+      3
+      &gt;&gt;&gt; index_of(5, (1, 2, 4, 5, 6, 10, 5, 5), 4)
+      6
+      &gt;&gt;&gt; index_of('y', 'happy birthday')
+      4
+      &gt;&gt;&gt; index_of('banana', ['apple', 'banana', 'cherry', 'date'])
+      1
+      &gt;&gt;&gt; index_of(5, [2, 3, 4])
+      -1
+      &gt;&gt;&gt; index_of('b', ['apple', 'banana', 'cherry', 'date'])
+      -1
+    """
+
+def remove_at(index, seq):
+    """
+      &gt;&gt;&gt; remove_at(3, [1, 7, 11, 9, 10])
+      [1, 7, 11, 10]
+      &gt;&gt;&gt; remove_at(5, (1, 4, 6, 7, 0, 9, 3, 5))
+      (1, 4, 6, 7, 0, 3, 5)
+      &gt;&gt;&gt; remove_at(2, "Yomrktown")
+      'Yorktown'
+    """
+
+def remove_val(val, seq):
+    """
+      &gt;&gt;&gt; remove_val(11, [1, 7, 11, 9, 10])
+      [1, 7, 9, 10]
+      &gt;&gt;&gt; remove_val(15, (1, 15, 11, 4, 9))
+      (1, 11, 4, 9)
+      &gt;&gt;&gt; remove_val('what', ('who', 'what', 'when', 'where', 'why', 'how'))
+      ('who', 'when', 'where', 'why', 'how')
+    """
+
+def remove_all(val, seq):
+    """
+      &gt;&gt;&gt; remove_all(11, [1, 7, 11, 9, 11, 10, 2, 11])
+      [1, 7, 9, 10, 2]
+      &gt;&gt;&gt; remove_all('i', 'Mississippi')
+      'Msssspp'
+    """
+
+def count(val, seq):
+    """
+      &gt;&gt;&gt; count(5, (1, 5, 3, 7, 5, 8, 5))
+      3
+      &gt;&gt;&gt; count('s', 'Mississippi')
+      4
+      &gt;&gt;&gt; count((1, 2), [1, 5, (1, 2), 7, (1, 2), 8, 5])
+      2
+    """
+
+def reverse(seq):
+    """
+      &gt;&gt;&gt; reverse([1, 2, 3, 4, 5])
+      [5, 4, 3, 2, 1]
+      &gt;&gt;&gt; reverse(('shoe', 'my', 'buckle', 2, 1))
+      (1, 2, 'buckle', 'my', 'shoe')
+      &gt;&gt;&gt; reverse('Python')
+      'nohtyP'
+    """
+
+def sort_sequence(seq):
+    """
+      &gt;&gt;&gt; sort_sequence([3, 4, 6, 7, 8, 2])
+      [2, 3, 4, 6, 7, 8]
+      &gt;&gt;&gt; sort_sequence((3, 4, 6, 7, 8, 2))
+      (2, 3, 4, 6, 7, 8)
+      &gt;&gt;&gt; sort_sequence("nothappy")
+      'ahnoppty'
+    """
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+</pre>
+예와 같이, 문서화테스트를 모두 통과할 때까지 한 번에 하나씩 테스트해 보라.
+</div></li>
+
+<li><div class="exercise">
+<code>recursive_min</code> 함수를 작성하라. 이 함수는 내포 숫자 리스트에서 가장 작은 값을 돌려준다:
+<pre class="python">
+def recursive_min(nested_num_list):
+    """
+      &gt;&gt;&gt; recursive_min([2, 9, [1, 13], 8, 6])
+      1
+      &gt;&gt;&gt; recursive_min([2, [[100, 1], 90], [10, 13], 8, 6])
+      1
+      &gt;&gt;&gt; recursive_min([2, [[13, -7], 90], [1, 100], 8, 6])
+      -7
+      &gt;&gt;&gt; recursive_min([[[-13, 7], 90], 2, [1, 100], 8, 6])
+      -13
+    """
+</pre>
+함수는 문서화테스트를 통과해야 한다.
+</div></li>
+
+<li><div class="exercise">
+<code>recursive_count</code> 함수를 작성하라. 이 함수는 <code>target</code>이 <code>nested_number_list</code>에서 나타난 횟수를 돌려준다: 
+<pre class="python">
+def recursive_count(target, nested_num_list):
+    """
+      &gt;&gt;&gt; recursive_count(2, [2, 9, [2, 1, 13, 2], 8, [2, 6]])
+      4
+      &gt;&gt;&gt; recursive_count(7, [[9, [7, 1, 13, 2], 8], [7, 6]])
+      2
+      &gt;&gt;&gt; recursive_count(15, [[9, [7, 1, 13, 2], 8], [2, 6]])
+      0
+      &gt;&gt;&gt; recursive_count(5, [[5, [5, [1, 5], 5], 5], [5, 6]])
+      6
+    """
+</pre>
+예와 같이, 함수는 문서화테스트를 통과해야 한다.
+</div></li>
+
+<li><div class="exercise">
+<code>flatten</code> 함수를 작성하라. 이 함수는 <code>nested_number_list</code>의 값을 모두 담아서 간단한 숫자 리스트를 돌려준다: 
+<pre class="python">
+def flatten(nested_num_list):
+    """
+      &gt;&gt;&gt; flatten([2, 9, [2, 1, 13, 2], 8, [2, 6]])
+      [2, 9, 2, 1, 13, 2, 8, 2, 6]
+      &gt;&gt;&gt; flatten([[9, [7, 1, 13, 2], 8], [7, 6]])
+      [9, 7, 1, 13, 2, 8, 7, 6]
+      &gt;&gt;&gt; flatten([[9, [7, 1, 13, 2], 8], [2, 6]])
+      [9, 7, 1, 13, 2, 8, 2, 6]
+      &gt;&gt;&gt; flatten([[5, [5, [1, 5], 5], 5], [5, 6]])
+      [5, 5, 1, 5, 5, 5, 5, 6]
+    """
+</pre>
+함수가 문서화테스트를 통과하는지 확인하라.
+</div></li>
+
+<li><div class="exercise">
+<code>readposint</code>라는 함수를 작성하라. 이 함수는 사용자에게 양의 정수를 요구한 다음 그 입력이 요구조건에 맞는지 점검한다. 샘플 세션은 다음과 같이 보일 것이다: 
+<pre class='python-interpreter'>
+&gt;&gt;&gt; num = readposint()
+Please enter a positive integer: yes
+yes is not a positive integer.  Try again.
+Please enter a positive integer: 3.14
+3.14 is not a positive integer.  Try again.
+Please enter a positive integer: -6
+-6 is not a positive integer.  Try again.
+Please enter a positive integer: 42
+&gt;&gt;&gt; num
+42
+&gt;&gt;&gt; num2 = readposint("Now enter another one: ")
+Now enter another one: 31
+&gt;&gt;&gt; num2
+31
+&gt;&gt;&gt;
+</pre>
+파이썬의 예외 처리 메커니즘은을 사용하여 사용자의 입력이 유효한지 확인하라.
+</div></li>
+
+<li><div class="exercise">
+각각 다음과 같다면 파이썬 인터프리터의 응답은 무엇인가:
+<ol style="list-style-type: lower-alpha">
+<li><pre class="python-interpreter">
+&gt;&gt;&gt; nums = [1, 2, 3, 4]
+&gt;&gt;&gt; [x**3 for x in nums]
+</pre></li>
+
+<li><pre class="python-interpreter">
+&gt;&gt;&gt; nums = [1, 2, 3, 4]
+&gt;&gt;&gt; [x**2 for x in nums if x**2 != 4]
+</pre></li>
+
+<li><pre class="python-interpreter">
+&gt;&gt;&gt; nums = [1, 2, 3, 4]
+&gt;&gt;&gt; [(x, y) for x in nums for y in nums]
+</pre></li>
+
+<li><pre class="python-interpreter">
+&gt;&gt;&gt; nums = [1, 2, 3, 4]
+&gt;&gt;&gt; [(x, y) for x in nums for y in nums if x != y]
+</pre></li>
+</ol>
+인터프리터에서 시도해 보기 전에 먼저 그 결과를 예측해 보라.
+</div></li>
+
+<li><div class="exercise">
+<code>pydoc</code>이나 온라인 문서(<a href="http://pydoc.org">http://pydoc.org</a>)를 사용하여 <code>sys.getrecursionlimit()</code>과 <code>sys.setrecursionlimit(n)</code>이 무슨 일을 하는지 알아보라. 이런 모듈들이 작동하는 방식을 제대로 이해하고 있는지 테스트해 보기 위하여 <code>infinite_recursion.py</code>가 한 일과 같은 것들을 <em>여러모로</em> 시험해 보라.
+</div></li>
+
+<li><div class="exercise">
+재귀 대신에 반복을 사용하여 <code>factorial</code> 함수를 재작성하라. 새로 만든 함수를 1000을 인자로 하여 호출하고 얼마나 빨리 값을 돌려주는지 기록하라.
+</div></li>
+
+<li><div class="exercise">
+<code>litter.py</code>라는 함수를 작성하라. 이 함수는 <code>trash.txt</code>라는 빈 파일을 인자로 가지고, 주어진 루트로부터 각 하부디렉토리마다 만든다 (또는 기본 값으로 현재 디렉토리). 이제 이 모든 파일을 지우는 <code>cleanup.py</code>라는 파일을 작성하라.
+<br /><br />
+<em>힌트:</em>  이 두 재귀 프로그램을 기반으로 <code>tree</code> 프로그램을 미니 사례 연구에서 가져와 사용하라.
+</div></li>
+
+</ol>
+
+<p>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap10.htm"><img border="0" alt="Next" src="images/next.png" ></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png"></a></td>
+    <td width="20" class=head><a href="chap08.htm"><img border="0" alt="Previous" src="images/prev.png" ></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png"></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm" ><img border="0" alt="Index" src="images/index.png" ></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+</body>
+</html>

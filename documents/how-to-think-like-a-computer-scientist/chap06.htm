@@ -1,0 +1,709 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>제 6 장 : 반복(Iteration)</title>
+<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+</style>
+
+
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style>
+
+</head>
+
+<body>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap07.htm"><img border="0" alt="Next" src="images/next.png"></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png"></a></td>
+    <td width="20" class=head><a href="chap05.htm"><img border="0" alt="Previous" src="images/prev.png"></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png"></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="images/index.png"></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+
+<h2>제 6 장</h2>
+
+<h1>반복</h1>
+
+
+<a name=1></a><br>
+<h3>6.1 다중 할당</h3>
+<p>
+지금까지는 다중 할당을 언급하지 않았습니다. 그러나 파이썬에서는 같은 변수에 할당을 여러 번 해도 적법합니다. 새로 할당하면 변수의 방향이 바뀌는 효과가 있습니다. 그래서 그 변수는 예전 값을 가리키는 것을 멈추고 새로운 값을 가리키기 시작합니다.</p>
+
+
+<span class=code>&nbsp; bruce = 5
+<br>&nbsp; <span class=keyword>print</span> bruce,
+<br>&nbsp; bruce = 7
+<br>&nbsp; <span class=keyword>print</span> bruce
+<br></span>
+
+<p>
+이 프로그램의 출력결과는 <span class=code>5 7</span>입니다, 왜냐하면 처음에 <span class=code>bruce</span> 를 출력하면 그 값이 5이고, 두 번째 출력하면 그 값이 7이기 때문입니다. 첫 번째 <span class=code><span class=keyword>print</span></span> 서술문의 끝에 있는 쉼표(comma) 때문에 그 지점에 새줄(newline)이 출력되지 않습니다.</p>
+<p>
+다음은 상태 다이어그램으로 다중 할당이 어떻게 보이는지 보여줍니다:</p>
+
+<p align="center"><img src="illustrations/assign2.png"></p>
+
+<p>
+한 변수에 대하여 여러번 할당할 때, 할당 서술문과 동등 서술문을 구별하는 것이 특히 중요합니다. 파이썬은 할당에 대하여 <span class=code>=</span> 심볼을 사용하기 때문에, <span class=code>a = b</span>와 같은 서술문을 동등 서술문으로 이해하기 쉽습니다. 그것이 아닌데도 말입니다!</p>
+<p>
+무엇보다도 동등은 상호교환적이지만 할당은 그렇지 않습니다. 예를 들어, 수학에서 <tt>a = 7</tt>이라면 <tt>7 = a</tt>입니다. 그러나 파이썬에서 다음 서술문 <span class=code>a = 7</span>은 적법하지만, <span class=code>7 = a</span>는 그렇지 않습니다.</p>
+<p>
+게다가, 수학에서 동등 서술문은 언제나 참입니다. 만약 현재 <tt>a = b</tt>라면, <tt>a</tt>는 언제나 <tt>b</tt>와 동등할 것입니다. 파이썬에서 할당 서술문은 변수 두 개를 동등하게 만들 수 있지만, 그렇게 동등하게 있을 필요가 없습니다!</p>
+
+
+<span class=code>&nbsp; a = 5
+<br>&nbsp; b = a&nbsp; &nbsp; <span class=comment># a와 b는 이제 같다.
+</span><br>&nbsp; a = 3&nbsp; &nbsp; <span class=comment># a와 b는 더 이상 같지 않다.
+</span><br></span>
+
+<p>
+세 번째 줄은 <span class=code>a</span>의 값을 변경합니다. 그러나 <span class=code>b</span>의 값을 변경하지는 않습니다, 그리고 그들은 더 이상 동등하지 않습니다. 어떤 프로그래밍 언어에서는 혼동을 피하기 위해서 할당에 대하여 대안적인 심볼들이 사용됩니다. <span class=code>&lt;-</span> 또는 <span class=code>:=</span>와 같이 말입니다.</p>
+<p>
+다중 할당은 아주 유용하지만, 주의해서 사용해야 합니다. 만약 변수의 값이 프로그램의 다른 여러 부분에서 항상 변화한다면, 코드를 읽고 디버그하기가 어려워질 수 있습니다.</p>
+
+<a name=2></a><br>
+<h3>6.2 반복(Iteration)</h3>
+<p>
+컴퓨터가 자주 사용되는 곳중의 하나는 반복적인 작업의 자동화입니다. 동일하거나 또는 비슷한 작업들을 실수 없이 반복하는 것은 컴퓨터는 잘하지만 사람들은 잘하지 못하는 것입니다.</p>
+<p>
+지금까지 본 프로그램들은 재귀를 사용하여 반복을 수행하였습니다. <span class=code>nLines</span>와 <span class=code>countdown</span>같은 함수들 말입니다. 이러한 형태의 반복을 반복(<b>iteration</b>)이라고 부릅니다. 그리고 파이썬이 제공하는 여러 특징으로 반복적인 프로그램을 더 쉽게 작성할 수 있습니다.</p>
+<p>
+살펴 보려는 첫 번째 특징은 <span class=code><span class=keyword>while</span></span> 서술문입니다.</p>
+
+<a name=3></a><br>
+<h3>6.3 <span class=code><span class=keyword>while</span></span> 서술문</h3>
+<p>
+<span class=code><span class=keyword>while</span></span> 서술문을 사용해서 <span class=code>countdown</span>을 다시 작성할 수 있습니다:</p>
+
+
+<span class=code>&nbsp; <span class=keyword>def</span> <span class=function>countdown</span>(n):
+<br>&nbsp; &nbsp; <span class=keyword>while</span> n &gt; 0:
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>print</span> n
+<br>&nbsp; &nbsp; &nbsp; n = n-1
+<br>&nbsp; &nbsp; <span class=keyword>print</span> <span class=quote>"Blastoff!"</span>
+<br></span>
+<p>
+<span class=code><span class=keyword>while</span></span> 서술문을 마치 영어인 것처럼 읽을 수 있습니다. 이것이 뜻하는 바는 이렇습니다. " <span class=code>n</span>이 0보다 큰 동안(While), 계속해서 <span class=code>n</span>의 값을 표시하고 <span class=code>n</span>의 값을 1만큼씩 줄여라. 0에 다다르면 다음 단어`Blastoff(발사)!를 출력하라."</p>
+<p>
+더욱 정형화해서 말하면, <span class=code><span class=keyword>while</span></span> 서술문에 대한 실행의 흐름은 다음과 같습니다:</p>
+
+<ol>
+
+<li>조건을 평가해서 <span class=code>0</span> 또는 <span class=code>1</span>을 산출한다.</li>
+
+<li>조건이 거짓(0)이면 <span class=code><span class=keyword>while</span></span> 서술문을 빠져 나가서 다음 서술문에서 실행을 계속한다.</li>
+
+<li>조건이 참(1)이면 while 회돌이의 몸체(<b>body</b>)에 있는 각 서술문들을 (<span class=code><span class=keyword>while</span></span> 서술문이 있는 줄 아래에 같은 양만큼 들여쓰기 되어 있는 모든 서술문들) 실행한다. 그리고는 다시 1 단계로 돌아간다.</li>
+
+</ol>
+
+<p>
+이런 형태의 흐름을 회돌이(<b>loop</b>)라고 부릅니다. 세 번째 단계가 회돌이 되어 최상위로 돌아가기 때문입니다. 주의하세요. 만약 제일 처음으로 회돌이를 통과할 때 그 조건이 거짓이라면, 그 회돌이 안에 있는 서술문들은 절대로 실행되지 않습니다.</p>
+<p>
+회돌이의 몸체는 하나 이상의 변수들을 변경해야 합니다. 그래야만 결국 조건은 거짓이 되고 회돌이가 끝날 수 있습니다. 그렇지 않으면 회돌이는 영원히 반복할 것입니다. 이것을 무한 회돌이(<b>infinite loop</b>)라고 부릅니다. "비누거품을 내고, 헹구고, 다시 반복하는" 머리감는 방법이 무한 회돌이라는 것을 관찰하는 것이 컴퓨터과학자들에게는 끝없는 즐거움의 원천입니다.</p>
+<p>
+<span class=code>countdown</span>의 경우, <span class=code>n</span>의 값이 유한하다는 것을 알고 있기 때문에 그 회돌이가 끝날 것이라는 것을 증명할 수 있습니다. 그리고 그 회돌이를 통과할 때마다 (각 반복마다) <span class=code>n</span>의 값이 점점 작아지는 것을 볼 수 있습니다. 그래서 결국에는 0에 도달해야 합니다. 다른 경우에는 그렇게 쉽게 말할 수 없습니다:</p>
+
+
+<span class=code>&nbsp; <span class=keyword>def</span> <span class=function>sequence</span>(n):
+<br>&nbsp; &nbsp; <span class=keyword>while</span> n != 1:
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>print</span> n,
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>if</span> n%2 == 0:&nbsp; &nbsp; &nbsp; &nbsp; <span class=comment># n is even
+</span><br>&nbsp; &nbsp; &nbsp; &nbsp; n = n/2
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>else</span>:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class=comment># n is odd
+</span><br>&nbsp; &nbsp; &nbsp; &nbsp; n = n*3+1
+<br></span>
+
+<p>이 회돌이에 대한 조건은 <span class=code>n != 1</span>입니다. 그래서 회돌이는 <span class=code>n</span>이 <span class=code>1</span>일 때까지, 즉 조건이 거짓이 될 때까지 계속될 것입니다.</p>
+
+<p>
+반복할 때마다 이 프로그램은 <span class=code>n</span>의 값을 출력하고 그 값이 짝수인지 홀수인지 점검합니다. 짝수라면 <span class=code>n</span>의 값은 2로 나누어집니다. 홀수라면 그 값은 <span class=code>3n+1</span>로 대체됩니다. 예를 들어, 만약 시작 값이 (sequence에 건네지는 인자가) 3이라면, 결과로 나오는 연속열은 3, 10, 5, 16, 8, 4, 2, 1입니다.</p>
+<p>
+<span class=code>n</span>이 어떤 때는 증가하고 어떤 때는 감소하므로, <span class=code>n</span>이 결국 1에 도달할 것이라는 것을, 또는 프로그램이 종료할 것이라는 것을 확실하게 증명할 수 없습니다. <span class=code>n</span>이 가지는 어떤 특별한 값들에 대해서는 종료를 증명할 수 있습니다. 예를 들어, 시작 값이 2의 지수승이라면 <span class=code>n</span>의 값은 회돌이를 통과할 때마다 반감할 것이며, 결국 1에 도달합니다. 앞의 예제가 16으로 시작하면 그런 연속열로 끝납니다.</p>
+<p>
+특수한 값들을 제쳐두고 나면, <span class=code>n</span>의 <i>모든</i> 값들에 대하여 이 프로그램이 종료할 것이라는 것을 증명할 수 있는가 하는 흥미로운 질문을 해 볼 수 있습니다. 지금까지는 아무도 그것을 <i>증명하지도 부인하지도</i> 못하고 있습니다!</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, 재귀 대신에 반복을 사용하여 <a href="chap04.htm#8">섹션 4.8</a>에 있는 <span class=code>nLines</span>를 재작성해 보세요.</i> </p>
+
+<a name=4></a><br>
+<h3>6.4 계산표(Tables)</h3>
+<p>
+회돌이를 유용하게 사용할 수 있는 곳 중의 하나는 계산표 데이타를 생성하는 것입니다. 예를 들어, 컴퓨터를 쉽게 사용할 수 없었던 시대에 사람들은 로그, 사인과 코사인, 그리고 다른 일반적인 수학 함수들을 손으로 계산하여야 했습니다. 그 일을 좀 더 쉽게 하기 위해 책에 기다란 계산표들을 담았고 거기에서 다양한 함수들의 값들을 찾을 수 있었습니다. 이러한 계산표들을 만드는 작업은 느리고 지겨운 일이었습니다. 그리고 그 결과는 에러로 가득차는 경향이 있었습니다.</p>
+<p>
+컴퓨터가 전면에 등장하자, 최초의 반응중의 하나는 다음과 같았습니다. "이것 참 훌륭하다! 컴퓨터를 사용하여 계산표들을 만들 수 있게 되었어, 그래서 이제 에러들도 모두 없어질거야." 그것은 (대부분) 사실로 드러났지만, 너무 짧게 본 것이었습니다. 그 이후로 곧 컴퓨터와 계산계들이 광범위하게 퍼지자 그 계산표들은 쓸모 없게 되어 버렸습니다.</p>
+<p>
+물론, 대부분이지 전부는 아닙니다. 어떤 연산들에 대해서는 컴퓨터가 계산표를 이용해서 근사치 해답을 얻고, 계산을 수행하여 그 근사값을 개선합니다. 어떤 경우에는 숨겨진 계산표에 에러들이 있었습니다. 대단히 유명한 계산표에도 에러가 있었는데 인텔 펜티엄이 그 계산표에서 부동-소수점 나눗셈을 수행하곤 했습니다.</p>
+<p>
+"로그 계산표"는 과거 한때 그랬던 것만큼 유용하지는 않습니다. 그렇지만 반복의 훌륭한 예를 보여줍니다. 다음 프로그램은 일련의 값들을 왼쪽 열에 그리고 그들의 로그 값들을 오른쪽 열에 출력합니다:</p>
+
+
+<span class=code>&nbsp; x = 1.0
+<br>&nbsp; <span class=keyword>while</span> x &lt; 10.0:
+<br>&nbsp; &nbsp; <span class=keyword>print</span> x, <span class=quote>'\t'</span>, math.log(x)
+<br>&nbsp; &nbsp; x = x + 1.0
+<br></span>
+
+<p>
+피신 연속열(<b>escape sequence</b>) <span class=code>&#92;t</span>는 탭(<b>tab</b>) 문자를 나타냅니다. 피신 연속열 <span class=code>&#92;n</span>을 사용하면 새줄(newline) 문자를 표현할 수도 있습니다. 이러한 피신 연속열은 문자열 어느 곳에나 나타날 수 있습니다; 이 예제에서는 문자열 안에에 탭 피신 문자만 있습니다.</p>
+<p>
+문자와 문자열이 화면에 표시될 때, 커서(<b>cursor</b>)라고 부르는 보이지 않는 위치설정자가 있습니다. 이것은 다음 문자가 어디에 찍힐지 추적 유지합니다. print 서술문이 실행되고 나면, 커서는 보통 다음 줄의 처음으로 갑니다.</p>
+<p>
+탭 문자는 탭 정지점중의 하나에 도달할 때까지 커서를 오른쪽으로 이동시킵니다. 탭은 텍스트 줄의 열을 정렬하는데 유용하게 사용됩니다. 앞 프로그램의 출력결과처럼 말입니다:</p>
+
+
+<span class=code>&nbsp; 1.0&nbsp; &nbsp; &nbsp;0.0
+<br>&nbsp; 2.0&nbsp; &nbsp; &nbsp;0.69314718056
+<br>&nbsp; 3.0&nbsp; &nbsp; &nbsp;1.09861228867
+<br>&nbsp; 4.0&nbsp; &nbsp; &nbsp;1.38629436112
+<br>&nbsp; 5.0&nbsp; &nbsp; &nbsp;1.60943791243
+<br>&nbsp; 6.0&nbsp; &nbsp; &nbsp;1.79175946923
+<br>&nbsp; 7.0&nbsp; &nbsp; &nbsp;1.94591014906
+<br>&nbsp; 8.0&nbsp; &nbsp; &nbsp;2.07944154168
+<br>&nbsp; 9.0&nbsp; &nbsp; &nbsp;2.19722457734
+<br></span>
+
+<p>
+만약 이러한 값들이 이상하게 보인다면, <span class=code>log</span> 함수가 밑수로 <span class=code>e</span>를 사용한다는 것을 기억하세요. 컴퓨터 과학에서 2의 지수승들은 너무 중요하기 때문에, 밑수 2를 고려한 로그값을 찾기를 원하는 경우가 자주 있습니다. 그렇게 하기 위하여 다음의 수식을 사용할 수 있습니다:</p>
+
+
+
+<table align=center><tr><td><tt>
+log<sub>2</sub> x = (log<sub>e</sub> x)/(log<sub>e</sub> 2)
+</tt></td></tr></table>
+
+<p>출력 서술문을 다음과 같이 변경하면</p>
+
+
+<span class=code>&nbsp; &nbsp; &nbsp;<span class=keyword>print</span> x, <span class=quote>'\t'</span>,&nbsp; math.log(x)/math.log(2.0)
+<br></span>
+
+<p>다음을 산출합니다</p>
+
+
+<span class=code>&nbsp; 1.0&nbsp; &nbsp; &nbsp;0.0
+<br>&nbsp; 2.0&nbsp; &nbsp; &nbsp;1.0
+<br>&nbsp; 3.0&nbsp; &nbsp; &nbsp;1.58496250072
+<br>&nbsp; 4.0&nbsp; &nbsp; &nbsp;2.0
+<br>&nbsp; 5.0&nbsp; &nbsp; &nbsp;2.32192809489
+<br>&nbsp; 6.0&nbsp; &nbsp; &nbsp;2.58496250072
+<br>&nbsp; 7.0&nbsp; &nbsp; &nbsp;2.80735492206
+<br>&nbsp; 8.0&nbsp; &nbsp; &nbsp;3.0
+<br>&nbsp; 9.0&nbsp; &nbsp; &nbsp;3.16992500144
+<br></span>
+
+<p>
+1, 2, 4 그리고 8이 2의 지수승인 것을 볼 수 있습니다. 왜냐하면 밑수가 2인 로그값들이 어림수이기 때문입니다. 2의 지수승의 다른 로그값들을 찾기를 원한다면, 프로그램을 이렇게 수정할 수 있습니다:</p>
+
+
+<span class=code>&nbsp; x = 1.0
+<br>&nbsp; <span class=keyword>while</span> x &lt; 100.0:
+<br>&nbsp; &nbsp; <span class=keyword>print</span> x, <span class=quote>'\t'</span>, math.log(x)/math.log(2.0)
+<br>&nbsp; &nbsp; x = x * 2.0
+<br></span>
+
+<p>
+이제 회돌이를 통과할 때마다 무엇인가를 <span class=code>x</span>에 더해서 수리적(arithmetic) 연속열을 산출하는 대신에, <span class=code>x</span>에 무엇인가를 곱해서 기하학적인(<i>geometric</i>) 연속열을 산출합니다. 그 결과는 다음과 같습니다:</p>
+
+
+<span class=code>&nbsp; 1.0&nbsp; &nbsp; &nbsp;0.0
+<br>&nbsp; 2.0&nbsp; &nbsp; &nbsp;1.0
+<br>&nbsp; 4.0&nbsp; &nbsp; &nbsp;2.0
+<br>&nbsp; 8.0&nbsp; &nbsp; &nbsp;3.0
+<br>&nbsp; 16.0&nbsp; &nbsp; 4.0
+<br>&nbsp; 32.0&nbsp; &nbsp; 5.0
+<br>&nbsp; 64.0&nbsp; &nbsp; 6.0
+<br></span>
+
+<p>
+두 열 사이에 탭 문자를 사용하고 있기 때문에, 두 번째 열의 위치는 첫 번째 열에 있는 자리수에 의존하지 않습니다.</p>
+<p>
+로그 계산표는 이제 더이상 유용하지 않을지도 모릅니다. 그러나 컴퓨터 과학자들에게는 2의 지수승을 아는것이 쓸모가 있습니다!</p>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, 이 프로그램을 수정해서 2의 지수승들을 65536까지 출력하도록 해 보세요 (그것은 <tt>2<sup>16</sup></tt>입니다). 그것을 인쇄해서 암기하세요.</i> </p>
+
+<a name=5></a><br>
+<h3>6.5 이-차원 계산표</h3>
+<p>
+이-차원 계산표에서 행과 열을 선택해서 그 교차점에 있는 값을 읽습니다. 곱셈 계산표가 좋은 예입니다. 1에서 6까지의 값들에 대한 곱셈 계산표를 출력하고 싶다고 해 보겠습니다.</p>
+<p>
+시작으로 좋은 방법은 간단한 회돌이를 작성하여 2의 곱들을 모두 한 줄에 인쇄하는 것입니다.</p>
+
+
+<span class=code>&nbsp; i = 1
+<br>&nbsp; <span class=keyword>while</span> i &lt;= 6:
+<br>&nbsp; &nbsp; <span class=keyword>print</span> 2*i, <span class=quote>'\t'</span>,
+<br>&nbsp; &nbsp; i = i + 1
+<br>&nbsp; <span class=keyword>print</span>
+<br></span>
+
+<p>
+첫 번째 줄은 <span class=code>i</span>라는 이름의 변수를 초기화합니다. 이 변수는 계수기, 즉 회돌이 변수(<b>loop variable</b>)로서 작용할 것입니다. 회돌이가 실행되면, <span class=code>i</span>의 값은 1에서 6까지 증가합니다. 그리고 나서 <span class=code>i</span>가 7이 되면 회돌이는 종료합니다. 회돌이를 통과할 때마다, <span class=code>2*i</span>의 값을 인쇄하고 잇따라 공백 세 개를 인쇄합니다. 쉼표를 <span class=code><span class=keyword>print</span></span> 서술문의 끝에 두면, 모든 출력결과를 단 한 줄에 얻습니다. 회돌이가 끝난 후에, <span class=code><span class=keyword>print</span></span> 서술문은 인자 없이 사용되어 새로운 줄을 시작합니다.</p>
+
+<p>이 프로그램의 출력결과는 다음과 같습니다:</p>
+
+
+<span class=code>&nbsp; 2&nbsp; &nbsp; &nbsp; 4&nbsp; &nbsp; &nbsp; 6&nbsp; &nbsp; &nbsp; 8&nbsp; &nbsp; &nbsp; 10&nbsp; &nbsp; &nbsp;12
+<br></span>
+
+<p>지금까지는 그럭저럭 괜찮습니다. 다음 단계는 캡슐화(<b>encapsulate</b>)와 일반화(<b>generalize</b>)입니다.</p>
+
+<a name=6></a><br>
+<h3>6.6 캡슐화와 일반화</h3>
+<p>
+캡슐화는 보통 한 조각의 코드를 취해서 그것을 함수에 싸 넣는 것을 뜻하는데, 이렇게 하면 함수가 가지는 모든 이점들을 이용할 수 있습니다. 캡슐화의 예로 두 가지를 보았습니다, <a href="chap04.htm#4">섹션 4.4</a>에서 <span class=code>printParity</span>를 작성할 때와 <a href="chap05.htm#5">섹션 5.5</a>에서 <span class=code>isDivisible</span>를 작성할 때 본 적이 있습니다.</p>
+<p>
+일반화는 2의 곱들을 출력하는 것처럼 무엇인가 특수한 것을 취해서 그것을 더욱 일반적으로 만드는 것을 뜻합니다.</p>
+<p>
+여기에 있는 함수는 이전 섹션에 있는 회돌이를 캡슐화하고 그것을 일반화하여 <span class=code>n</span>의 곱들을 인쇄합니다.</p>
+
+
+<span class=code>&nbsp; <span class=keyword>def</span> <span class=function>printMultiples</span>(n):
+<br>&nbsp; &nbsp; i = 1
+<br>&nbsp; &nbsp; <span class=keyword>while</span> i &lt;= 6:
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>print</span> n*i, <span class=quote>'\t'</span>,
+<br>&nbsp; &nbsp; &nbsp; i = i + 1
+<br>&nbsp; &nbsp; <span class=keyword>print</span>
+<br></span>
+
+<p>
+캡슐화하기 위해 첫 번째 줄을 추가하기만 하면 됩니다. 이 줄에는 함수의 이름과 매개변수 목록이 선언됩니다. 일반화하기 위해 값 2를 매개변수 <span class=code>n</span>과 바꾸기만 하면 됩니다.</p>
+
+<p>
+이 함수를 인자 2로 호출하면 이전과 똑 같은 출력결과를 얻습니다. 인자를 3으로 하면 출력결과는 다음과 같습니다:</p>
+
+
+<span class=code>&nbsp; 3&nbsp; &nbsp; &nbsp; 6&nbsp; &nbsp; &nbsp; 9&nbsp; &nbsp; &nbsp; 12&nbsp; &nbsp; &nbsp;15&nbsp; &nbsp; &nbsp;18
+<br></span>
+
+<p>그리고 인자를 4로 하면 출력결과는 다음과 같습니다</p>
+
+
+<span class=code>&nbsp; 4&nbsp; &nbsp; &nbsp; 8&nbsp; &nbsp; &nbsp; 12&nbsp; &nbsp; &nbsp;16&nbsp; &nbsp; &nbsp;20&nbsp; &nbsp; &nbsp;24
+<br></span>
+
+<p>
+이제 곱셈표를 어떻게 인쇄할지 짐작할 수 있을 것입니다: 서로 다른 인자로 <span class=code>printMultiples</span> 함수를 반복적으로 호출하겠습니다. 회돌이를 하나 더 사용하여 행들을 회돌이하겠습니다.</p>
+
+
+<span class=code>&nbsp; i = 1
+<br>&nbsp; <span class=keyword>while</span> i &lt;= 6:
+<br>&nbsp; &nbsp; printMultiples(i)
+<br>&nbsp; &nbsp; i = i + 1
+<br></span>
+
+<p>무엇보다 이 회돌이가 <span class=code>printMultiples</span> 안에 있는 회돌이와 얼마나 비슷한지 주목하세요. 단지 print 서술문을 함수 호출로 바꾸었을 뿐입니다.</p>
+
+<p>이 프로그램의 출력결과는 다음과 같은데</p>
+
+
+<span class=code>&nbsp; 1&nbsp; &nbsp; &nbsp; 2&nbsp; &nbsp; &nbsp; 3&nbsp; &nbsp; &nbsp; 4&nbsp; &nbsp; &nbsp; 5&nbsp; &nbsp; &nbsp; 6
+<br>&nbsp; 2&nbsp; &nbsp; &nbsp; 4&nbsp; &nbsp; &nbsp; 6&nbsp; &nbsp; &nbsp; 8&nbsp; &nbsp; &nbsp; 10&nbsp; &nbsp; &nbsp;12
+<br>&nbsp; 3&nbsp; &nbsp; &nbsp; 6&nbsp; &nbsp; &nbsp; 9&nbsp; &nbsp; &nbsp; 12&nbsp; &nbsp; &nbsp;15&nbsp; &nbsp; &nbsp;18
+<br>&nbsp; 4&nbsp; &nbsp; &nbsp; 8&nbsp; &nbsp; &nbsp; 12&nbsp; &nbsp; &nbsp;16&nbsp; &nbsp; &nbsp;20&nbsp; &nbsp; &nbsp;24
+<br>&nbsp; 5&nbsp; &nbsp; &nbsp; 10&nbsp; &nbsp; &nbsp;15&nbsp; &nbsp; &nbsp;20&nbsp; &nbsp; &nbsp;25&nbsp; &nbsp; &nbsp;30
+<br>&nbsp; 6&nbsp; &nbsp; &nbsp; 12&nbsp; &nbsp; &nbsp;18&nbsp; &nbsp; &nbsp;24&nbsp; &nbsp; &nbsp;30&nbsp; &nbsp; &nbsp;36
+<br></span>
+
+<p>이것이 바로 곱셈 계산표입니다.</p>
+
+<a name=7></a><br>
+<h3>6.7 캡슐화 심화연구</h3>
+<p>
+캡슐화를 다시 한번 더 보여주기 위해, <a href="chap06.htm#6">섹션 6.6</a>의 끝 부분에 있는 코드를 취해 그것을 함수에 싸 넣어 보겠습니다:</p>
+
+
+<span class=code>&nbsp; <span class=keyword>def</span> <span class=function>printMultTable</span>():
+<br>&nbsp; &nbsp; i = 1
+<br>&nbsp; &nbsp; <span class=keyword>while</span> i &lt;= 6:
+<br>&nbsp; &nbsp; &nbsp; printMultiples(i)
+<br>&nbsp; &nbsp; &nbsp; i = i + 1
+<br></span>
+
+<p>
+지금 보여주고 있는 이 처리과정이 일반적인 개발 계획(<b>development plan</b>)입니다.  __main__ 또는 다른 곳에 코드를 추가함으로써 점진적으로 코드를 개발합니다. 그리고 코드가 잘 작동하면 그것을 뽑아내어 함수에 싸 넣습니다. 이 처리과정은 파이썬 인터프리터를 이용하면 더 쉽게 이루어집니다. 이렇게 하면 "내가 이렇게 작성하면 어떤 일이 일어나지?"라는 모든 질문들에 대하여 즉각적인 응답을 얻을 수 있습니다. 원하는 방식으로 작동하는 함수를 얻으면, 텍스트 편집기를 사용하여 그것을 모듈에 저장하세요.</p>
+<p>
+이런 개발 계획은 프로그램 작성을 시작하고 나서 정확하게 프로그램을 함수로 분리하는 법을 알 수 없을 때 특히 유익합니다. 이러한 접근법을 사용하면 진행해 가면서 디자인할 수 있습니다.</p>
+
+<a name=8></a><br>
+<h3>6.8 지역 변수</h3>
+<p>
+어떻게 같은 변수인 <span class=code>i</span>를 <span class=code>printMultiples</span>와 <span class=code>printMultTable</span> 모두에서 사용할 수 있는지 궁금할 것입니다. 함수중 하나가 그 변수의 값을 변경하면 문제를 야기하지 않는가?</p>
+<p>
+그 대답은 "아니오"입니다. 왜냐하면 <span class=code>printMultiples</span>에 있는 <span class=code>i</span>와 <span class=code>printMultTable</span>에 있는 <span class=code>i</span>가 <i>같은 변수가 아니기 때문입니다</i>.</p>
+<p>
+함수 정의 안에서 만들어진 변수들은 지역적이라는 것을 기억하세요. 그 변수의 "홈(home)" 함수 바깥에서는 지역 변수에 접근할 수 없습니다. 그리고 같은 이름을 가진 여러 변수들을 얼마든지 가질 수 있습니다. 그 변수들이 같은 함수 안에 있지만 않으면 됩니다.</p>
+<p>
+이 프로그램에 대한 스택 다이어그램은 <span class=code>i</span>라는 이름의 두 변수가 같은 변수가 아니라는 것을 명료하게 보여줍니다. 두 변수는 서로 다른 값들을 가리킬 수 있습니다. 그리고 한 변수를 변경해도 다른 변수에 영향을 주지 않습니다.</p>
+
+<p align="center"><img src="illustrations/stack4.png"></p>
+
+<p>
+<span class=code>printMultiple</span>에 있는 <span class=code>i</span>의 값은 1에서부터 <span class=code>n</span>까지 갑니다. 다이어그램에서 그 값은 현재 2가 됩니다. 다음으로 회돌이를 통과할 때 그 값은 3이 될 것입니다.</p>
+<p>
+함수마다 따로 변수 이름을 지어서 혼동을 피하는 것이 좋은 생각입니다. 그러나 이름을 재사용하는데는 충분한 이유가 있습니다. 예를 들어, 일반적으로 <span class=code>i</span>, <span class=code>j</span> 그리고 <span class=code>k</span>와 같은 이름은 회돌이 변수로 사용됩니다. 다른 어느 곳에선가 그런 변수들을 사용했다는 이유만으로 한 함수에서 그 변수들을 사용하기를 꺼린다면, 아마도 프로그램을 읽기 어렵게 만들게 될 것입니다.</p>
+
+<a name=9></a><br>
+<h3>6.9 일반화 심화연구</h3>
+<p>
+일반화의 또 다른 예로서, 어떤 크기의 곱셈 계산표라도 출력하는 프로그램을 작성하고 싶다고 해보세요. 단지 6x6 계산표가 아니라 말입니다. 매개변수 하나를 <span class=code>printMultTable</span>에 추가할 수 있습니다:</p>
+
+
+<span class=code>&nbsp; <span class=keyword>def</span> <span class=function>printMultTable</span>(high):
+<br>&nbsp; &nbsp; i = 1
+<br>&nbsp; &nbsp; <span class=keyword>while</span> i &lt;= high:
+<br>&nbsp; &nbsp; &nbsp; printMultiples(i)
+<br>&nbsp; &nbsp; &nbsp; i = i + 1
+<br></span>
+
+<p>
+값 6을 매개변수 <span class=code>high</span>로 바꾸었습니다. 만약 <span class=code>printMultTable</span>를 인자 7로 호출하면, 다음과 같은 것을 얻습니다</p>
+
+
+<span class=code>&nbsp; 1&nbsp; &nbsp; &nbsp; 2&nbsp; &nbsp; &nbsp; 3&nbsp; &nbsp; &nbsp; 4&nbsp; &nbsp; &nbsp; 5&nbsp; &nbsp; &nbsp; 6
+<br>&nbsp; 2&nbsp; &nbsp; &nbsp; 4&nbsp; &nbsp; &nbsp; 6&nbsp; &nbsp; &nbsp; 8&nbsp; &nbsp; &nbsp; 10&nbsp; &nbsp; &nbsp;12
+<br>&nbsp; 3&nbsp; &nbsp; &nbsp; 6&nbsp; &nbsp; &nbsp; 9&nbsp; &nbsp; &nbsp; 12&nbsp; &nbsp; &nbsp;15&nbsp; &nbsp; &nbsp;18
+<br>&nbsp; 4&nbsp; &nbsp; &nbsp; 8&nbsp; &nbsp; &nbsp; 12&nbsp; &nbsp; &nbsp;16&nbsp; &nbsp; &nbsp;20&nbsp; &nbsp; &nbsp;24
+<br>&nbsp; 5&nbsp; &nbsp; &nbsp; 10&nbsp; &nbsp; &nbsp;15&nbsp; &nbsp; &nbsp;20&nbsp; &nbsp; &nbsp;25&nbsp; &nbsp; &nbsp;30
+<br>&nbsp; 6&nbsp; &nbsp; &nbsp; 12&nbsp; &nbsp; &nbsp;18&nbsp; &nbsp; &nbsp;24&nbsp; &nbsp; &nbsp;30&nbsp; &nbsp; &nbsp;36
+<br>&nbsp; 7&nbsp; &nbsp; &nbsp; 14&nbsp; &nbsp; &nbsp;21&nbsp; &nbsp; &nbsp;28&nbsp; &nbsp; &nbsp;35&nbsp; &nbsp; &nbsp;42
+<br></span>
+
+<p>
+정말 훌륭합니다. 단 계산표가 정방형(같은 개수의 행과 열)이기를 원할지도 모른다는 점만 빼면 말입니다. 이것은 또 다른 매개변수를 <span class=code>printMultiples</span>에 추가해서, 얼마나 많은 열을 그 계산표가 가져야 하는지를 지정해야 한다는 것을 뜻합니다.</p>
+<p>
+재미삼아, 이 매개변수 <span class=code>high</span>를 호출하여, 서로 다른 함수들이 같은 이름을 가진 매개변수들을 (마치 지역변수들처럼) 가질 수도 있다는 것을 보여 드리겠습니다:</p>
+
+
+<span class=code>&nbsp; <span class=keyword>def</span> <span class=function>printMultiples</span>(n, high):
+<br>&nbsp; &nbsp; int i = 1
+<br>&nbsp; &nbsp; <span class=keyword>while</span> i &lt;= high:
+<br>&nbsp; &nbsp; &nbsp; <span class=keyword>print</span> n*i, <span class=quote>'\t'</span>,
+<br>&nbsp; &nbsp; &nbsp; i = i + 1
+<br>&nbsp; &nbsp; <span class=keyword>print
+<br>
+<br>&nbsp; def</span> printMultTable(high):
+<br>&nbsp; &nbsp; int i = 1
+<br>&nbsp; &nbsp; <span class=keyword>while</span> i &lt;= high:
+<br>&nbsp; &nbsp; &nbsp; printMultiples(i, high)
+<br>&nbsp; &nbsp; &nbsp; i = i + 1
+<br></span>
+
+<p>
+매개변수를 새롭게 추가할 때 함수의 첫 번째 줄(함수 머리부)을 변경해야 했다는 것을 주목하세요. 또 <span class=code>printMultTable</span>에서 그 함수가 호출되는 위치도 변경해야 했습니다. 예상대로, 이 프로그램은 정방형 7x7 계산표를 만들어 냅니다:</p>
+
+
+<span class=code>&nbsp; 1&nbsp; &nbsp; &nbsp; 2&nbsp; &nbsp; &nbsp; 3&nbsp; &nbsp; &nbsp; 4&nbsp; &nbsp; &nbsp; 5&nbsp; &nbsp; &nbsp; 6&nbsp; &nbsp; &nbsp; 7
+<br>&nbsp; 2&nbsp; &nbsp; &nbsp; 4&nbsp; &nbsp; &nbsp; 6&nbsp; &nbsp; &nbsp; 8&nbsp; &nbsp; &nbsp; 10&nbsp; &nbsp; &nbsp;12&nbsp; &nbsp; &nbsp;14
+<br>&nbsp; 3&nbsp; &nbsp; &nbsp; 6&nbsp; &nbsp; &nbsp; 9&nbsp; &nbsp; &nbsp; 12&nbsp; &nbsp; &nbsp;15&nbsp; &nbsp; &nbsp;18&nbsp; &nbsp; &nbsp;21
+<br>&nbsp; 4&nbsp; &nbsp; &nbsp; 8&nbsp; &nbsp; &nbsp; 12&nbsp; &nbsp; &nbsp;16&nbsp; &nbsp; &nbsp;20&nbsp; &nbsp; &nbsp;24&nbsp; &nbsp; &nbsp;28
+<br>&nbsp; 5&nbsp; &nbsp; &nbsp; 10&nbsp; &nbsp; &nbsp;15&nbsp; &nbsp; &nbsp;20&nbsp; &nbsp; &nbsp;25&nbsp; &nbsp; &nbsp;30&nbsp; &nbsp; &nbsp;35
+<br>&nbsp; 6&nbsp; &nbsp; &nbsp; 12&nbsp; &nbsp; &nbsp;18&nbsp; &nbsp; &nbsp;24&nbsp; &nbsp; &nbsp;30&nbsp; &nbsp; &nbsp;36&nbsp; &nbsp; &nbsp;42
+<br>&nbsp; 7&nbsp; &nbsp; &nbsp; 14&nbsp; &nbsp; &nbsp;21&nbsp; &nbsp; &nbsp;28&nbsp; &nbsp; &nbsp;35&nbsp; &nbsp; &nbsp;42&nbsp; &nbsp; &nbsp;49
+<br></span>
+
+<p>
+함수를 적절하게 일반화하면, 그 결과로 나온 프로그램이 의도하지 않았던 능력을 가지고 있다는 것을 발견하곤 합니다. 예를 들어, 곱셈 계산표가 대칭적이라는 것을 눈치채셨을 겁니다. 왜냐하면 <i>ab = ba</i>이기 때문입니다. 그래서 계산표에 있는 모든 항목들은 두 번 나타납니다. 그 계산표의 절반만을 인쇄하면 잉크를 절약할 수 있습니다. 그렇게 하려면, <span class=code>printMultTable</span>에서 한 줄 만 바꾸면 됩니다. 다음을,</p>
+
+
+<span class=code>&nbsp; &nbsp; &nbsp; printMultiples(i, high)
+<br></span><p>아래와 같이 바꾸면</p>
+
+
+<span class=code>&nbsp; &nbsp; &nbsp; printMultiples(i, i)
+<br></span>
+
+<p>다음과 같은 것을 얻습니다</p>
+
+
+<span class=code>&nbsp; 1
+<br>&nbsp; 2&nbsp; &nbsp; &nbsp; 4
+<br>&nbsp; 3&nbsp; &nbsp; &nbsp; 6&nbsp; &nbsp; &nbsp; 9
+<br>&nbsp; 4&nbsp; &nbsp; &nbsp; 8&nbsp; &nbsp; &nbsp; 12&nbsp; &nbsp; &nbsp;16
+<br>&nbsp; 5&nbsp; &nbsp; &nbsp; 10&nbsp; &nbsp; &nbsp;15&nbsp; &nbsp; &nbsp;20&nbsp; &nbsp; &nbsp;25
+<br>&nbsp; 6&nbsp; &nbsp; &nbsp; 12&nbsp; &nbsp; &nbsp;18&nbsp; &nbsp; &nbsp;24&nbsp; &nbsp; &nbsp;30&nbsp; &nbsp; &nbsp;36
+<br>&nbsp; 7&nbsp; &nbsp; &nbsp; 14&nbsp; &nbsp; &nbsp;21&nbsp; &nbsp; &nbsp;28&nbsp; &nbsp; &nbsp;35&nbsp; &nbsp; &nbsp;42&nbsp; &nbsp; &nbsp;49
+<br></span>
+
+<p style="margin-left: 30px; margin-right: 30px;"> <i>연습으로, 이 새로운 버전의 <span class=code>printMultTable</span>의 실행의 흐름을 따르거나 추적해서 어떻게 작동하는지 알아 보세요.</i> </p>
+
+<a name=10></a><br>
+<h3>6.10 함수</h3>
+<p>
+여러 번 "함수가 가지는 모든 이점들"에 대하여 언급하였습니다. 지금까지 그러한 것들이 정확하게 무엇인지 궁금했을 것입니다. 다음에 함수가 유익한 이유를 몇 가지 나열하겠습니다:</p>
+
+<ul>
+
+<li>일련의 서술문들에 이름을 부여함으로써, 프로그램을 더 쉽게 읽고 더 쉽게 디버그하도록 만들 수 있다.</li>
+
+<li>기다란 프로그램을 함수들로 분리하면, 프로그램을 부분으로 잘라서 따로따로 디버그할 수 있고 그 다음에 다시 결합해서 전체로 구성할 수 있다.</li>
+
+<li>함수는 재귀와 반복 모두에 유용하다.</li>
+
+<li>설계가-잘된 함수들은 많은 프로그램에 자주 유용하게 사용된다. 함수를 작성하고 디버그하기만 하면, 그것을 재사용할 수 있다.</li>
+
+</ul>
+
+<h3>6.* 뉴튼의 방법</h3>
+
+<p>회돌이는 숫치 결과를 계산하기 위해 프로그램에 자주 사용됩니다. 근사 값으로 시작해서 반복적으로 차츰 개선해 나갑니다.</p>
+
+<p>예를 들어, 제곱근을 계산하는 한가지 방법으로 뉴튼의 방법이 있습니다. <code>n</code>의 제곱근을 알고 싶다고 해 봅시다. 최대한 근사값으로 시작한다면, 다음 공식으로 근사값을 더 잘 계산할 수 있습니다:</p>
+
+<pre class='boxed'>
+better =  (approx + n/approx)/2
+</pre>
+
+<p>
+앞의 근사값과 개선된 근사값이 동일해 질 때까지 이 공식을 반복적으로 적용하려면, 제곱근을 계산하기 위한 함수를 작성하면 됩니다:</p>
+
+<pre class='python'>
+def sqrt(n):
+    approx = n/2.0
+    better = (approx + n/approx)/2.0
+    while better != approx:
+        approx = better
+        better = (approx + n/approx)/2.0
+    return approx
+</pre>
+
+<p>이 함수를 <code>25</code>를 인자로 하여 호출하면  <code>5.0</code>을 돌려주는지 확인하세요.</p>
+
+
+<h3>6.* 알고리즘</h3>
+<span class="index" value="algorithm" />
+
+<p>뉴튼의 방법은 알고리즘(<b>algorithm</b>)의 한 예입니다: 문제의 범주를 해결하기 위한 기계적 처리과정입니다 (이 경우, 제곱근을 계산하는 것이 되겠지요).</p>
+
+<p>알고리즘을 정의하기는 쉽지 않습니다. 무언가 알고리즘이 아닌 것으로 시작하면 도움이 될 것 같습니다. 아마도 한 자리수 숫자 곱셈을 배울 때 배운 곱셈 표라는 것을 기억하실 것입니다. 사실상, 구체적으로 100개의 해답을 기억하고 있습니다. 이런 종류의 지식은 알고리즘이 아닙니다. </p>
+
+<p>
+그러나 <q>게을러서</q> 몇 가지 꼼수를 배워서 속일 수도 있습니다. 예를 들어 n과 9의 곲은 n - 1을 첫 수로 하고 10 - n을 뒷수로 하면 됩니다. 이 트릭은 9와 한 자리수를 곱할 때 일반적 해법입니다. 그것이 바로 알고리즘입니다!</p>
+
+<p>
+비슷하게, 올림있는 덧셈과 빌림있는 뺄셈 그리고 긴 나눗셈에서 배운 테크닉은 모두 알고리즘입니다. 알고리즘의 특징중 하나는 수행하기 위해 지능을 요구하지 않는다는 것입니다. 기게적으로 진행되어 각 단계는 단순한 규칙을 따라서 앞 단계를 따릅니다.</p>
+
+<p>생각건대, 인간이 학교에서 문자 그대로 아무 지능없는 알고리즘을 실행하느라 그렇게 많은 시간을 들여야 하다니 당황스럽습니다.
+</p>
+
+<p>반면에, 알고리즘을 디자인 하는 과정은 흥미롭고 지적 도전욕구를 북돋우며 프로그래밍이라고 부르는 것의 핵심입니다.</p>
+
+
+<p>
+아무 어려움 없이 사람들이 자연스럽게 하는 일은 알고리즘적으로 설명하기가 아주 어렵습니다. 자연 언어를 이해하는 것이 그 좋은 예입니다. 우리 모두는 자연어를 이해하지만, 지금까지 아무도 어떻게 이해하는지 적어도 알고리즘의 형태로 설명하지 못하고 있습니다.</p>
+
+<a name=11></a><br>
+<h3>6.11 용어 해설</h3>
+
+<dl>
+
+<dt>다중 할당(multiple assignment)</dt>
+<dd>프로그램의 실행중에 같은 변수에 대하여 할당을 한 번 이상 하는 것.</dd>
+
+<dt>반복(iteration)</dt>
+<dd>회돌이 몸체의 연속적인 반복 (실행). 종료 혹은 탈출 조건이 충족될 때까지 계속된다. 단독으로 사용되면 반복은 조건의 평가를 포함하여 회돌이 몸체를 단 한번 통과하는 것을 가리킨다.</dd>
+
+<dt>몸체(body)</dt>
+<dd>회돌이 안에 있는 서술문들.</dd>
+
+<dt>회돌이(loop)</dt>
+<dd>종료 조건을 만족할 때까지 반복적으로 실행되는 서술문 또는 서술문의 그룹.</dd>
+
+<dt>무한 회돌이(infinite loop)</dt>
+<dd>종료 조건이 절대로 충족되지 않는 회돌이.</dd>
+
+<dt>피신 연속열(escape sequence)</dt>
+<dd>자신의 뒤에 하나 이상의 출력가능한 문자들이 따르는 피신 문자 (<tt>&#92;</tt>), 즉 출력-불가능한 문자들을 지정하는데 사용된다. 다른 피신 연속열은 다음과 같다:</dd>
+
+
+
+<table align=center>
+<tr><td style="padding-right: 8;"><b>피신 연속열</b>  &gt;<b>의미</b><br></td></tr>
+<tr><td style="padding-right: 8;"><tt>&#92;&#92;</tt>    &gt;역사선(Backslash) (<tt>&#92;</tt>)<br></td></tr>
+<tr><td style="padding-right: 8;"><tt>&#92;</tt>n             &gt;아스키 새로운라인(ASCII NewLine (LF))<br></td></tr>
+<tr><td style="padding-right: 8;"><tt>&#92;</tt>t             &gt;아스키 수평 탭(ASCII Horizontal Tab (TAB))<br></td></tr>
+</table>
+<dt>아스키(ASCII)</dt>
+<dd>정보교환을 위한 미국 표준 코드(American Standard Code for Information Interchange). 컴퓨터에서 문자들을 저장하는데 사용되는 일반적인 코드.</dd>
+
+<dt>커서(cursor)</dt>
+<dd>다음 문자가 인쇄될 곳을 추적 유지하는 보이지 않는 표식 설정자.</dd>
+
+<dt>탭(tab)</dt>
+<dd>커서를 현재 줄에서 다음 탭 정지점까지 움직이도록 하는 특수 문자.</dd>
+
+<dt>회돌이 변수(loop variable)</dt>
+<dd>흔히 계수기(counter)라고 불리우는 변수로서, 회돌이의 종료 조건을 결정하는데 사용된다. 계수기로 사용되면, 회돌이 변수는 원하는 횟수의 반복이 만족될 때까지 회돌이를 통과할 때마다 1만큼씩 증가한다.</dd>
+
+<dt>캡슐화(encapsulate)</dt>
+<dd>거대하고 복잡한 프로그램을 (함수와 같은) 구성요소들로 분해하고 그 구성요소들을 다른 구성요소들과 (예를 들어, 지역 변수를 사용해서) 격리시키는 것.</dd>
+
+<dt>일반화(generalize)</dt>
+<dd>(상수 값과 같은) 불필요하게 특정한 어떤 것을 적절하게 일반적인 (매개변수 혹은 변수와 같은) 어떤 것으로 바꾸는 것. 일반화를 사용하면 코드는 더욱 융통성 있게 되며 더욱 재사용이 가능하여지고 심지어 훨씬 더 작성하기 쉽게 된다.</dd>
+
+<dt>개발 계획(development plan)</dt>
+<dd>프로그램을 개발하는 과정. 이 장에서 보여준 개발 스타일은 단순하고 구체적인 일을 수행하는 코드를 개발해서, 캡슐화하고 일반화하는 것에 기초를 두고 있다.</dd>
+
+
+
+</dl>
+
+<h2>연습문제</h2>
+<ol>
+<li><div class="exercise">
+다음과 같이 출력되는 문자열을 작성하라
+<pre class="shell">
+   produces
+   this
+   output.
+</pre>
+&nbsp;
+</div></li>
+
+<li><div class="exercise">
+계산될 때마다 더 잘 출력하도록 print 서술문을 섹션 6.14에 정의된 <code>sqrt</code> 함수에 추가하라.  수정한 함수를 25를 인자로 하여 호출하고 그 결과를 기록하라.
+</div></li>
+
+<li><div class="exercise">
+지난 <code>print_mult_table</code> 버전의 실행을 추적하여 어떻게 작동하는지 알아보라.
+</div></li>
+
+<li><div class="exercise">
+<code>print_triangular_numbers(n)</code>를 작성하라. 이 함수는 첫 삼각수를 인쇄한다. <code>print_triangular_numbers(5)</code>를 호출하면 다음과 같이 출력된다:
+<pre class='shell'>
+1       1
+2       3
+3       6
+4       10
+5       15
+</pre>
+(<em>힌트: 삼각수(triangular number)가 무엇인지는 웹을 검색해 보라.</em>)
+</div></li>
+
+<li><div class="exercise">
+이름이 <code>ch06.py</code>인 파일을 열어서 다음을 추가하라:
+<pre class='python'>
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
+</pre>
+<code>is_prime</code>라는 함수를 작성하라. 이 함수는 정수 인자를 하나 받아 인자가 소수이면 <code>True</code>를 돌려주고 그렇지 않으면<code>False</code>를 돌려준다. 함수를 개발하면서 doctest를 추가하라.
+</div></li>
+
+<li><div class="exercise">
+<code>num_digits(0)</code>은 무엇을 돌려주는가?  이 경우 <code>1</code>을 돌려주도록 이 함수를 수정하라.  왜 <code>num_digits(-24)</code>를 호출하면 무한 회돌이에 빠지는가 (<em>힌트: -1/10은 -1로 평가된다</em>)?  어떤 정수 값에도 제대로 작동하도록 <code>num_digits</code> 함수를 수정하라.
+<br /><br />
+다음을 앞에서 만든 <code>ch06.py</code> 파일에 추가하라:
+<pre class='python'>
+def num_digits(n):
+    """
+      &gt;&gt;&gt; num_digits(12345)
+      5
+      &gt;&gt;&gt; num_digits(0)
+      1
+      &gt;&gt;&gt; num_digits(-12345)
+      5
+    """
+</pre>
+함수 몸체를 <code>num_digits</code>에 추가하고 doctest를 통과하는지 확인하라.
+</div></li>
+
+<li><div class="exercise">
+다음을 <code>ch06.py</code>에 추가하라:
+<pre class='python'>
+def num_even_digits(n):
+    """
+      &gt;&gt;&gt; num_even_digits(123456)
+      3
+      &gt;&gt;&gt; num_even_digits(2468)
+      4
+      &gt;&gt;&gt; num_even_digits(1357)
+      0
+      &gt;&gt;&gt; num_even_digits(2)
+      1
+      &gt;&gt;&gt; num_even_digits(20)
+      2
+    """
+</pre>
+예상대로 작동하도록 <code>num_even_digits</code>에 대하여 몸체를 작성하라.
+</div></li>
+
+<li><div class="exercise">
+다음을 <code>ch06.py</code>에 추가하라:
+<pre class='python'>
+def print_digits(n):
+    """
+      &gt;&gt;&gt; print_digits(13789)
+      9 8 7 3 1
+      &gt;&gt;&gt; print_digits(39874613)
+      3 1 6 4 7 8 9 3
+      &gt;&gt;&gt; print_digits(213141)
+      1 4 1 3 1 2
+    """
+</pre>
+주어진 doctest를 통과하도록 <code>print_digits</code>에 몸체를 작성하라.
+</div></li>
+
+<li><div class="exercise">
+건네진 정수에서 각 자리수의 제곱을 모두 더하는 <code>sum_of_squares_of_digits</code> 함수를 작성하라. 예를 들어, <code>sum_of_squares_of_digits(987)</code>는 194를 돌려줄 것이다. 왜냐하면, <code>9**2 + 8**2 + 7**2 == 81 + 64 + 49 == 194</code>이기 때문이다.
+<pre class='python'>
+def sum_of_squares_of_digits(n):
+    """
+      &gt;&gt;&gt; sum_of_squares_of_digits(1)
+      1
+      &gt;&gt;&gt; sum_of_squares_of_digits(9)
+      81
+      &gt;&gt;&gt; sum_of_squares_of_digits(11)
+      2
+      &gt;&gt;&gt; sum_of_squares_of_digits(121)
+      6
+      &gt;&gt;&gt; sum_of_squares_of_digits(987)
+      194
+    """
+</pre>
+위의 doctest와 여러분의 해답을 비교해 보라.
+</div></li>
+</ol>
+
+<p>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0">
+  <tr>
+    <td width="20" class=head><a href="chap07.htm"><img border="0" alt="Next" src="images/next.png"></a></td>
+    <td width="20" class=head><a href="index.htm"><img border="0" alt="Up" src="images/up.png"></a></td>
+    <td width="20" class=head><a href="chap05.htm"><img border="0" alt="Previous" src="images/prev.png"></a></td>
+    <td width="100%" class=headcenter><img border="0" alt="Hi" src="images/headertitle.png"></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+    <td width="20" class=head><a href="dex.htm"><img border="0" alt="Index" src="images/index.png"></a></td>
+    <td width="20" class=head><img border="0" alt="" src="images/blank.png"></td>
+  </tr>
+</table>
+<hr>
+
+</body>
+</html>
