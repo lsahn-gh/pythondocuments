@@ -2,6 +2,13 @@
 	"list":
 	[
 		{
+			"title": "쉽게 설명한 파이썬 장식자",
+			"english": "Python Decorators, Don't have to be (that) Scary",
+			"year": 2008,
+			"translator": "johnsonj",
+			"link": "./documents/python-decorators-dont-have-to-be-scary/index.html"
+		},
+		{
 			"title": "파이썬 디자인 패턴",
 			"english": "Patterns in Python",
 			"year": 2008,
