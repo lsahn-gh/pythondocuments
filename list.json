@@ -2,6 +2,13 @@
 	"list":
 	[
 		{
+			"title": "파이썬 팁과 트릭, 그리고 핵",
+			"english": "Python Tips, Tricks, and Hacks",
+			"year": 2008,
+			"translator": "johnsonj",
+			"link": "./documents/python-tips-tricks-and-hacks"
+		},
+		{
 			"title": "컴퓨터 과학자 같이 생각하는 법",
 			"english": "How to think like a Computer Scientist",
 			"year": 2008,
