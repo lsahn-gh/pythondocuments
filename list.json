@@ -2,6 +2,13 @@
 	"list":
 	[
 		{
+			"title": "컴퓨터 과학자 같이 생각하는 법",
+			"english": "How to think like a Computer Scientist",
+			"year": 2008,
+			"translator": "johnsonj",
+			"link": "./documents/how-to-think-like-a-computer-scientist/index.htm"
+		},
+		{
 			"title": "파이썬과 유니코드에 관한 모든 것",
 			"english": "All About Python and Unicode",
 			"year": 2008,
