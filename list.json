@@ -2,6 +2,13 @@
 	"list":
 	[
 		{
+			"title": "파이썬 디자인 패턴",
+			"english": "Patterns in Python",
+			"year": 2008,
+			"translator": "johnsonj",
+			"link": "./documents/patterns-in-python/index.html"
+		},
+		{
 			"title": "파이썬 팁과 트릭, 그리고 핵",
 			"english": "Python Tips, Tricks, and Hacks",
 			"year": 2008,
