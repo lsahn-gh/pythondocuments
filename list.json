@@ -2,6 +2,13 @@
 	"list":
 	[
 		{
+			"title": "파이썬 관용구와 효율성",
+			"english": "Python Idioms and Efficiency Suggestions",
+			"year": 2008,
+			"translator": "johnsonj",
+			"link": "./documents/python-idioms-and-efficiency-suggestions/index.html"
+		},
+		{
 			"title": "쉽게 설명한 파이썬 장식자",
 			"english": "Python Decorators, Don't have to be (that) Scary",
 			"year": 2008,
