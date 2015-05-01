@@ -2,60 +2,67 @@
 	"list":
 	[
 		{
+			"title": "파이썬의 유형 점검 연구",
+			"english": "Type Checking in Python",
+			"year": 2008,
+			"translator": "johnsonj",
+			"link": "./documents/type-checking-in-python/"
+		},
+		{
 			"title": "파이썬 관용구와 효율성",
 			"english": "Python Idioms and Efficiency Suggestions",
 			"year": 2008,
 			"translator": "johnsonj",
-			"link": "./documents/python-idioms-and-efficiency-suggestions/index.html"
+			"link": "./documents/python-idioms-and-efficiency-suggestions/"
 		},
 		{
 			"title": "쉽게 설명한 파이썬 장식자",
 			"english": "Python Decorators, Don't have to be (that) Scary",
 			"year": 2008,
 			"translator": "johnsonj",
-			"link": "./documents/python-decorators-dont-have-to-be-scary/index.html"
+			"link": "./documents/python-decorators-dont-have-to-be-scary/"
 		},
 		{
 			"title": "파이썬 디자인 패턴",
 			"english": "Patterns in Python",
 			"year": 2008,
 			"translator": "johnsonj",
-			"link": "./documents/patterns-in-python/index.html"
+			"link": "./documents/patterns-in-python/"
 		},
 		{
 			"title": "파이썬 팁과 트릭, 그리고 핵",
 			"english": "Python Tips, Tricks, and Hacks",
 			"year": 2008,
 			"translator": "johnsonj",
-			"link": "./documents/python-tips-tricks-and-hacks/index.html"
+			"link": "./documents/python-tips-tricks-and-hacks/"
 		},
 		{
 			"title": "컴퓨터 과학자 같이 생각하는 법",
 			"english": "How to think like a Computer Scientist",
 			"year": 2008,
 			"translator": "johnsonj",
-			"link": "./documents/how-to-think-like-a-computer-scientist/index.htm"
+			"link": "./documents/how-to-think-like-a-computer-scientist/"
 		},
 		{
 			"title": "파이썬과 유니코드에 관한 모든 것",
 			"english": "All About Python and Unicode",
 			"year": 2008,
 			"translator": "johnsonj",
-			"link": "./documents/all-about-python-and-unicode/index.html"
+			"link": "./documents/all-about-python-and-unicode/"
 		},
 		{
 			"title": "파이썬으로 하는 알고리즘 교육",
 			"english": "Algorithm Education in Python",
 			"year": 2006,
 			"translator": "johnsonj",
-			"link": "./documents/algorithm-education-in-python/index.html"
+			"link": "./documents/algorithm-education-in-python/"
 		},
 		{
 			"title": "뷰티풀 수프4.0.0 문서",
 			"english": "Beautiful Soup 4 Document",
 			"year": 2012,
 			"translator": "johnsonj",
-			"link": "./documents/beautifulsoup4/index.html"
+			"link": "./documents/beautifulsoup4/"
 		}
 	]
 }
